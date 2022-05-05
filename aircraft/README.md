@@ -27,7 +27,8 @@ acarsdec -v -l acars.log -r 0 131.250 131.450 131.950
 ```
 sudo bash -c "$(wget -O - https://repo-feed.flightradar24.com/install_fr24_rpi.sh)"
 ```
-とちゅうで緯度経度,海抜高度の入力を求められる。
+対話形式で設定を進める。とちゅうで緯度経度,海抜高度の入力を求められる。
+- 設定を変更する際は`fr24feed --reconfigure`
 # VDL2 (VHF Data Link - Mode 2)
 ```
 git clone https://github.com/szpajder/dumpvdl2.git
