@@ -20,6 +20,14 @@ sudo make install
 #実行
 acarsdec -v -l acars.log -r 0 131.250 131.450 131.950
 ```
+# ADS-B (Automatic Dependent Surveillance-Broadcast)
+シンプルにはdump1090を使うなど？ついでにFightradar24へのアップロードを考えているなら、fr24feedをインストールするとまとめてセットアップしてくれる。
+
+公式 (https://www.flightradar24.com/share-your-data) で推奨されているインストール方法
+```
+sudo bash -c "$(wget -O - https://repo-feed.flightradar24.com/install_fr24_rpi.sh)"
+```
+とちゅうで緯度経度,海抜高度の入力を求められる。
 # VDL2 (VHF Data Link - Mode 2)
 ```
 git clone https://github.com/szpajder/dumpvdl2.git
