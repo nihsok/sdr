@@ -21,7 +21,7 @@ sudo make install
 acarsdec -v -l acars.log -r 0 131.250 131.450 131.950
 ```
 # ADS-B (Automatic Dependent Surveillance-Broadcast)
-シンプルにはdump1090を使うなど？ついでにFightradar24へのアップロードを考えているなら、fr24feedをインストールするとまとめてセットアップしてくれる。
+fr24feedをインストールすると、Flightradar24へのアップロードまでまとめてセットアップしてくれる。
 
 公式 (https://www.flightradar24.com/share-your-data) で推奨されているインストール方法
 ```
@@ -29,6 +29,37 @@ sudo bash -c "$(wget -O - https://repo-feed.flightradar24.com/install_fr24_rpi.s
 ```
 対話形式で設定を進める。とちゅうで緯度経度,海抜高度の入力を求められる。
 - 設定を変更する際は`fr24feed --reconfigure`
+と思っていたが、この方法ではdump1090-mutabilityがインストールされてしまう。単体だと問題なく動いたが、サポート終了しているためかfr24feedがうまく動かなかった(dump1090をインストールしようとする）ので、dump1090-faを使うようにした。
+```
+git clone https://github.com/flightaware/dump1090 dump1090-fa
+cd dump1090-fa
+sudo apt install libbladerf-dev libhackrf-dev liblimesuite-dev libncurses5-dev debhelper
+dpkg-buildpackage -b --no-sign
+sudo dpkg -i ../dump1090-fa_3.8.0_arm64.deb
+sudo systemctl enable dump1090-fa.service #自動起動
+sudo service dump1090-fa start
+sudo fr24feed --reconfigure
+#Enter your receiver type (1-7)$:5
+#Enter your connection type (1-2)$:1
+#Step 4.3A - Please enter your receiver's IP address/hostname$:127.0.0.1
+#Step 4.3B - Please enter your receiver's data port number$:30003
+sudo service fr24feed restart
+```
+しばらくすると
+```
+fr24feed-status
+[ ok ] FR24 Feeder/Decoder Process: running.
+[ ok ] FR24 Stats Timestamp: 2022-05-06 15:05:26.
+[ ok ] FR24 Link: connected [UDP].
+[ ok ] FR24 Radar: T-RJAF117.
+[ ok ] FR24 Tracked AC: 0.
+[ ok ] Receiver: connected ( MSGS/ SYNC).
+```
+の結果を得る。
+http://192.168.0.100/skyaware/
+https://gato.intaa.net/archives/21706 FlightRadar24の設定について詳しい。
+http://www17.plala.or.jp/y9500/ads-b.html 熱対策とアンテナの工夫について参考になる。
+
 # VDL2 (VHF Data Link - Mode 2)
 ```
 git clone https://github.com/szpajder/dumpvdl2.git
