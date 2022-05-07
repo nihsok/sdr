@@ -39,23 +39,27 @@ sudo dpkg -i ../dump1090-fa_3.8.0_arm64.deb
 sudo systemctl enable dump1090-fa.service #自動起動
 sudo service dump1090-fa start
 sudo fr24feed --reconfigure
-#Enter your receiver type (1-7)$:5
+#Enter your receiver type (1-7)$:4 #ModeS Beast
 #Enter your connection type (1-2)$:1
 #Step 4.3A - Please enter your receiver's IP address/hostname$:127.0.0.1
-#Step 4.3B - Please enter your receiver's data port number$:30003
+#Step 4.3B - Please enter your receiver's data port number$:30005
 sudo service fr24feed restart
 ```
 しばらくすると
 ```
 fr24feed-status
 [ ok ] FR24 Feeder/Decoder Process: running.
-[ ok ] FR24 Stats Timestamp: 2022-05-06 15:05:26.
+[ ok ] FR24 Stats Timestamp:.
 [ ok ] FR24 Link: connected [UDP].
 [ ok ] FR24 Radar: T-RJAF117.
-[ ok ] FR24 Tracked AC: 0.
+[ ok ] FR24 Tracked AC:.
 [ ok ] Receiver: connected ( MSGS/ SYNC).
+[ ok ] FR24 MLAT: ok [UDP].
+[ ok ] FR24 MLAT AC seen: 2.
 ```
 の結果を得る。
+fr24feedはそれでもうまくいかなかったので、flightawareにフィードするpiawareも試した。
+
 http://192.168.0.100/skyaware/
 https://gato.intaa.net/archives/21706 FlightRadar24の設定について詳しい。
 http://www17.plala.or.jp/y9500/ads-b.html 熱対策とアンテナの工夫について参考になる。
