@@ -58,9 +58,8 @@ fr24feed-status
 [ ok ] FR24 MLAT AC seen: 2.
 ```
 の結果を得る。
-fr24feedはそれでもうまくいかなかったので、flightawareにフィードするpiawareも試した。
-
-http://192.168.0.100/skyaware/
+http://192.168.0.100:8754 flightradar24のステータスを確認できる（IPアドレスは適宜変更の必要あり）
+http://192.168.0.100/skyaware/ dump1090-faのステータスを確認できる（IPアドレスは適宜変更の必要あり）
 https://gato.intaa.net/archives/21706 FlightRadar24の設定について詳しい。
 http://www17.plala.or.jp/y9500/ads-b.html 熱対策とアンテナの工夫について参考になる。
 
