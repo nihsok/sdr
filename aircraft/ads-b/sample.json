@@ -3,6 +3,47 @@
 	"messages": 8909,
 	"aircraft": [
 		{
+			"hex": "841bd0",
+			"mlat": [],
+			"tisb": [],
+			"messages": 1477,
+			"seen": 282.4,
+			"rssi": -23.1
+		},
+		{
+			"hex": "84c43e",
+			"category": "A0",
+			"version": 0,
+			"sil_type": "unknown",
+			"mlat": [],
+			"tisb": [],
+			"messages": 174,
+			"seen": 150.9,
+			"rssi": -25.2
+		},
+		{
+			"hex": "8681ac",
+			"category": "A0",
+			"version": 0,
+			"sil_type": "unknown",
+			"mlat": [],
+			"tisb": [],
+			"messages": 1041,
+			"seen": 287.5,
+			"rssi": -25
+		},
+		{
+			"hex": "84b40d",
+			"category": "A3",
+			"version": 2,
+			"sil_type": "perhour",
+			"mlat": [],
+			"tisb": [],
+			"messages": 1066,
+			"seen": 95.6,
+			"rssi": -25.2
+		},
+		{
 			"hex": "8518d0",
 			"alt_baro": 32000,
 			"alt_geom": 33200,
@@ -148,47 +189,6 @@
 			"messages": 2073,
 			"seen": 0.1,
 			"rssi": -10.4
-		},
-		{
-			"hex": "84c43e",
-			"category": "A0",
-			"version": 0,
-			"sil_type": "unknown",
-			"mlat": [],
-			"tisb": [],
-			"messages": 174,
-			"seen": 150.9,
-			"rssi": -25.2
-		},
-		{
-			"hex": "8681ac",
-			"category": "A0",
-			"version": 0,
-			"sil_type": "unknown",
-			"mlat": [],
-			"tisb": [],
-			"messages": 1041,
-			"seen": 287.5,
-			"rssi": -25
-		},
-		{
-			"hex": "84b40d",
-			"category": "A3",
-			"version": 2,
-			"sil_type": "perhour",
-			"mlat": [],
-			"tisb": [],
-			"messages": 1066,
-			"seen": 95.6,
-			"rssi": -25.2
-		},
-		{
-			"hex": "841bd0",
-			"mlat": [],
-			"tisb": [],
-			"messages": 1477,
-			"seen": 282.4,
-			"rssi": -23.1
 		}
 	]
 }
