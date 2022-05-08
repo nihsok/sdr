@@ -1,7 +1,7 @@
 const y0 = 50
 const yr = 200
 const ymin = 0
-const ymax = 12000
+const ymax = 15000
 let realy = (y) => y0+yr-yr*(y-ymin)/(ymax-ymin)
 
 function plot(id,xtitle,x0,xr,xmin,xmax){
