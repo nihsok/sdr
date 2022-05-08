@@ -64,7 +64,7 @@ fr24feed-status
 #before
 ExecStart=/usr/share/dump1090-fa/start-dump1090-fa --write-json %t/dump1090-fa
 #after
-ExecStartPre=/usr/bin/install -m 755 -o dump1090 -g nogroup -d /tmp/dump1090-fa
+ExecStartPre=/usr/bin/install -m 777 -o dump1090 -g nogroup -d /tmp/dump1090-fa
 ExecStart=/usr/share/dump1090-fa/start-dump1090-fa --write-json /tmp/dump1090-fa
 ```
 次に、Web表示にも反映させるため/etc/lighttpd/conf-available/89-skyaware.conf のなかの/run/dump1090-fa/をすべて/tmp/dump1090-fa/に書き換える（3か所くらい）。その後
