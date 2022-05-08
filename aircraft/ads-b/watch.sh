@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#add */10 * * * * bash ~/sdr/aircraft/ads-b/watch.sh on your cron setting
+#add */10 * * * * cd ~/sdr/aircraft/ads-b/; bash watch.sh on your cron setting
 
 path='/tmp/dump1090-fa/'
 for i in {0..119};do

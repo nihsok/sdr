@@ -1,5 +1,5 @@
 # やること
-1. history_\*.jsonを読んでデータを成型→hoge.py
+1. history_\*.jsonを読んでデータを成型→reform.py (定期的にwatch.shを動かすためにcrontabを設定する必要がある。)
 2. 可視化→huga.py
 
 # 観測値の求め方
