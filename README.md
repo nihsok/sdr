@@ -5,8 +5,8 @@
   - Raspberry PiなどのLinux PC （Raspberry Pi 3B相当のスペックが必要と聞いたこともあるが、未検証。4Bでは安定して動いた。ネットにはZeroで動かしている例もある）
   - ノートPCでも可
 - SDR受信機（ドングル）
-  - RTL-SDR Blog V3 R820T2 RTL2832U 1PPM TCXO SMA Software Defined Radio (https://www.rtl-sdr.com/buy-rtl-sdr-dvb-t-dongles/) が一番コスパよさそう。ただし結構熱くなる。
-  - HiLetgo® USB2.0 デジタル DVB-T SDR+ DAB+ FM HDTV TVチューナー 受信機 (https://www.amazon.co.jp/dp/B01MF6TQEA/) これも安いので試してみたい。
+  - RTL-SDR Blog V3 R820T2 RTL2832U 1PPM TCXO SMA Software Defined Radio (https://www.rtl-sdr.com/buy-rtl-sdr-dvb-t-dongles/) が一番コスパよさそう。約$30。ただし結構熱くなる。
+  - HiLetgo® USB2.0 デジタル DVB-T SDR+ DAB+ FM HDTV TVチューナー 受信機 (https://www.amazon.co.jp/dp/B01MF6TQEA/) これも安い。すぐ売り切れるので都度関連商品から探す必要があるが、選べば2000円くらいで買える。ただし**R820T2が搭載されているもの**を選ぶ。R820T2は生産中止しているという噂があるので、代替チューナー（FC0012だと948.6MHzまでしか受信できない）搭載品を間違って買わないよう注意。外見は同じなので、買ってチップを直接見るまでわからない？受信帯域が違うだけなら低周波受信用にまわせばよいが、感度も弱くなるとか。
 - アンテナ
   - いろいろな方向に位置する対象からの電波を受信したいので、無指向性のもの
   - 特定の対象（衛星など）を追いかけるためにローテーターを使うという選択肢もあるが、維持管理コストがかかるのでここでは考えない。
