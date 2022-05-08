@@ -1,6 +1,7 @@
-# やること
-1. history_\*.jsonを読んでデータを成型: reform.py（定期的にwatch.shを動かすためにcrontabを設定する必要がある。）
-2. 可視化: huga.py
+# 機能
+1. reform.py: history_\*.jsonを読んでデータを成型→conv_history_\*.json（定期的にwatch.shを動かすため、crontabの設定が必要）
+2. stat.py: reform.pyを読んでデータを成型→data.js（定期的に動かすため、crontabの設定が必要）
+3. index.html: 可視化（data.js以外の読み込みスクリプトは静的）
 
 # 観測値の求め方
 ## 気温 (T)
@@ -19,7 +20,7 @@
 https://doi.org/10.1371/journal.pone.0205029 ここにはもう少し詳しい求め方が載っている（マッハ数で条件分岐する）
 ```mermaid
 flowchart TD
-  A(相対速度Vr) --> C{eq.}
+  A(相対速度Vr) --> C{気温の計算式}
   B(マッハ数M) --> C
   C --> D[気温T]
 ```
