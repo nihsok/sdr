@@ -1,6 +1,6 @@
 # やること
-1. history_\*.jsonを読んでデータを成型→reform.py (定期的にwatch.shを動かすためにcrontabを設定する必要がある。)
-2. 可視化→huga.py
+1. history_\*.jsonを読んでデータを成型: reform.py（定期的にwatch.shを動かすためにcrontabを設定する必要がある。）
+2. 可視化: huga.py
 
 # 観測値の求め方
 ## 気温 (T)
@@ -16,7 +16,7 @@
 
 <img src="https://latex.codecogs.com/svg.image?T=\frac{V_r^2}{\kappa&space;RM^2}=\frac{V_r^2}{1.4\times&space;287\times&space;M^2}=\frac{V_r^2}{401.8M^2}">
 
-https://doi.org/10.1371/journal.pone.0205029 ここにはもう少し詳しい求め方のが載っている（マッハ数で条件分岐する）
+https://doi.org/10.1371/journal.pone.0205029 ここにはもう少し詳しい求め方が載っている（マッハ数で条件分岐する）
 ```mermaid
 flowchart TD
   A(相対速度Vr) --> C{eq.}
