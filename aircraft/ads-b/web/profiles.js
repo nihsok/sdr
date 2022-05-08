@@ -61,5 +61,5 @@ function plot(id,xtitle,x0,xr,xmin,xmax){
   }
 }
 window.addEventListener("load",function(){
-  plot('temperature','Temperature[K]',50,150,150,300)
+  plot('temperature','Temperature [K]',50,150,150,300)
 })
