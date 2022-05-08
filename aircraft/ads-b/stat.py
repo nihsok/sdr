@@ -1,3 +1,4 @@
+#add 0,30 * * * * cd ~/sdr/aircraft/ads-b/web; python3 ../stat.py on your cron setting
 import json
 path='/tmp/dump1090-fa/'
 hex=[]
@@ -20,7 +21,7 @@ for i in range(199):
   
 dist = [0 for i in hex] #to be filled by real value
 
-with open(path+'data.js','w') as f:
+with open('data.js','w') as f: #ここも/tmp/にしたいが、シンボリックリンクだと今のところ読めない
   f.write('const hex = ['+','.join(["'"+i+"'" for i in hex])+']\n')
   f.write('const lon = ['+','.join([str(i) for i in lon])+']\n')
   f.write('const lat = ['+','.join([str(i) for i in lat])+']\n')
