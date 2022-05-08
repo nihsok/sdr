@@ -21,7 +21,7 @@ for i in range(199):
 dist = [0 for i in hex] #to be filled by real value
 
 with open(path+'data.js','w') as f:
-  f.write('const hex = ['+','.join([i for i in hex])+']\n')
+  f.write('const hex = ['+','.join(["'"+i+"'" for i in hex])+']\n')
   f.write('const lon = ['+','.join([str(i) for i in lon])+']\n')
   f.write('const lat = ['+','.join([str(i) for i in lat])+']\n')
   f.write('const alt = ['+','.join([str(i) for i in alt])+']\n')
