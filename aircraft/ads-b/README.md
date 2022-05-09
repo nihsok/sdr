@@ -1,7 +1,7 @@
 # 機能
-1. reform.py: history_\*.jsonを読んでデータを成型→conv_history_\*.json（定期的にwatch.shを動かすため、crontabの設定が必要）
-2. stat.py: reform.pyを読んでデータを成型→data.js（定期的に動かすため、crontabの設定が必要）
-3. index.html: 可視化（data.js以外の読み込みスクリプトは静的）
+1. reform.py: history_\*.jsonを読んでデータを成型→history_\*.csv
+2. watch.sh: reform.pyの実行と、history_\*.csvを合体→data.csv（crontabの設定が必要）
+3. index.html,\*.js: 可視化
 
 # 観測値の求め方
 ## 気温 (T)
@@ -18,6 +18,9 @@
 <img src="https://latex.codecogs.com/svg.image?T=\frac{V_r^2}{\kappa&space;RM^2}=\frac{V_r^2}{1.4\times&space;287\times&space;M^2}=\frac{V_r^2}{401.8M^2}">
 
 https://doi.org/10.1371/journal.pone.0205029 ここにはもう少し詳しい求め方が載っている（マッハ数で条件分岐する）
+
+## 風速 (U,V)
+
 ```mermaid
 flowchart TD
   A(相対速度Vr) --> C{気温の計算式}
