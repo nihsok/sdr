@@ -59,7 +59,7 @@ fr24feed-status
 ```
 の結果を得る。flightradar24 のMy data sharingに反映されるまではもう半日くらいかかる。
 
-デフォルトでは/run/dump1090-fa/以下に取得データが書き込まれる。SDカードへの書き込み回数を減らすため、データの記録先を/tmp/dump1090-fa/に変更した。まず/lib/systemd/system/dump1090-fa.service を編集
+~~デフォルトでは/run/dump1090-fa/以下に取得データが書き込まれる。SDカードへの書き込み回数を減らすため、データの記録先を/tmp/dump1090-fa/に変更した。まず/lib/systemd/system/dump1090-fa.service を編集~~
 ```
 #before
 ExecStart=/usr/share/dump1090-fa/start-dump1090-fa --write-json %t/dump1090-fa
@@ -67,11 +67,12 @@ ExecStart=/usr/share/dump1090-fa/start-dump1090-fa --write-json %t/dump1090-fa
 ExecStartPre=/usr/bin/install -m 777 -o dump1090 -g nogroup -d /tmp/dump1090-fa
 ExecStart=/usr/share/dump1090-fa/start-dump1090-fa --write-json /tmp/dump1090-fa
 ```
-次に、Web表示にも反映させるため/etc/lighttpd/conf-available/89-skyaware.conf のなかの/run/dump1090-fa/をすべて/tmp/dump1090-fa/に書き換える（3か所くらい）。その後
+~~次に、Web表示にも反映させるため/etc/lighttpd/conf-available/89-skyaware.conf のなかの/run/dump1090-fa/をすべて/tmp/dump1090-fa/に書き換える（3か所くらい）。その後~~
 ```
 sudo systemctl restart lighttpd
 ```
-（dump1090-faも再起動が必要なはずだが、記憶にない）
+~~（dump1090-faも再起動が必要なはずだが、記憶にない）~~
+自分の環境では/run/もtmpfsになっていたので、必要なかった。
 - http://192.168.0.100:8754 flightradar24のステータスを確認できる（IPアドレスは適宜変更の必要あり）
 - http://192.168.0.100/skyaware/ dump1090-faのステータスを確認できる（IPアドレスは適宜変更の必要あり）
 - http://www17.plala.or.jp/y9500/ads-b.html 熱対策とアンテナの工夫について参考になる。
