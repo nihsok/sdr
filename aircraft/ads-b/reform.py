@@ -1,16 +1,41 @@
 import json
 import sys
+import csv
 path='/tmp/dump1090-fa/'
 file=sys.argv[1]
-output={'count':{'withmet':0,'womet':0},'data':[]}
+output=[]
 input=json.load(open(path+file,'r'))['aircraft']
 
 for aircraft in input:
-  if ('mach' in aircraft) & ('tas' in aircraft) & ('lon' in aircraft) & ('lat' in aircraft):#一部欠けていることもある
-    output['count']['withmet']+=1
-    output['data'].append({'hex':aircraft['hex'],'lon':aircraft['lon'],'lat':aircraft['lat'],'alt':aircraft['alt_geom']*0.3048,'temperature':(aircraft['tas']*0.51444)**2/(401.8*aircraft['mach']**2)})
-  else:
-    output['count']['womet']+=1
+  tmp = [0,aircraft['hex']]+['']*10
+  if ('alt_geom' in aircraft):
+    tmp[0] += 1
+    if ('flight' in aircraft):
+      tmp[2] = aircraft['flight']
+    if ('mach' in aircraft) & ('tas' in aircraft) &('alt_geom' in aircraft):#一部欠けていることもある
+      tmp[0] += 4
+      tmp[5] = aircraft['alt_geom']*0.3048 #ft->m
+      tmp[6] = (aircraft['tas']*0.51444)**2/(401.8*aircraft['mach']**2)-273.15
+    if ('lon' in aircraft) & ('lat' in aircraft):
+      tmp[0] += 2
+      tmp[3] = aircraft['lon']
+      tmp[4] = aircraft['lat']
+      if ('gs' in aircraft) & ('track' in aircraft):
+        tmp[0] +=8
+        #calculate wind
+        tmp[7] = 0
+        tmp[8] = 0
+        tmp[9] = 0
+        tmp[10] = 0
+  output.append(tmp)
 
-with open(path+'conv_'+file,'w') as file:
-  json.dump(output,file)
+with open(path+file.split('.')[0]+'.csv','w') as f:
+  writer = csv.writer(f,lineterminator='\n')
+  writer.writerows(output)
+
+#flag,hex,flight,lon,lat,alt,temperature,zonal wind,mediridional wind,wind speed,wind direction,pressure?
+#flag 8:wind
+#flag 4:temperature
+#flag 2:lat,lon
+#falg 1:alt
+#flag 0:no data

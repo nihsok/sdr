@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#add */10 * * * * cd ~/sdr/aircraft/ads-b/; bash watch.sh on your cron setting
+#add */30 * * * * cd ~/sdr/aircraft/ads-b/; bash watch.sh on your cron setting
 
 path='/tmp/dump1090-fa/'
 for i in {0..119};do
@@ -8,3 +8,6 @@ for i in {0..119};do
     python3 reform.py history_$i.json
   fi
 done
+
+cat 'flag,hex,flight,lon,lat,alt,t,u,v,ws,wd,p' > data.csv 
+cat ${path}history_*.csv >> data.csv

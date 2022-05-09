@@ -15,7 +15,7 @@ for i in range(199):
       lon.append(data['lon'])
       lat.append(data['lat'])
       alt.append(data['alt'])
-      temp.append(data['temperature'])
+      temp.append(data['temperature']+273.15)
   except FileNotFoundError as e:
     pass
   
