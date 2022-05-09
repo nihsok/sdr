@@ -1,10 +1,9 @@
 import json
 import sys
 import csv
-path='/tmp/dump1090-fa/'
 file=sys.argv[1]
 output=[]
-input=json.load(open(path+file,'r'))['aircraft']
+input=json.load(open(file,'r'))['aircraft']
 
 for aircraft in input:
   tmp = [0,aircraft['hex']]+['']*10
@@ -29,7 +28,7 @@ for aircraft in input:
         tmp[10] = 0
   output.append(tmp)
 
-with open(path+file.split('.')[0]+'.csv','w') as f:
+with open(file.split('.')[0]+'.csv','w') as f:
   writer = csv.writer(f,lineterminator='\n')
   writer.writerows(output)
 
