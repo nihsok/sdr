@@ -10,19 +10,20 @@ const svg = d3.select("#temperature")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
-    .attr("transform","translate("+margin.left+","+margin.top+")");
+    .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
 d3.csv("./data.csv").then(function(data){
+  //x axis
   svg.append("g")
-    .attr("transform", "translate(0,"+height+")")
+    .attr("transform", "translate(0," + height + ")")
     .call(d3
       .axisBottom(x.domain([-80, 20]))
-      .tickFormat((val)=>{return val % 20 == 0 ? val.toString() : ''}))
-
+      .tickFormat((val) => val % 20 == 0 ? val.toString() : ''))
+  //y axis
   svg.append("g")
     .call(d3
       .axisLeft(y.domain([0, 15000]))
-      .tickFormat((val)=>{return val % 2000 == 0 ? (val/1000).toString() : ''}))
+      .tickFormat((val) => val % 2000 == 0 ? (val/1000).toString() : ''))
 
   const tooltiop = d3.select("#temperature")
     .append("div")
@@ -33,14 +34,15 @@ d3.csv("./data.csv").then(function(data){
     .style("border-width", "1px")
     .style("border-radius", "5px")
     .style("padding", "10px")
+
   svg.selectAll("dot")
-    .data(data)
+    .data(data.filter(d => d.alt && d.t))
     .enter()
     .append("circle")
-      .attr("cx", (d) => {return x(d.t)})
-      .attr("cy", (d) => {return y(d.alt)})
+      .attr("cx", (d) => x(d.t))
+      .attr("cy", (d) => y(d.alt))
       .attr("r", 3)
-      .style("fill", (d) =>{return '#'+d.hex})
+      .style("fill", (d) => '#'+d.hex)
       .style("opacity", 0.5);
 });
 
