@@ -38,15 +38,10 @@ d3.csv("./data.csv").then(function(data){
     .attr("transform","rotate(-90)")
     .text("Altitude [km]")
 
-  const tooltiop = d3.select("#temperature")
+  const tooltip = d3.select("body")
     .append("div")
-    .style("opacity", 0)
     .attr("class", "tooltip")
     .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "1px")
-    .style("border-radius", "5px")
-    .style("padding", "10px")
 
   svg.selectAll("dot")
     .data(data.filter(d => d.alt && d.t))
@@ -56,7 +51,19 @@ d3.csv("./data.csv").then(function(data){
       .attr("cy", (d) => y(d.alt))
       .attr("r", 3)
       .style("fill", (d) => '#'+d.hex)
-      .style("opacity", 0.5);
+      .style("opacity", 0.5)
+    .on("mouseover",function(event,d){
+      d3.select(event.target).style("opacity",1)
+      tooltip
+        .style("visibility","visible")
+        .style("left",60+x(d.t)+"px")
+        .style("top",y(d.alt)+"px")
+        .html('z: '+Math.round(d.alt)/1000+"km<br>T: "+Math.round(d.t*100)/100+'&#8451')
+    })
+    .on("mouseout",function(event){
+      d3.select(event.target).style("opacity",0.5)
+      tooltip.style("visibility","hidden")
+    })
 
   svg.append("clipPath")
     .attr("id","clip-rect")
@@ -65,30 +72,29 @@ d3.csv("./data.csv").then(function(data){
     .attr("y",0)
     .attr("width",width)
     .attr("height",height)
-
-    const dataset=[0,15000]
-    for (i=-60;i<=140;i+=20){
-      svg.append("path")
-        .datum([0,15000])
-        .style("opacity",0.2)
-        .attr("fill","none")
-        .attr("stroke","red")
-        .attr("clip-path","url(#clip-rect)")
-        .attr("d",d3.line()
-          .x((d) => x(i-9.8*d/1000))
-          .y((d) => y(d))
-      )
-      svg.append("path")
+  
+  for (i=-60;i<=140;i+=20){
+    svg.append("path")
       .datum([0,15000])
       .style("opacity",0.2)
       .attr("fill","none")
-      .attr("stroke","blue")
+      .attr("stroke","red")
       .attr("clip-path","url(#clip-rect)")
       .attr("d",d3.line()
-        .x((d) => x(i-5*d/1000))
+        .x((d) => x(i-9.8*d/1000))
         .y((d) => y(d))
     )
-    }
+    svg.append("path")
+    .datum([0,15000])
+    .style("opacity",0.2)
+    .attr("fill","none")
+    .attr("stroke","blue")
+    .attr("clip-path","url(#clip-rect)")
+    .attr("d",d3.line()
+      .x((d) => x(i-5*d/1000))
+      .y((d) => y(d))
+    )
+  }
 });
 
 
