@@ -145,6 +145,16 @@ d3.csv("./data.csv").then(function(data){
       d3.select(event.target).style("opacity",0.5)
       tooltip.style("visibility","hidden")
   })
+  u_profile.append("path")
+  .datum([0,15000])
+  .style("opacity",0.2)
+  .attr("fill","none")
+  .attr("stroke","black")
+  .attr("clip-path","url(#clip-rect)")
+  .attr("d",d3.line()
+    .x(x(0))
+    .y(d => y(d))
+  )
 
   axes(v_profile,'Meridional Wind [m/s]',[-60,60])
   v_profile.selectAll("dot")
@@ -167,7 +177,17 @@ d3.csv("./data.csv").then(function(data){
    .on("mouseout",function(event){
      d3.select(event.target).style("opacity",0.5)
      tooltip.style("visibility","hidden")
- })
+  })
+  v_profile.append("path")
+  .datum([0,15000])
+  .style("opacity",0.2)
+  .attr("fill","none")
+  .attr("stroke","black")
+  .attr("clip-path","url(#clip-rect)")
+  .attr("d",d3.line()
+    .x(x(0))
+    .y(d => y(d))
+  )
 });
 
 
