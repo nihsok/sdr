@@ -1,6 +1,19 @@
 import json
+import math
 import sys
 import csv
+import numpy as np
+from scipy.interpolate import RectBivariateSpline
+
+with open('igrfgridData.csv','r') as f:
+  for i in range(16): header = next(csv.reader(f))
+  z1d = [float(row[4]) for row in csv.reader(f)]
+decline=RectBivariateSpline(
+  np.linspace(-180,180,73), # 5 degree interval
+  np.linspace(-90,85,36),   # 5 degree interval
+  np.array(z1d).reshape([36,73])[::-1,:].T,
+  kx=1,ky=1)
+
 file=sys.argv[1]
 output=[]
 input=json.load(open(file,'r'))['aircraft']
@@ -13,30 +26,40 @@ for aircraft in input:
   if ('alt_geom' in aircraft):
     tmp['flag'] += 1
     tmp['alt'] = aircraft['alt_geom']*0.3048 #ft->m
-    if ('mach' in aircraft) & ('tas' in aircraft):#mach,tasがあってlatlon,altがないケースがあるか？
+    if ('mach' in aircraft) & ('tas' in aircraft): #mach,tasがあってlatlon,altがないケースがあるか？
       tmp['flag'] += 4
-      tmp['t'] = (aircraft['tas']*0.51444)**2/(401.8*aircraft['mach']**2)-273.15
+      tmp['tas'] = aircraft['tas'] * 0.51444 #nm->m/s
+      tmp['mach'] = aircraft['mach']
+      tmp['t'] = tmp['tas'] ** 2 / ( 401.8 * aircraft['mach'] ** 2 ) - 273.15
     if ('lon' in aircraft) & ('lat' in aircraft):
       tmp['flag'] += 2
       tmp['lon'] = aircraft['lon']
       tmp['lat'] = aircraft['lat']
-      if ('gs' in aircraft) & ('track' in aircraft):
-        tmp['flag'] +=8
-        #calculate wind
-        tmp['u'] = 0
-        tmp['v'] = 0
+      if ('gs' in aircraft) & ('tas' in aircraft) & ('track' in aircraft) & (tmp['lat'] <= 85):
+        if ('mag_heading' in aircraft) | ('nav_heading' in aircraft) & (aircraft['nav_heading'] > 0):
+          if ('mag_heading' in aircraft):
+            heading = aircraft['mag_heading']
+          else:
+            heading = aircraft['nav_heading']
+          tmp['flag'] += 8
+          aircraft['gs'] *= 0.51444 #nm->m/s
+          heading += decline.ev(tmp['lon'],tmp['lat'])
+          tmp['vt_x'] = tmp['tas'] * math.sin(heading * math.pi / 180)
+          tmp['vt_y'] = tmp['tas'] * math.cos(heading * math.pi / 180)
+          tmp['u'] = aircraft['gs'] * math.sin(aircraft['track'] * math.pi / 180) - tmp['vt_x']
+          tmp['v'] = aircraft['gs'] * math.cos(aircraft['track'] * math.pi / 180) - tmp['vt_y']
   output.append(tmp)
 
 with open(file.split('.')[0]+'.csv','w') as f:
-  writer = csv.DictWriter(f,['flag','lon','lat','alt','t','u','v','p','tas','gs','heading','track','dist','hex','flight','version','category'],lineterminator='\n')
+  writer = csv.DictWriter(f,['flag','lon','lat','alt','t','u','v','mach','tas','vt_x','vt_y','dist','hex','flight','version','category'],lineterminator='\n')
   writer.writerows(output)
 
 #flag,
-#lon,lat,alt,temperature,zonal wind,mediridional wind, ...physical value
-#pressure,tas,gs,true heading,true track, ...semi-physical value
-#distance,hex, ...additional value
-#flight,version,category ...status value
-#flag 8:wind
+#lon,lat,alt, ...position
+#temperature,zonal wind,mediridional wind, ...physical value
+#mach number, tas, aircraft u, aircraft v, ...verification value
+#distance,hex,flight,version,category ...additional value
+#flag 8:wind (needs lat, lon)
 #flag 4:temperature
 #flag 2:lat,lon
 #falg 1:alt

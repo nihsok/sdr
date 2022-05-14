@@ -61,8 +61,9 @@
 
 αは地磁気偏角で、緯度、経度、高度、時間によって決まる。NOAAのサイト (https://www.ngdc.noaa.gov/geomag/calculators/magcalc.shtml) で計算できる。今回は2020年1月1日における高度10kmの10度ごとの値を取得し、内挿により求める。
 - 数年のスケールでは問題ないと思われるが、地磁気は変化するので適宜更新が必要。
-- この方法では細かい水平構造（例えばhttps://www.gsi.go.jp/common/000237171.pdf）は再現できていないと思われる。
+- この方法では細かい水平構造（例えばhttps://www.gsi.go.jp/common/000237171.pdf） は再現できていないと思われる。
 - 風速の不確実性の原因にはなると思われる。
+- 気温と同様、マッハ数が小さいときはIASからTASを求めることができるが、今回は実装しない。
 
 参考文献：Haan et al (2011) https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2010JD015264
 
