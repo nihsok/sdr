@@ -17,22 +17,23 @@
 
 <img src="https://latex.codecogs.com/svg.image?T=\frac{TAS^2}{\kappa&space;RM^2}=\frac{TAS^2}{1.4\times&space;287\times&space;M^2}=\frac{TAS^2}{401.8M^2}">
 
+### 予備知識
 航空機の速度はTAS以外に
 - 指示対気速度 (Indicated AirSpeed; IAS) 
-- 較正対気速度 (Calibrated AirSpeed) 
-- 等価対気速度 (Equivalent AirSpeed) 
+- 較正対気速度 (Calibrated AirSpeed; CAS) 
+- 等価対気速度 (Equivalent AirSpeed; EAS) 
 
-がある。これら3種はほぼ同じ値で（厳密には異なる）、TASがないときにもIASのデータが得らえることがある。そこで、IASを用いて気温を求める方法も考える。大気の圧縮性を無視できるとき（M≦0.3: https://ja.wikipedia.org/wiki/マッハ数 ）、IASとTASの関係は以下のように与えられる。(https://en.wikipedia.org/wiki/Equivalent_airspeed)
+がある。これら3種はほぼ同じ値で（厳密には異なる）、TASがなくてもIASのデータが得られることがある。そこで、IASを用いて気温を求める方法を考える。大気の圧縮性を無視できるとき（M≦0.3: https://ja.wikipedia.org/wiki/マッハ数 ）、IASとTASの関係は以下のように与えられる。(https://en.wikipedia.org/wiki/Equivalent_airspeed)
 
 <img src="https://latex.codecogs.com/svg.image?IAS\approx&space;EAS=TAS\sqrt{\frac{\rho}{\rho_0}}">
 
-大気の密度ρは等温を仮定すると、スケールハイトHを使って高度zとともに指数関数的に減少する。
+大気の密度ρは等温を仮定すると、地上での密度ρ0からスケールハイトHを使って高度zとともに指数関数的に減少する。
 
 <img src="https://latex.codecogs.com/svg.image?\rho=\rho_0&space;e^{-\frac{z}{H}}">
 
 これを代入すると
 
-<img src="https://latex.codecogs.com/svg.image?TAS\approx&space;IAS\sqrt{\frac{\rho_0}{\rho}}=IAS&space;e^{\frac{z}{2H}}">
+<img src="https://latex.codecogs.com/svg.image?TAS\approx&space;IAS\sqrt{\frac{\rho_0}{\rho}}=IAS\times&space;e^{\frac{z}{2H}}">
 
 Tを求める式は、
 
@@ -40,11 +41,11 @@ Tを求める式は、
 
 ここで、気温約273K（仮定）のとき、Hは8000m。
 
-大気の圧縮性を無視できないとき (M>0.3) は密度の比は使えず、TASとMからTを求める式をTASについて変形した形
+大気の圧縮性を無視できないとき (M>0.3) はIASとTASの変換式は使えず、TASとMからTを求める式をTASについて変形した形
 
 <img src="https://latex.codecogs.com/svg.image?TAS=M\sqrt{\kappa&space;RT}">
 
-で求める。つまり、IASから気温を求められるのはM≦0.3のときで、離着陸時を除いて上空を航行しているときはほとんどM>0.3なので、今回は実装しない。
+で求める。この式でTは求められないので、TASの情報がないときにIASから気温を求められるのはM≦0.3のときに限られる。実際に上空を航行しているときはほとんどM>0.3なので、今回は実装しない。
 
 ## 風速 (U,V)
 
@@ -53,5 +54,8 @@ flowchart TD
   A(相対速度TAS) --> C{気温の計算式}
   B(マッハ数M) --> C
   C --> D[気温T]
-  D(指示対気速度IAS) -. M<0.3 .-> A
+  E(指示対気速度IAS) --> F{M0.3以下}
+  G(高度z) --> F
+  F -.-> A
+  B -.-> F
 ```
