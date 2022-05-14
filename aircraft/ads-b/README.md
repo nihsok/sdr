@@ -17,11 +17,16 @@
 
 <img src="https://latex.codecogs.com/svg.image?T=\frac{TAS^2}{\kappa&space;RM^2}=\frac{TAS^2}{1.4\times&space;287\times&space;M^2}=\frac{TAS^2}{401.8M^2}">
 
-航空機の速度はTAS以外に指示対気速度 (Indicated AirSpeed; IAS) 、較正対気速度 (Calibrated AirSpeed) 、等価対気速度 (Equivalent AirSpeed) がある。これら3種はほぼ同じ値になり（厳密には異なる）、TASがないときにもIASのデータが得らえることがある。そこで、IASを用いて気温を求める方法も考える。大気の圧縮性を無視できるとき（M≦0.3: https://ja.wikipedia.org/wiki/マッハ数）、IASとTASの関係は以下のように与えられる。(https://en.wikipedia.org/wiki/Equivalent_airspeed)
+航空機の速度はTAS以外に
+- 指示対気速度 (Indicated AirSpeed; IAS) 
+- 較正対気速度 (Calibrated AirSpeed) 
+- 等価対気速度 (Equivalent AirSpeed) 
+
+がある。これら3種はほぼ同じ値で（厳密には異なる）、TASがないときにもIASのデータが得らえることがある。そこで、IASを用いて気温を求める方法も考える。大気の圧縮性を無視できるとき（M≦0.3: https://ja.wikipedia.org/wiki/マッハ数 ）、IASとTASの関係は以下のように与えられる。(https://en.wikipedia.org/wiki/Equivalent_airspeed)
 
 <img src="https://latex.codecogs.com/svg.image?IAS\approx&space;EAS=TAS\sqrt{\frac{\rho}{\rho_0}}">
 
-大気の密度ρは等温を仮定すると、高度zとともに指数関数的に減少する。
+大気の密度ρは等温を仮定すると、スケールハイトHを使って高度zとともに指数関数的に減少する。
 
 <img src="https://latex.codecogs.com/svg.image?\rho=\rho_0&space;e^{-\frac{z}{H}}">
 
@@ -48,4 +53,5 @@ flowchart TD
   A(相対速度TAS) --> C{気温の計算式}
   B(マッハ数M) --> C
   C --> D[気温T]
+  D(指示対気速度IAS) -. M<0.3 .-> A
 ```
