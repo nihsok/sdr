@@ -20,6 +20,7 @@ input=json.load(open(file,'r'))['aircraft']
 
 for aircraft in input:
   tmp = {'flag': 0, 'hex': aircraft['hex']}
+  if ('tas' in aircraft): tmp['tas'] = aircraft['tas'] * 0.51444 #nm->m/s
   if ('flight' in aircraft): tmp['flight'] = aircraft['flight']
   if ('version' in aircraft): tmp['version'] = aircraft['version']
   if ('category' in aircraft): tmp['category'] = aircraft['category']
@@ -28,7 +29,6 @@ for aircraft in input:
     tmp['alt'] = aircraft['alt_geom']*0.3048 #ft->m
     if ('mach' in aircraft) & ('tas' in aircraft): #mach,tasがあってlatlon,altがないケースがあるか？
       tmp['flag'] += 4
-      tmp['tas'] = aircraft['tas'] * 0.51444 #nm->m/s
       tmp['mach'] = aircraft['mach']
       tmp['t'] = tmp['tas'] ** 2 / ( 401.8 * aircraft['mach'] ** 2 ) - 273.15
     if ('lon' in aircraft) & ('lat' in aircraft):
