@@ -27,16 +27,16 @@ for aircraft in input:
   if ('alt_geom' in aircraft):
     tmp['flag'] += 1
     tmp['alt'] = aircraft['alt_geom']*0.3048 #ft->m
-    if ('mach' in aircraft) & ('tas' in aircraft): #mach,tasがあってlatlon,altがないケースがあるか？
+    if ('mach' in aircraft) and ('tas' in aircraft): #mach,tasがあってlatlon,altがないケースがあるか？
       tmp['flag'] += 4
       tmp['mach'] = aircraft['mach']
       tmp['t'] = tmp['tas'] ** 2 / ( 401.8 * aircraft['mach'] ** 2 ) - 273.15
-    if ('lon' in aircraft) & ('lat' in aircraft):
+    if ('lon' in aircraft) and ('lat' in aircraft):
       tmp['flag'] += 2
       tmp['lon'] = aircraft['lon']
       tmp['lat'] = aircraft['lat']
-      if ('gs' in aircraft) & ('tas' in aircraft) & ('track' in aircraft) & (tmp['lat'] <= 85):
-        if ('mag_heading' in aircraft) | ('nav_heading' in aircraft) & (aircraft['nav_heading'] > 0):
+      if ('gs' in aircraft) and ('tas' in aircraft) and ('track' in aircraft) and (tmp['lat'] <= 85):
+        if ('mag_heading' in aircraft) or ('nav_heading' in aircraft) and (aircraft['nav_heading'] > 0):
           if ('mag_heading' in aircraft):
             heading = aircraft['mag_heading']
           else:
