@@ -14,21 +14,20 @@
       border-radius: 5px;
       padding: 5px;
     }
-    .profile{
-      height: 400px;
-      width: 300px;
-      margin: 0;
-    }
   </style>
   </head>
   <body>
     <div id="profiles">
-      <div id="temperature" class="profile"></div>
-      <div id="zonal_wind" class="profile"></div>
-      <div id="meridional_wind" class="profile"></div>
       <script src="./profiles.js"></script>
     </div>
+    <div id="stat">
+
+    </div>
     <hr>
+    <div id="verify">
+      <script src="./temperature_calc.js"></script>
+      <script src="./wind_calc.js"></script>
+    </div>
     <a href="data.csv">data.csv</a>
   </body>
 </html>

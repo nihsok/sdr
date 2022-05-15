@@ -1,25 +1,25 @@
-const margin = {top:10, right:10, bottom:40, left:40},
+const margin = {top:10, right:15, bottom:50, left:60},
   width = 300 - margin.left - margin.right,
   height = 400 - margin.top - margin.bottom;
 
 const x = d3.scaleLinear().range([0, width])
 const y = d3.scaleLinear().range([height, 0])
 
-const t_profile = d3.select("#temperature")
+const t_profile = d3.select("#profiles")
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
-const u_profile = d3.select("#zonal_wind")
+const u_profile = d3.select("#profiles")
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
-const v_profile = d3.select("#meridional_wind")
+const v_profile = d3.select("#profiles")
   .append("svg")
    .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -33,11 +33,12 @@ d3.csv("./data.csv").then(function(data){
       .attr("transform", "translate(0," + height + ")")
       .call(d3
         .axisBottom(x.domain(range))
-        .tickFormat((val) => val % 20 == 0 ? val.toString() : ''))
+        .tickFormat((val) => val % 30 == 0 ? val.toString() : ''))
+        .style("font-size",20)
       .append("text")
         .attr("fill", "black")
         .attr("x", width / 2 )
-        .attr("y", 35)
+        .attr("y", 45)
         .html(title)
     svg.append("g")
       .call(d3
@@ -49,11 +50,12 @@ d3.csv("./data.csv").then(function(data){
         .axisLeft(y.domain([0, 15000]))
        .tickValues(d3.range(0,15000,1000))
        .tickFormat((val) => val % 2000 == 0 ? (val/1000).toString() : ''))
+       .style("font-size",20)
       .append("text")
       .attr("fill","black")
       .attr("text-anchor","middle")
       .attr("x",  - height / 2 - margin.top)
-      .attr("y", -30)
+      .attr("y", -40)
       .attr("transform","rotate(-90)")
       .text("Altitude [km]")
     svg.append("g")
@@ -83,10 +85,13 @@ d3.csv("./data.csv").then(function(data){
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
-        .style("left",60+x(d.t)+"px")
-        .style("top",y(d.alt)+"px")
         .html('z: '+Math.round(d.alt)/1000+"km<br>T: "+Math.round(d.t*100)/100+'&#8451')
-      })
+    })
+    .on("mousemove",function(event,d){
+      tooltip
+        .style("left", event.pageX + 15 + "px")
+        .style("top", event.pageY -20 + "px")
+    })
     .on("mouseout",function(event){
       d3.select(event.target).style("opacity",0.5)
       tooltip.style("visibility","hidden")
@@ -123,7 +128,7 @@ d3.csv("./data.csv").then(function(data){
     )
   }
 
-  axes(u_profile,'Zonal wind [m/s]',[-60,60])
+  axes(u_profile,'Zonal wind [m/s]',[-70,70])
   u_profile.selectAll("dot")
    .data(data.filter(d => d.alt && d.u))
     .enter()
@@ -137,10 +142,13 @@ d3.csv("./data.csv").then(function(data){
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
-        .style("left",60+x(d.u)+"px")
-        .style("top",400+y(d.alt)+"px")
         .html('z: '+Math.round(d.alt)/1000+"km<br>u: "+Math.round(d.u*100)/100+'m/s')
-      })
+    })
+    .on("mousemove",function(event,d){
+      tooltip
+      .style("left", event.pageX + 15 + "px")
+      .style("top", event.pageY -20 + "px")
+    })
     .on("mouseout",function(event){
       d3.select(event.target).style("opacity",0.5)
       tooltip.style("visibility","hidden")
@@ -156,7 +164,7 @@ d3.csv("./data.csv").then(function(data){
     .y(d => y(d))
   )
 
-  axes(v_profile,'Meridional Wind [m/s]',[-60,60])
+  axes(v_profile,'Meridional Wind [m/s]',[-70,70])
   v_profile.selectAll("dot")
   .data(data.filter(d => d.alt && d.u))
    .enter()
@@ -170,10 +178,13 @@ d3.csv("./data.csv").then(function(data){
      d3.select(event.target).style("opacity",1)
      tooltip
        .style("visibility","visible")
-       .style("left",60+x(d.v)+"px")
-       .style("top",800+y(d.alt)+"px")
        .html('z: '+Math.round(d.alt)/1000+"km<br>v: "+Math.round(d.v*100)/100+'m/s')
-     })
+    })
+    .on("mousemove",function(event,d){
+      tooltip
+      .style("left", event.pageX + 15 + "px")
+      .style("top", event.pageY -20 + "px")
+    })
    .on("mouseout",function(event){
      d3.select(event.target).style("opacity",0.5)
      tooltip.style("visibility","hidden")

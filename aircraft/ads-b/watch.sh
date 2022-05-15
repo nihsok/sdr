@@ -8,4 +8,4 @@ for i in {0..119};do
 done
 #/tmp/にしたいが、シンボリックリンクだと今のところ読めない?
 echo 'flag,lon,lat,alt,t,u,v,mach,tas,vt_x,vt_y,dist,hex,flight,version,category' > web/data.csv
-cat ${path}history_*.csv | sort -n | uniq >> web/data.csv
+cat ${path}history_*.csv | sort -g | uniq >> web/data.csv
