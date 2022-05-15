@@ -26,8 +26,8 @@ for aircraft in input:
   if ('category' in aircraft): tmp['category'] = aircraft['category']
   if ('alt_geom' in aircraft):
     tmp['flag'] += 1
-    tmp['alt'] = aircraft['alt_geom']*0.3048 #ft->m
-    if ('mach' in aircraft) and ('tas' in aircraft): #mach,tasがあってlatlon,altがないケースがあるか？
+    tmp['alt'] = aircraft['alt_geom'] * 0.3048 #ft->m
+    if ('mach' in aircraft) and ('tas' in aircraft):
       tmp['flag'] += 4
       tmp['mach'] = aircraft['mach']
       tmp['t'] = tmp['tas'] ** 2 / ( 401.8 * aircraft['mach'] ** 2 ) - 273.15
