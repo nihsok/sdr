@@ -21,9 +21,9 @@ d3.csv("./data.csv").then(function(data){
   svg.append("g")
   .attr("transform", "translate(0," + height + ")")
   .call(d3
-    .axisBottom(x.domain([0.6,0.9]))
-    .tickValues(d3.range(0.6,0.91,0.02))
-    .tickFormat(val => val*10 % 1 == 0 ? Math.round(val*10)/10 : ''))
+    .axisBottom(x.domain([0.58,0.88]))
+    .tickValues(d3.range(0.58,0.88,0.02))
+    .tickFormat(val => val*100 % 10 == 0 ? Math.round(val*10)/10 : ''))
   .style("font-size",20)
   .append("text")
     .attr("fill", "black")
@@ -32,8 +32,8 @@ d3.csv("./data.csv").then(function(data){
     .text('Mach number')
   svg.append("g")
   .call(d3
-    .axisTop(x.domain([0.6,0.9]))
-    .tickValues(d3.range(0.6,0.91,0.02))
+    .axisTop(x.domain([0.58,0.88]))
+    .tickValues(d3.range(0.58,0.88,0.02))
     .tickFormat(''))
   //y axis
   svg.append("g")
@@ -69,7 +69,7 @@ d3.csv("./data.csv").then(function(data){
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
-        .html('Mach: '+d.mach+"<br>TAS: "+Math.round(d.tas*100)/100+'m/s<br>T:'+Math.round(d.t*100)/100+'&#8451')
+        .html('Mach: '+d.mach+"<br>TAS: "+Math.round(d.tas*100)/100+'m/s<br>T: '+Math.round(d.t*100)/100+'&#8451')
     })
     .on("mousemove",function(event,d){
       tooltip
@@ -102,7 +102,7 @@ d3.csv("./data.csv").then(function(data){
         d3.select(event.target).style("opacity",1)
         tooltip
           .style("visibility","visible")
-          .html(i+'&#8451')
+          .html('T='+i+'&#8451')
       })
       .on("mousemove",function(event,d){
         tooltip
