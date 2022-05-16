@@ -21,6 +21,7 @@ input=json.load(open(file,'r'))['aircraft']
 for aircraft in input:
   tmp = {'flag': 0, 'hex': aircraft['hex']}
   if ('tas' in aircraft): tmp['tas'] = aircraft['tas'] * 0.51444 #nm->m/s
+  if ('mach' in aircraft): tmp['mach'] = aircraft['mach']
   if ('flight' in aircraft): tmp['flight'] = aircraft['flight']
   if ('version' in aircraft): tmp['version'] = aircraft['version']
   if ('category' in aircraft): tmp['category'] = aircraft['category']
@@ -29,12 +30,12 @@ for aircraft in input:
     tmp['alt'] = aircraft['alt_geom'] * 0.3048 #ft->m
     if ('mach' in aircraft) and ('tas' in aircraft):
       tmp['flag'] += 4
-      tmp['mach'] = aircraft['mach']
-      tmp['t'] = tmp['tas'] ** 2 / ( 401.8 * aircraft['mach'] ** 2 ) - 273.15
+      tmp['t'] = tmp['tas'] ** 2 / ( 401.8 * tmp['mach'] ** 2 ) - 273.15
     if ('lon' in aircraft) and ('lat' in aircraft):
       tmp['flag'] += 2
       tmp['lon'] = aircraft['lon']
       tmp['lat'] = aircraft['lat']
+      tmp['dist'] = 0
       if ('gs' in aircraft) and ('tas' in aircraft) and ('track' in aircraft) and (tmp['lat'] <= 85):
         if ('mag_heading' in aircraft) or ('nav_heading' in aircraft) and (aircraft['nav_heading'] > 0):
           if ('mag_heading' in aircraft):
@@ -51,7 +52,7 @@ for aircraft in input:
   output.append(tmp)
 
 with open(file.split('.')[0]+'.csv','w') as f:
-  writer = csv.DictWriter(f,['flag','lon','lat','alt','t','u','v','mach','tas','vt_x','vt_y','dist','hex','flight','version','category'],lineterminator='\n')
+  writer = csv.DictWriter(f,['flag','alt','lon','lat','u','v','vt_x','vt_y','tas','mach','t','dist','hex','flight','version','category'],lineterminator='\n')
   writer.writerows(output)
 
 #flag,
