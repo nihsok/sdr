@@ -21,9 +21,9 @@ d3.csv("./data.csv").then(function(data){
   svg.append("g")
   .attr("transform", "translate(0," + height + ")")
   .call(d3
-    .axisBottom(x.domain([0.58,0.88]))
-    .tickValues(d3.range(0.58,0.88,0.02))
-    .tickFormat(val => val*100 % 10 == 0 ? Math.round(val*10)/10 : ''))
+    .axisBottom(x.domain([0.575,0.875]))
+    .tickValues(d3.range(0.575,0.875,0.025))
+    .tickFormat(val => val*100 % 10 == 0 ? Math.round(val*100)/100 : ''))
   .style("font-size",20)
   .append("text")
     .attr("fill", "black")
@@ -32,8 +32,8 @@ d3.csv("./data.csv").then(function(data){
     .text('Mach number')
   svg.append("g")
   .call(d3
-    .axisTop(x.domain([0.58,0.88]))
-    .tickValues(d3.range(0.58,0.88,0.02))
+    .axisTop(x.domain([0.575,0.875]))
+    .tickValues(d3.range(0.575,0.875,0.025))
     .tickFormat(''))
   //y axis
   svg.append("g")
