@@ -29,7 +29,7 @@ for aircraft in input:
     tmp['flag'] += 1
     tmp['alt'] = aircraft['alt_geom'] * 0.3048 #ft->m
     if ('mach' in aircraft) and ('tas' in aircraft):
-      tmp['flag'] += 4
+      tmp['flag'] += 8
       tmp['t'] = tmp['tas'] ** 2 / ( 401.8 * tmp['mach'] ** 2 ) - 273.15
     if ('lon' in aircraft) and ('lat' in aircraft):
       tmp['flag'] += 2
@@ -42,17 +42,19 @@ for aircraft in input:
             heading = aircraft['mag_heading']
           else:
             heading = aircraft['nav_heading']
-          tmp['flag'] += 8
+          tmp['flag'] += 4
           aircraft['gs'] *= 0.51444 #nm->m/s
           heading += decline.ev(tmp['lon'],tmp['lat'])
           tmp['vt_x'] = tmp['tas'] * math.sin(heading * math.pi / 180)
           tmp['vt_y'] = tmp['tas'] * math.cos(heading * math.pi / 180)
-          tmp['u'] = aircraft['gs'] * math.sin(aircraft['track'] * math.pi / 180) - tmp['vt_x']
-          tmp['v'] = aircraft['gs'] * math.cos(aircraft['track'] * math.pi / 180) - tmp['vt_y']
+          tmp['gs_x'] = aircraft['gs'] * math.sin(aircraft['track'] * math.pi / 180)
+          tmp['gs_y'] = aircraft['gs'] * math.cos(aircraft['track'] * math.pi / 180)
+          tmp['u'] = tmp['gs_x'] - tmp['vt_x']
+          tmp['v'] = tmp['gs_y'] - tmp['vt_y']
   output.append(tmp)
 
 with open(file.split('.')[0]+'.csv','w') as f:
-  writer = csv.DictWriter(f,['flag','alt','lon','lat','u','v','vt_x','vt_y','tas','mach','t','dist','hex','flight','version','category'],lineterminator='\n')
+  writer = csv.DictWriter(f,['flag','alt','lon','lat','u','v','vt_x','vt_y','gs_x','gs_y','tas','mach','t','dist','hex','flight','version','category'],lineterminator='\n')
   writer.writerows(output)
 
 #flag,
@@ -60,8 +62,8 @@ with open(file.split('.')[0]+'.csv','w') as f:
 #temperature,zonal wind,mediridional wind, ...physical value
 #mach number, tas, aircraft u, aircraft v, ...verification value
 #distance,hex,flight,version,category ...additional value
-#flag 8:wind (needs lat, lon)
-#flag 4:temperature
+#flag 8:temperature
+#flag 4:wind (needs lat, lon)
 #flag 2:lat,lon
 #falg 1:alt
 #flag 0:no data

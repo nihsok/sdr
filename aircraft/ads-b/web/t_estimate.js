@@ -1,5 +1,5 @@
 d3.csv("./data.csv").then(function(data){
-  const margin = {top:10, right:15, bottom:85, left:80},
+  const margin = {top:10, right:20, bottom:90, left:80},
         width  = 450 - margin.left - margin.right,
         height = 450 - margin.top - margin.bottom;
 
@@ -21,9 +21,9 @@ d3.csv("./data.csv").then(function(data){
   svg.append("g")
   .attr("transform", "translate(0," + height + ")")
   .call(d3
-    .axisBottom(x.domain([0.575,0.875]))
-    .tickValues(d3.range(0.575,0.875,0.025))
-    .tickFormat(val => val*100 % 10 == 0 ? Math.round(val*100)/100 : ''))
+    .axisBottom(x.domain([0.5,0.9]))
+    .tickValues(d3.range(0.5,0.91,0.02))
+    .tickFormat(val => val*10 % 1 == 0 ? Math.round(val*100)/100 : ''))
   .style("font-size",20)
   .append("text")
     .attr("fill", "black")
@@ -32,14 +32,14 @@ d3.csv("./data.csv").then(function(data){
     .text('Mach number')
   svg.append("g")
   .call(d3
-    .axisTop(x.domain([0.575,0.875]))
-    .tickValues(d3.range(0.575,0.875,0.025))
+    .axisTop(x.domain([0.5,0.9]))
+    .tickValues(d3.range(0.5,0.9,0.02))
     .tickFormat(''))
   //y axis
   svg.append("g")
   .call(d3
-    .axisLeft(y.domain([180,270]))
-    .tickValues(d3.range(180,271,5))
+    .axisLeft(y.domain([165,270]))
+    .tickValues(d3.range(165,271,5))
     .tickFormat((val) => val % 10 == 0 ? val.toString() : ''))
   .style("font-size",20)
   .append("text")
@@ -52,8 +52,8 @@ d3.csv("./data.csv").then(function(data){
   svg.append("g")
   .attr('transform',"translate(" + width + ",0)")
   .call(d3
-    .axisRight(y.domain([180,270]))
-    .tickValues(d3.range(180,270,5))
+    .axisRight(y.domain([165,270]))
+    .tickValues(d3.range(165,270,5))
     .tickFormat(''))
 
   svg.selectAll("dot")

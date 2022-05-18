@@ -126,7 +126,7 @@ d3.csv("./data.csv").then(function(data){
     )
   }
 
-  axes(u_profile,'Zonal wind [m/s]',[-70,70])
+  axes(u_profile,'Zonal wind [m/s]',[-80,80])
   u_profile.selectAll("dot")
    .data(data.filter(d => d.alt && d.u))
     .enter()
@@ -161,7 +161,7 @@ d3.csv("./data.csv").then(function(data){
     .y(d => y(d))
   )
 
-  axes(v_profile,'Meridional Wind [m/s]',[-70,70])
+  axes(v_profile,'Meridional Wind [m/s]',[-80,80])
   v_profile.selectAll("dot")
   .data(data.filter(d => d.alt && d.u))
    .enter()

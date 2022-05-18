@@ -7,5 +7,5 @@ for i in {0..119};do
   fi
 done
 #/tmp/にしたいが、シンボリックリンクだと今のところ読めない?
-echo 'flag,alt,lon,lat,u,v,vt_x,vt_y,tas,mach,t,dist,hex,flight,version,category' > web/data.csv
+echo 'flag,alt,lon,lat,u,v,vt_x,vt_y,gs_x,gs_y,tas,mach,t,dist,hex,flight,version,category' > web/data.csv
 cat ${path}history_*.csv | sort -g | uniq >> web/data.csv
