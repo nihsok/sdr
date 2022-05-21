@@ -1,7 +1,7 @@
 d3.csv("./data.csv").then(function(data){
   const margin = {top:10, right:20, bottom:90, left:80},
-        width  = 450 - margin.left - margin.right,
-        height = 450 - margin.top - margin.bottom;
+        width  = 495 - margin.left - margin.right,
+        height = 495 - margin.top - margin.bottom;
 
   const x = d3.scaleLinear().range([0, width])
   const y = d3.scaleLinear().range([height, 0])
