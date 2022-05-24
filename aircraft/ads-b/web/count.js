@@ -1,9 +1,9 @@
 d3.csv("./stat.csv").then(function(data){
   const margin = {top:10, right:20, bottom:90, left:80},
         width  = 990 - margin.left - margin.right,
-        height = 300 - margin.top - margin.bottom;
+        height = 250 - margin.top - margin.bottom;
 
-  const x = d3.scaleTime().domain([new Date(data[0].time),new Date(data[data.length-1].time)]).range([0, width])//長すぎる場合は切るように
+  const x = d3.scaleTime().domain([new Date(data[data.length<72?0:data.length-72].time),new Date(data[data.length-1].time)]).range([0, width])
   const y = d3.scaleLinear().domain([0,650]).range([height, 0])
 
   const svg = d3.select("#count")
@@ -41,13 +41,21 @@ d3.csv("./stat.csv").then(function(data){
     .attr("x",  - height / 2 - margin.top)
     .attr("y", -60)
     .attr("transform","rotate(-90)")
-    .text("Number of data")
+    .text("# of data / hour")
   svg.append("g")
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
       .axisRight(y)
       .tickValues(d3.range(0,651,50))
       .tickFormat(''))
+  
+  svg.append("clipPath")
+    .attr("id","clip-count")
+    .append("rect")
+      .attr("x",0)
+      .attr("y",0)
+      .attr("width",width)
+      .attr("height",height)
   
   svg.selectAll(null)
     .data(d3.range(50,650,50))
@@ -57,26 +65,27 @@ d3.csv("./stat.csv").then(function(data){
     .attr("y1",d=>y(d))
     .attr("x2",x(new Date(data[data.length-1].time)))
     .attr("y2",d=>y(d))
+    .attr("clip-path","url(#clip-count)")
     .style("stroke","black")
     .style("opacity",0.1)
 
-  const color=['rgb(102,51,0)','rgb(255,40,0)','rgb(0,65,255)','rgb(53,161,107)','rgb(154,0,121)']
-  const legend={t:'T,U,Position',u:'U,Position',latlon:'Position (lon,lat,alt)',alt:'Altitude',little:'No info'}
-  const stack=d3.stack()
-  .keys(['t','u','latlon','alt','little'])(data).reverse()
-  console.log(stack)
+  const color=['rgb(102,51,0)','rgb(53,161,107)','rgb(255,40,0)','rgb(0,65,255)','rgb(154,0,121)']
+  
+  const legend={t:'T,U,Position',u:'U,Position',latlon:'Position (lon,lat,alt)',alt:'Altitude',little:'All'}
+
   svg.selectAll("mylayers")
-    .data(stack)
+    .data(d3.stack()
+      .keys(['t','u','latlon','alt','little'])(data).reverse())
     .join("path")
     .style("fill",(d,i)=>color[i])
     .style("opacity",0.3)
+    .attr("clip-path","url(#clip-count)")
     .attr("d",d3.area()
       .x(d=>x(new Date(d.data.time)))
-      .y0(d=>y(0))
+      .y0(y(0))
       .y1(d=>y(d[1]))
     )
     .on("mouseover",function(event,d){
-      console.log(d3.sum(d,(d)=>d[1]),d3.max(d,(d)=>d[1]),d3.mean(d,(d)=>d[1]))
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
