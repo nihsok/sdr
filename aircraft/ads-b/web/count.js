@@ -89,7 +89,7 @@ d3.csv("./stat.csv").then(function(data){
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
-        .text(legend[d.key]+' Max='+d3.max(d,(d)=>d[1])+', Mean='+Math.round(d3.mean(d,(d)=>d[1])*10)/10)
+        .html(legend[d.key]+'<br>Max='+d3.max(d,(d)=>d[1])+', Mean='+Math.round(d3.mean(d,(d)=>d[1])*10)/10)
     })
     .on("mousemove",function(event,d){
       tooltip
