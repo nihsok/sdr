@@ -2,7 +2,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   const width = window.innerWidth
   const height = 500
   const earthradius = 637.1//10km
-  const zfactor = 50
+  const zfactor = 10
 
   const canvasElement = document.querySelector('#myCanvas')
   const renderer = new THREE.WebGLRenderer({
@@ -46,7 +46,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       }
     }
     const geometry = new THREE.BufferGeometry().setAttribute('position',new THREE.Float32BufferAttribute(points,3))
-    const material = new THREE.PointsMaterial({size:4,color:0xffffff})
+    const material = new THREE.PointsMaterial({size:2,color:0xffffff})
     const mesh=new THREE.Points(geometry,material)
     scene.add(mesh)
   })

@@ -1,7 +1,7 @@
 d3.csv("./data.csv").then(function(data){
-  const margin = {top:10, right:20, bottom:90, left:80},
+  const margin = {top:10, right:15, bottom:45, left:75},
         width  = 495 - margin.left - margin.right,
-        height = 495 - margin.top - margin.bottom;
+        height = width//495 - margin.top - margin.bottom;
 
   const x = d3.scaleLinear().range([0, width])
   const y = d3.scaleLinear().range([height, 0])
@@ -12,6 +12,7 @@ d3.csv("./data.csv").then(function(data){
       .attr("height", height + margin.top + margin.bottom)
     .append("g")
       .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+
   const tooltip = d3.select("body")
     .append("div")
     .attr("class", "tooltip")
@@ -27,13 +28,13 @@ d3.csv("./data.csv").then(function(data){
     .append("text")
       .attr("fill", "black")
       .attr("x", width / 2 )
-      .attr("y", 45)
+      .attr("y", 40)
       .text('Zonal component [m/s]')
   svg.append("g")
-  .call(d3
-    .axisTop(x.domain([-350,350]))
-    .tickValues(d3.range(-350,351,50))
-    .tickFormat(''))
+    .call(d3
+      .axisTop(x.domain([-350,350]))
+      .tickValues(d3.range(-350,351,50))
+      .tickFormat(''))
   //y axis
   svg.append("g")
     .call(d3
@@ -45,7 +46,7 @@ d3.csv("./data.csv").then(function(data){
     .attr("fill","black")
     .attr("text-anchor","middle")
     .attr("x",  - height / 2 - margin.top)
-    .attr("y", -60)
+    .attr("y", -55)
     .attr("transform","rotate(-90)")
     .text("Meridional component [m/s]")
   svg.append("g")
