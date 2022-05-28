@@ -15,6 +15,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   const controls = new THREE.OrbitControls(camera,canvasElement)
   controls.enableDamping = true
   controls.dampingFactor = 0.2
+  controls.rotateSpeed = 0.03
 
   const light = new THREE.AmbientLight(0xFFFFFF,1.0)
   scene.add(light)

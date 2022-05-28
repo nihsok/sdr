@@ -154,6 +154,6 @@ d3.csv("./data.csv").then(function(data){
     .attr("x2", d=>x(d.u))
     .attr("y2", d=>y(d.v))
     .style("stroke","red")
-    .style("stroke-width",0.3)
+    .style("stroke-width",0.1)
     .attr("marker-end","url(#arrow-red)")
 })
