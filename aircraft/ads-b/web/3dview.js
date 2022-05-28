@@ -5,15 +5,13 @@ window.addEventListener('DOMContentLoaded',()=>{
   const zfactor = 2
 
   const canvasElement = document.querySelector('#myCanvas')
-  const renderer = new THREE.WebGLRenderer({
-    canvas: canvasElement
-  })
+  const renderer = new THREE.WebGLRenderer({canvas: canvasElement})
   renderer.setSize(width,height)
 
   const scene = new THREE.Scene()
 
   const camera = new THREE.PerspectiveCamera(45,width/height)
-  camera.position.set(-500,500,-500)
+  camera.position.set(-450,450,-450)
 
   const controls = new THREE.OrbitControls(camera,canvasElement)
   controls.enableDamping = true
@@ -30,6 +28,19 @@ window.addEventListener('DOMContentLoaded',()=>{
   const earth = new THREE.Mesh(geometry,material)
   scene.add(earth)
 
+  const color = t => {
+    if     (t<-55){ return 0x30015f }
+    else if(t<-50){ return 0x0000fa }
+    else if(t<-45){ return 0x027ff0 }
+    else if(t<-40){ return 0x26aebc }
+    else if(t<-35){ return 0x34cca4 }
+    else if(t<-30){ return 0xc0da80 }
+    else if(t<-25){ return 0xecec00 }
+    else if(t<-20){ return 0xeba20f }
+    else if(t<-15){ return 0xea691a }
+    else          { return 0xd20000 }
+  }//https://www.iaud.net/activity/2871/
+
   const loader = new THREE.FileLoader().load('./data.csv',(data)=>{
     const p=[]
     for (const row of data.split('\n')){
@@ -40,25 +51,26 @@ window.addEventListener('DOMContentLoaded',()=>{
         const theta = (90+parseFloat(values[2]))*Math.PI/180 //+90 shift
 
         if(values[0] > 6){
-          const cos =   Math.cos(values[3]*Math.PI/180)
-          const x = cos*Math.cos(values[2]*Math.PI/180)*values[5] - cos*values[4]
-          const y = cos*Math.sin(values[2]*Math.PI/180)*values[5] + cos*values[4]
-          const z =    -Math.sin(values[3]*Math.PI/180)*values[5]
+          const cos =   Math.cos((90-values[3])*Math.PI/180)
+          const x = cos*Math.cos((90+parseFloat(values[2]))*Math.PI/180)*values[5] - cos*values[4]
+          const y = cos*Math.sin((90+parseFloat(values[2]))*Math.PI/180)*values[5] + cos*values[4]
+          const z =    -Math.sin((90-values[3])*Math.PI/180)*values[5]
           const wind  = new THREE.Vector3().set(x,y,z)
           const arrow = new THREE.ArrowHelper(
             wind.normalize(),
             new THREE.Vector3().setFromSphericalCoords(r,phi,theta),
             wind.length()*3,
-            0xffffff)
+            color(values[12]))
           scene.add(arrow)
         }else{
           p.push(new THREE.Vector3().setFromSphericalCoords(r,phi,theta))
         }
       }
     }
-    const geometry = new THREE.BufferGeometry().setFromPoints(p)
-    const material = new THREE.PointsMaterial({color:0xffffff,size:0.2})
-    const points = new THREE.Points(geometry,material)
+    const points = new THREE.Points(
+      new THREE.BufferGeometry().setFromPoints(p),
+      new THREE.PointsMaterial({color:0xffffff,size:0.2})
+    )
     scene.add(points)
   })
 
