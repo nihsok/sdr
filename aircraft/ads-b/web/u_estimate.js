@@ -64,7 +64,7 @@ d3.csv("./data.csv").then(function(data){
     .attr("stroke","black")
     .attr("cx",x(0))
     .attr("cy",y(0))
-    .attr("r",d => d*445/(2*width))
+    .attr("r",d => d*470/(2*width))
     .style("opacity", 0.1)
     .attr("clip-path","url(#clip-t)")
     .on("mouseover",function(event,d){

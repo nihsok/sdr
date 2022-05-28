@@ -13,7 +13,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   const scene = new THREE.Scene()
 
   const camera = new THREE.PerspectiveCamera(45,width/height)
-  camera.position.set(0,0,800)//もっといい位置に置くか、読み込み時に回転させる
+  camera.position.set(-500,500,-500)
 
   const controls = new THREE.OrbitControls(camera,canvasElement)
   controls.enableDamping = true
@@ -23,7 +23,8 @@ window.addEventListener('DOMContentLoaded',()=>{
   scene.add(light)
 
   const material = new THREE.MeshStandardMaterial({
-    map:new THREE.TextureLoader().load('./lib/land_shallow_topo_2048.jpg')
+    map:new THREE.TextureLoader().load('./lib/land_shallow_topo_8192.jpg')
+    //https://visibleearth.nasa.gov/images/57752/blue-marble-land-surface-shallow-water-and-shaded-topography
   })
   const geometry = new THREE.SphereGeometry(earthradius,20,20)
   const earth = new THREE.Mesh(geometry,material)
@@ -31,24 +32,25 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   const loader = new THREE.FileLoader().load('./data.csv',(data)=>{
     const points=[]
-    const rows = data.split('\n')
-    for (const row of rows){
+    for (const row of data.split('\n')){
       const values = row.split(',')
       if(values[0]>2){
         const r = earthradius+values[1]/10000*zfactor
-        const longitude = -values[2]*Math.PI/180
-        const latitude = values[3]*Math.PI/180
+        const phi =   (90-           values[3] )*Math.PI/180 //colatitude
+        const theta = (90+parseFloat(values[2]))*Math.PI/180 //+90 shift
 
-        const x = Math.cos(latitude)*Math.cos(longitude)*r
-        const y = Math.sin(latitude)*r
-        const z = Math.cos(latitude)*Math.sin(longitude)*r
-        points.push(x,y,z)
+
+        if(values[0]>6){
+          const arrow = new THREE.ArrowHelper(
+            new THREE.Vector3().set(0,0,1),
+            new THREE.Vector3().setFromSphericalCoords(r,phi,theta),
+            5,0xffffff)
+          scene.add(arrow)
+        }else{
+
+        }
       }
     }
-    const geometry = new THREE.BufferGeometry().setAttribute('position',new THREE.Float32BufferAttribute(points,3))
-    const material = new THREE.PointsMaterial({size:2,color:0xffffff})
-    const mesh=new THREE.Points(geometry,material)
-    scene.add(mesh)
   })
 
   tick()
