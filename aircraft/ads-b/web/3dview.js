@@ -1,8 +1,7 @@
 window.addEventListener('DOMContentLoaded',()=>{
   const width = window.innerWidth
-  const height = 500
+  const height = 700
   const earthradius = 637.1//10km
-  const zfactor = 2
 
   const canvasElement = document.querySelector('#myCanvas')
   const renderer = new THREE.WebGLRenderer({canvas: canvasElement})
@@ -11,7 +10,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   const scene = new THREE.Scene()
 
   const camera = new THREE.PerspectiveCamera(45,width/height)
-  camera.position.set(-450,450,-450)
+  camera.position.set(-450,450,-450)//parameter
 
   const controls = new THREE.OrbitControls(camera,canvasElement)
   controls.enableDamping = true
@@ -21,7 +20,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   scene.add(light)
 
   const material = new THREE.MeshStandardMaterial({
-    map:new THREE.TextureLoader().load('./lib/land_shallow_topo_8192.jpg')
+    map: new THREE.TextureLoader().load('./lib/land_shallow_topo_8192.jpg')
     //https://visibleearth.nasa.gov/images/57752/blue-marble-land-surface-shallow-water-and-shaded-topography
   })
   const geometry = new THREE.SphereGeometry(earthradius,20,20)
@@ -46,21 +45,23 @@ window.addEventListener('DOMContentLoaded',()=>{
     for (const row of data.split('\n')){
       const values = row.split(',')
       if(values[0] > 2){
-        const r = earthradius+values[1]/10000*zfactor
+        const r = earthradius + values[1]/10000 * 2//parameter
         const phi   = (90-           values[3] )*Math.PI/180 //colatitude
         const theta = (90+parseFloat(values[2]))*Math.PI/180 //+90 shift
 
         if(values[0] > 6){
-          const cos =   Math.cos((90-values[3])*Math.PI/180)
-          const x = cos*Math.cos((90+parseFloat(values[2]))*Math.PI/180)*values[5] - cos*values[4]
-          const y = cos*Math.sin((90+parseFloat(values[2]))*Math.PI/180)*values[5] + cos*values[4]
-          const z =    -Math.sin((90-values[3])*Math.PI/180)*values[5]
+          const x = - values[5]*Math.cos(phi)*Math.sin(theta) + values[4]*Math.cos(theta)
+          const y =   values[5]*Math.sin(phi)
+          const z = - values[5]*Math.cos(phi)*Math.cos(theta) - values[4]*Math.sin(theta) 
           const wind  = new THREE.Vector3().set(x,y,z)
+
           const arrow = new THREE.ArrowHelper(
             wind.normalize(),
             new THREE.Vector3().setFromSphericalCoords(r,phi,theta),
-            wind.length()*3,
-            color(values[12]))
+            wind.length() * 2,//parameter
+            color(values[12]),
+            0.5,0.4//parameter
+          )
           scene.add(arrow)
         }else{
           p.push(new THREE.Vector3().setFromSphericalCoords(r,phi,theta))
