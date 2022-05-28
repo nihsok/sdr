@@ -93,7 +93,7 @@ d3.csv("./data.csv").then(function(data){
     .attr("y2", d=>y(d.gs_y))
     .style("stroke","gray")
     .style("stroke-width",0.1)
-    .style("opacity",0.5)
+    .style("opacity",0.1)
 
   svg.selectAll(null)
     .data(data.filter(d=>d.u))
@@ -105,7 +105,7 @@ d3.csv("./data.csv").then(function(data){
     .attr("y2", d=>y(d.gs_y))
     .style("stroke","gray")
     .style("stroke-width",0.1)
-    .style("opacity",0.5)
+    .style("opacity",0.1)
 
   for (color of ['red','blue','black']){
     svg.append("defs")
@@ -130,7 +130,7 @@ d3.csv("./data.csv").then(function(data){
     .attr("x2", d=>x(d.gs_x))
     .attr("y2", d=>y(d.gs_y))
     .style("stroke","black")
-    .style("stroke-width",0.3)
+    .style("stroke-width",0.1)
     .attr("marker-end","url(#arrow-black)")
 
   svg.selectAll(null)
@@ -142,11 +142,11 @@ d3.csv("./data.csv").then(function(data){
     .attr("x2", d=>x(d.vt_x))
     .attr("y2", d=>y(d.vt_y))
     .style("stroke","blue")
-    .style("stroke-width",0.3)
+    .style("stroke-width",0.1)
     .attr("marker-end","url(#arrow-blue)")
 
   svg.selectAll(null)
-    .data(data.filter(d => d.u))
+    .data(data.filter(d=>d.u))
     .enter()
     .append("line")
     .attr("x1", x(0))

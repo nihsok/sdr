@@ -1,9 +1,10 @@
 d3.csv("./stat.csv").then(function(data){
+  if(data.length>120) data = data.slice(data.length-120)
   const margin = {top:10, right:15, bottom:20, left:75},
         width  = 990 - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
 
-  const x = d3.scaleTime().domain([new Date(data[data.length<96?0:data.length-96].time),new Date(data[data.length-1].time)]).range([0, width])
+  const x = d3.scaleTime().domain([new Date(data[0].time),new Date(data[data.length-1].time)]).range([0, width])
   const y = d3.scaleLinear().domain([0,650]).range([height, 0])
 
   const svg = d3.select("#count")
@@ -38,7 +39,7 @@ d3.csv("./stat.csv").then(function(data){
     .append("text")
     .attr("fill","black")
     .attr("text-anchor","middle")
-    .attr("x",  - height / 2 - margin.top)
+    .attr("x", - height / 2 - margin.top)
     .attr("y", -55)
     .attr("transform","rotate(-90)")
     .text("# of data / hour")
@@ -89,7 +90,13 @@ d3.csv("./stat.csv").then(function(data){
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
-        .html(legend[d.key]+'<br>Max='+d3.max(d,(d)=>d[1])+', Mean='+Math.round(d3.mean(d,(d)=>d[1])*10)/10)
+        .html(legend[d.key]
+          +'<br>Latest='+d[d.length-1][1]
+          +', Max='                 +d3.max(      d,(d)=>d[1])
+          +', Median='              +d3.median(   d,(d)=>d[1])
+          +', Mean='     +Math.round(d3.mean(     d,(d)=>d[1])*10)/10
+          +', Deviation='+Math.round(d3.deviation(d,(d)=>d[1])*10)/10
+)
     })
     .on("mousemove",function(event,d){
       tooltip
