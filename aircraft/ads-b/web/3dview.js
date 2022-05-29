@@ -15,7 +15,9 @@ window.addEventListener('DOMContentLoaded',()=>{
   const controls = new THREE.OrbitControls(camera,canvasElement)
   controls.enableDamping = true
   controls.dampingFactor = 0.2
-  controls.rotateSpeed = 0.03
+  controls.rotateSpeed = 0.02
+  controls.zoomSpeed = 0.1
+  controls.panSpeed = 0.1
 
   const light = new THREE.AmbientLight(0xFFFFFF,1.0)
   scene.add(light)
@@ -29,16 +31,17 @@ window.addEventListener('DOMContentLoaded',()=>{
   scene.add(earth)
 
   const color = t => {
-    if     (t<-55){ return 0x30015f }
-    else if(t<-50){ return 0x0000fa }
-    else if(t<-45){ return 0x027ff0 }
-    else if(t<-40){ return 0x26aebc }
-    else if(t<-35){ return 0x34cca4 }
-    else if(t<-30){ return 0xc0da80 }
-    else if(t<-25){ return 0xecec00 }
-    else if(t<-20){ return 0xeba20f }
-    else if(t<-15){ return 0xea691a }
-    else          { return 0xd20000 }
+    if     ( t == "" ){ return 0x7f878f }
+    else if( t < -55 ){ return 0x30015f }
+    else if( t < -50 ){ return 0x0000fa }
+    else if( t < -45 ){ return 0x027ff0 }
+    else if( t < -40 ){ return 0x26aebc }
+    else if( t < -35 ){ return 0x34cca4 }
+    else if( t < -30 ){ return 0xc0da80 }
+    else if( t < -25 ){ return 0xecec00 }
+    else if( t < -20 ){ return 0xeba20f }
+    else if( t < -15 ){ return 0xea691a }
+    else              { return 0xd20000 }
   }//https://www.iaud.net/activity/2871/
 
   const loader = new THREE.FileLoader().load('./data.csv',(data)=>{
@@ -55,13 +58,13 @@ window.addEventListener('DOMContentLoaded',()=>{
           const y =   values[5]*Math.sin(phi)
           const z = - values[5]*Math.cos(phi)*Math.cos(theta) - values[4]*Math.sin(theta) 
           const wind  = new THREE.Vector3().set(x,y,z)
-
+          console.log([values[12],color(values[12])])
           const arrow = new THREE.ArrowHelper(
             wind.normalize(),
             new THREE.Vector3().setFromSphericalCoords(r,phi,theta),
-            wind.length() * 2,//parameter
+            wind.length() * 1,//parameter
             color(values[12]),
-            0.5,0.4//parameter
+            0.3,0.1//parameter
           )
           scene.add(arrow)
         }else{
