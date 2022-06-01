@@ -65,7 +65,7 @@ d3.csv("./data.csv").then(function(data){
       .attr("height",height)
   
   svg.selectAll(null)
-    .data(d3.range(-80,1,10))
+    .data(d3.range(-90,1,10))
     .enter()
     .append("line")
     .attr("x1",x(0))

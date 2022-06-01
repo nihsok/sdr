@@ -58,13 +58,12 @@ window.addEventListener('DOMContentLoaded',()=>{
           const y =   values[5]*Math.sin(phi)
           const z = - values[5]*Math.cos(phi)*Math.cos(theta) - values[4]*Math.sin(theta) 
           const wind  = new THREE.Vector3().set(x,y,z)
-          console.log([values[12],color(values[12])])
           const arrow = new THREE.ArrowHelper(
             wind.normalize(),
             new THREE.Vector3().setFromSphericalCoords(r,phi,theta),
-            wind.length() * 1,//parameter
+            wind.length(),//parameter
             color(values[12]),
-            0.3,0.1//parameter
+            0.3, 0.1//parameter
           )
           scene.add(arrow)
         }else{
@@ -74,7 +73,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     }
     const points = new THREE.Points(
       new THREE.BufferGeometry().setFromPoints(p),
-      new THREE.PointsMaterial({color:0xffffff,size:0.2})
+      new THREE.PointsMaterial({color:0x7f878f,size:0.2})
     )
     scene.add(points)
   })
