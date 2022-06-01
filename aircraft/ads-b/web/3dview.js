@@ -59,12 +59,14 @@ window.addEventListener('DOMContentLoaded',()=>{
           const z = - values[5]*Math.cos(phi)*Math.cos(theta) - values[4]*Math.sin(theta) 
           const wind  = new THREE.Vector3().set(x,y,z)
           const arrow = new THREE.ArrowHelper(
-            wind.normalize(),
+            wind.clone().normalize(),
             new THREE.Vector3().setFromSphericalCoords(r,phi,theta),
-            wind.length(),//parameter
+            wind.length() * 0.02,//parameter
             color(values[12]),
-            0.3, 0.1//parameter
+            0.2,//headlength
+            0.1//headwidth
           )
+          console.log(wind.length())
           scene.add(arrow)
         }else{
           p.push(new THREE.Vector3().setFromSphericalCoords(r,phi,theta))
