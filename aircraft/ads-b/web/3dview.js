@@ -66,7 +66,6 @@ window.addEventListener('DOMContentLoaded',()=>{
             0.2,//headlength
             0.1//headwidth
           )
-          console.log(wind.length())
           scene.add(arrow)
         }else{
           p.push(new THREE.Vector3().setFromSphericalCoords(r,phi,theta))
@@ -75,7 +74,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     }
     const points = new THREE.Points(
       new THREE.BufferGeometry().setFromPoints(p),
-      new THREE.PointsMaterial({color:0x7f878f,size:0.2})
+      new THREE.PointsMaterial({color:0x7f878f,size:0.1})
     )
     scene.add(points)
   })
