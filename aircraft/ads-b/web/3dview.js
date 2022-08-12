@@ -32,16 +32,16 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   const color = t => {
     if     ( t == "" ){ return 0x7f878f }
-    else if( t < -55 ){ return 0x30015f }
-    else if( t < -50 ){ return 0x0000fa }
-    else if( t < -45 ){ return 0x027ff0 }
-    else if( t < -40 ){ return 0x26aebc }
-    else if( t < -35 ){ return 0x34cca4 }
-    else if( t < -30 ){ return 0xc0da80 }
-    else if( t < -25 ){ return 0xecec00 }
-    else if( t < -20 ){ return 0xeba20f }
-    else if( t < -15 ){ return 0xea691a }
-    else              { return 0xd20000 }
+    else if( t <= -55 ){ return 0x30015f }
+    else if( t <= -50 ){ return 0x0000fa }
+    else if( t <= -45 ){ return 0x027ff0 }
+    else if( t <= -40 ){ return 0x26aebc }
+    else if( t <= -35 ){ return 0x34cca4 }
+    else if( t <= -30 ){ return 0xc0da80 }
+    else if( t <= -25 ){ return 0xecec00 }
+    else if( t <= -20 ){ return 0xeba20f }
+    else if( t <= -15 ){ return 0xea691a }
+    else               { return 0xd20000 }
   }//https://www.iaud.net/activity/2871/
 
   const loader = new THREE.FileLoader().load('./data.csv',(data)=>{

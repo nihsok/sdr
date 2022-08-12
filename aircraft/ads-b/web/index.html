@@ -17,13 +17,43 @@
       border-radius: 5px;
       padding: 5px;
     }
+    .map{
+      position:relative;
+    }
+    .regend{
+      position:absolute;
+      top:10px;
+      left:10px;
+    }
+    td{
+      text-align:right;
+      padding:0 5px;
+      border-radius:2px;
+    }
   </style>
   </head>
   <body>
     <div id="profiles">
       <script src="./profiles.js"></script>
     </div>
-    <canvas id="myCanvas"></canvas>
+    <div class="map">
+      <canvas id="myCanvas"></canvas>
+      <div class="regend">
+        <table>
+          <tr bgcolor="d20000"><td>T &gt; -15&#8451</td></tr>
+          <tr bgcolor="ea691a"><td>-15..-20&#8451</td></tr>
+          <tr bgcolor="eba20f"><td>-20..-25&#8451</td></tr>  
+          <tr bgcolor="ecec00"><td>-25..-30&#8451</td></tr>   
+          <tr bgcolor="c0da80"><td>-30..-35&#8451</td></tr>
+          <tr bgcolor="34cca4"><td>-35..-40&#8451</td></tr>
+          <tr bgcolor="26aebc"><td>-40..-45&#8451</td></tr>
+          <tr bgcolor="027ff0"><td>-45..-50&#8451</td></tr>
+          <tr bgcolor="0000fa"><td>-50..-55&#8451</td></tr>
+          <tr bgcolor="30015f"><td>T &le; -55&#8451</td></tr>
+        </table>
+      </div>
+    </div>
+ 
     <div id="check">
       <script src="./t_estimate.js"></script>
       <script src="./u_estimate.js"></script>
