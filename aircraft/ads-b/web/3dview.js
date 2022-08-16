@@ -23,47 +23,35 @@ window.addEventListener('DOMContentLoaded',()=>{
   const light = new THREE.AmbientLight(0xFFFFFF,1.0)
   scene.add(light)
 
+
+
+  d3.json("./lib/countries-50m.json").then((topology)=>{
+    //https://unpkg.com/world-atlas@2.0.2/countries-50m.json
+    const material = new THREE.LineBasicMaterial({color:0x7f878f})
+    for (const path of topology.arcs){
+      const points = []
+      let lon = 0, lat = 0
+      for (const p of path){
+        const longitude = (lon += p[0]) * topology.transform.scale[0] + topology.transform.translate[0]
+        const latitude  = (lat += p[1]) * topology.transform.scale[1] + topology.transform.translate[1] 
+        const phi   = (90-            latitude )*Math.PI/180 //colatitude
+        const theta = (90+parseFloat(longitude))*Math.PI/180 //+90 shift
+        points.push(new THREE.Vector3().setFromSphericalCoords(earthradius,phi,theta).multiply(new THREE.Vector3(1,flattening,1)))
+      }
+      const geometry = new THREE.BufferGeometry().setFromPoints(points)
+      const line = new THREE.Line(geometry,material)
+      scene.add(line)
+    }
+  }).catch(error => console.log(error))
+
   const material = new THREE.MeshStandardMaterial({
-    map: new THREE.TextureLoader().load('./lib/land_shallow_topo_8192.jpg')
+    map: new THREE.TextureLoader().load('./lib/land_shallow_topo_2048.jpg')
     //https://visibleearth.nasa.gov/images/57752/blue-marble-land-surface-shallow-water-and-shaded-topography
   })
-  const geometry = new THREE.SphereGeometry(earthradius,20,20)
+  const geometry = new THREE.SphereGeometry(earthradius,40,40)
   const earth = new THREE.Mesh(geometry,material)
   scene.add(earth)
   earth.scale.set(1,flattening,1)
-
-  // function vertex([longitude, latitude], radius) {
-  //   const lambda = (longitude * Math.PI) / 180;
-  //   const phi = (latitude * Math.PI) / 180;
-  //   return new THREE.Vector3(
-  //     radius * Math.cos(phi) * Math.cos(lambda),
-  //     radius * Math.sin(phi),
-  //     -radius * Math.cos(phi) * Math.sin(lambda)
-  //   );
-  // }
-
-  // function wireframe(multilinestring,radius, material) {
-  //   var geometry = new THREE.BufferGeometry()
-  //   geometry.vertices=[]
-  //   for (const P of multilinestring.coordinates) {
-  //     for (let p0, p1 = vertex(P[0], radius), i = 1; i < P.length; ++i) {
-  //       geometry.vertices.push(p0 = p1, p1 = vertex(P[i], radius));
-  //     }
-  //   }
-  //   return new THREE.LineSegments(geometry,material)
-  // }
-  // d3.json("https://unpkg.com/world-atlas@1.1.4/world/110m.json").then(function(topology){
-  //   console.log(topology)
-  //   const mesh = topojson.mesh(topology, topology.objects.land);
-  //   scene.add( wireframe(
-  //     mesh,
-  //     600,
-  //     new THREE.LineBasicMaterial({
-  //       color: new THREE.Color('blue'),
-  //       linewidth: 10,
-  //     })
-  //   ))
-  // }).catch(error => console.log(error))
 
   const color = t => {
     if     ( t == ""  ){ return 0x7f878f }
