@@ -79,15 +79,13 @@ https://noaa-apt.mbernardi.com.ar/
 ### ISS SSTV
 
 ### SATNOGS
-
+複雑なので、詳細はsatnogs_setup.mdに示す。
 ## 航空機データの受信
-
-### ACARS (Aircraft Communications Addressing and Reporting System)
-
-### ADS-B (Automatic Dependent Surveillance-Broadcast)
-
-### VDL2 (VHF Data Link - Mode 2)
-
+航空機が発信しているデータとしては、
+- ACARS (Aircraft Communications Addressing and Reporting System)
+- ADS-B (Automatic Dependent Surveillance-Broadcast)
+- VDL2 (VHF Data Link - Mode 2)
+が受信できる。詳細はaircraftのディレクトリに記述。
 ## 短波FAX
 ### Fldigi
 解説資料: http://www.hotozuka.com/fax/pdf/fldigi.pdf

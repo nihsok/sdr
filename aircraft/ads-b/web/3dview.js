@@ -2,6 +2,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   const width = window.innerWidth
   const height = 700
   const earthradius = 637.1//10km
+  const flattening = 1 - 1/298.257222101
 
   const canvasElement = document.querySelector('#myCanvas')
   const renderer = new THREE.WebGLRenderer({canvas: canvasElement})
@@ -29,9 +30,43 @@ window.addEventListener('DOMContentLoaded',()=>{
   const geometry = new THREE.SphereGeometry(earthradius,20,20)
   const earth = new THREE.Mesh(geometry,material)
   scene.add(earth)
+  earth.scale.set(1,flattening,1)
+
+  // function vertex([longitude, latitude], radius) {
+  //   const lambda = (longitude * Math.PI) / 180;
+  //   const phi = (latitude * Math.PI) / 180;
+  //   return new THREE.Vector3(
+  //     radius * Math.cos(phi) * Math.cos(lambda),
+  //     radius * Math.sin(phi),
+  //     -radius * Math.cos(phi) * Math.sin(lambda)
+  //   );
+  // }
+
+  // function wireframe(multilinestring,radius, material) {
+  //   var geometry = new THREE.BufferGeometry()
+  //   geometry.vertices=[]
+  //   for (const P of multilinestring.coordinates) {
+  //     for (let p0, p1 = vertex(P[0], radius), i = 1; i < P.length; ++i) {
+  //       geometry.vertices.push(p0 = p1, p1 = vertex(P[i], radius));
+  //     }
+  //   }
+  //   return new THREE.LineSegments(geometry,material)
+  // }
+  // d3.json("https://unpkg.com/world-atlas@1.1.4/world/110m.json").then(function(topology){
+  //   console.log(topology)
+  //   const mesh = topojson.mesh(topology, topology.objects.land);
+  //   scene.add( wireframe(
+  //     mesh,
+  //     600,
+  //     new THREE.LineBasicMaterial({
+  //       color: new THREE.Color('blue'),
+  //       linewidth: 10,
+  //     })
+  //   ))
+  // }).catch(error => console.log(error))
 
   const color = t => {
-    if     ( t == "" ){ return 0x7f878f }
+    if     ( t == ""  ){ return 0x7f878f }
     else if( t <= -55 ){ return 0x30015f }
     else if( t <= -50 ){ return 0x0000fa }
     else if( t <= -45 ){ return 0x027ff0 }

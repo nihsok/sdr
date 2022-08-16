@@ -4,6 +4,7 @@
   <script src="./lib/d3.v7.min.js"></script> 
   <script src="./lib/three.min.js"></script>
   <script src="./lib/OrbitControls.js"></script>
+  <script src="https://unpkg.com/topojson-client@3"></script>
   <script src="./3dview.js"></script>
   <style>
     body{
@@ -25,10 +26,11 @@
       top:10px;
       left:10px;
     }
-    td{
+    tr{
       text-align:right;
       padding:0 5px;
       border-radius:2px;
+      opacity:0.9;
     }
   </style>
   </head>
@@ -41,14 +43,14 @@
       <div class="regend">
         <table>
           <tr bgcolor="d20000"><td>T &gt; -15&#8451</td></tr>
-          <tr bgcolor="ea691a"><td>-15..-20&#8451</td></tr>
-          <tr bgcolor="eba20f"><td>-20..-25&#8451</td></tr>  
-          <tr bgcolor="ecec00"><td>-25..-30&#8451</td></tr>   
-          <tr bgcolor="c0da80"><td>-30..-35&#8451</td></tr>
-          <tr bgcolor="34cca4"><td>-35..-40&#8451</td></tr>
-          <tr bgcolor="26aebc"><td>-40..-45&#8451</td></tr>
-          <tr bgcolor="027ff0"><td>-45..-50&#8451</td></tr>
-          <tr bgcolor="0000fa"><td>-50..-55&#8451</td></tr>
+          <tr bgcolor="ea691a"><td>-15...-20&#8451</td></tr>
+          <tr bgcolor="eba20f"><td>-20...-25&#8451</td></tr>  
+          <tr bgcolor="ecec00"><td>-25...-30&#8451</td></tr>   
+          <tr bgcolor="c0da80"><td>-30...-35&#8451</td></tr>
+          <tr bgcolor="34cca4"><td>-35...-40&#8451</td></tr>
+          <tr bgcolor="26aebc"><td>-40...-45&#8451</td></tr>
+          <tr bgcolor="027ff0"><td>-45...-50&#8451</td></tr>
+          <tr bgcolor="0000fa"><td>-50...-55&#8451</td></tr>
           <tr bgcolor="30015f"><td>T &le; -55&#8451</td></tr>
         </table>
       </div>
