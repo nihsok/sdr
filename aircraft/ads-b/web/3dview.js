@@ -81,7 +81,7 @@ window.addEventListener('DOMContentLoaded',()=>{
           const wind  = new THREE.Vector3().set(x,y,z)
           const arrow = new THREE.ArrowHelper(
             wind.clone().normalize(),
-            new THREE.Vector3().setFromSphericalCoords(r,phi,theta),
+            new THREE.Vector3().setFromSphericalCoords(r,phi,theta),//.multiply(new THREE.Vector3(1,flattening,1)),
             wind.length() * 0.02,//parameter
             color(values[12]),
             0.2,//headlength
@@ -89,7 +89,7 @@ window.addEventListener('DOMContentLoaded',()=>{
           )
           scene.add(arrow)
         }else{
-          p.push(new THREE.Vector3().setFromSphericalCoords(r,phi,theta))
+          p.push(new THREE.Vector3().setFromSphericalCoords(r,phi,theta))//.multiply(new THREE.Vector3(1,flattening,1)))
         }
       }
     }
