@@ -1,8 +1,8 @@
 window.addEventListener('DOMContentLoaded',()=>{
   const width = window.innerWidth
   const height = 700
-  const earthradius = 637.1//10km
-  const flattening = 1 - 1/298.257222101
+  const earthradius = 637.8137 //10km
+  const flattening = 1 - 1/298.257222101 //GRS80
 
   const canvasElement = document.querySelector('#myCanvas')
   const renderer = new THREE.WebGLRenderer({canvas: canvasElement})
@@ -34,7 +34,7 @@ window.addEventListener('DOMContentLoaded',()=>{
         const latitude  = (lat += p[1]) * topology.transform.scale[1] + topology.transform.translate[1] 
         const phi   = (90-            latitude )*Math.PI/180 //colatitude
         const theta = (90+parseFloat(longitude))*Math.PI/180 //+90 shift
-        points.push(new THREE.Vector3().setFromSphericalCoords(earthradius,phi,theta))//.multiply(new THREE.Vector3(1,flattening,1)))
+        points.push(new THREE.Vector3().setFromSphericalCoords(earthradius,phi,theta).multiply(new THREE.Vector3(1,flattening,1)))
       }
       const geometry = new THREE.BufferGeometry().setFromPoints(points)
       const line = new THREE.Line(geometry,material)
@@ -49,7 +49,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   const geometry = new THREE.SphereGeometry(earthradius,100,100)
   const earth = new THREE.Mesh(geometry,material)
   scene.add(earth)
-  //earth.scale.set(1,flattening,1)
+  earth.scale.set(1,flattening,1)
 
   const color = t => {
     if     ( t == ""  ){ return 0x7f878f }
@@ -81,7 +81,7 @@ window.addEventListener('DOMContentLoaded',()=>{
           const wind  = new THREE.Vector3().set(x,y,z)
           const arrow = new THREE.ArrowHelper(
             wind.clone().normalize(),
-            new THREE.Vector3().setFromSphericalCoords(r,phi,theta),//.multiply(new THREE.Vector3(1,flattening,1)),
+            new THREE.Vector3().setFromSphericalCoords(r,phi,theta).multiply(new THREE.Vector3(1,flattening,1)),
             wind.length() * 0.02,//parameter
             color(values[12]),
             0.2,//headlength
@@ -89,7 +89,7 @@ window.addEventListener('DOMContentLoaded',()=>{
           )
           scene.add(arrow)
         }else{
-          p.push(new THREE.Vector3().setFromSphericalCoords(r,phi,theta))//.multiply(new THREE.Vector3(1,flattening,1)))
+          p.push(new THREE.Vector3().setFromSphericalCoords(r,phi,theta).multiply(new THREE.Vector3(1,flattening,1)))
         }
       }
     }
