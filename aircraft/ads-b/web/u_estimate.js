@@ -6,7 +6,7 @@ d3.csv("./data.csv").then(function(data){
   const x = d3.scaleLinear().range([0, width])
   const y = d3.scaleLinear().range([height, 0])
 
-  const svg = d3.select("#check")
+  const svg = d3.select("#check-u")
     .append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
