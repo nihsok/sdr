@@ -27,5 +27,10 @@ BECOME password: #ホストサーバーでsudoになるためのパスワード�
 $ sudo satnogs-setup 
 ~~~
 でよいはず。
+ところが以下のエラーメッセージで動かず。
+~~~
+Inconsistency detected by ld.so: get-dynamic-info.h: 138: elf_get_dynamic_info: Assertion `info[DT_RELENT]->d_un.d_val == sizeof (ElfW(Rel))' failed!
+~~~
+どうやらSDファイルの破損らしい。壊れていないSDカードならちゃんと動くはずなので、新しいSDカードを試すまでこの項目は棚上げ。
 
 ##実行 (https://wiki.satnogs.org/SatNOGS_Client_Setup)
