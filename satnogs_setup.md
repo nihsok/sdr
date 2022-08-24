@@ -22,6 +22,7 @@ BECOME password: #ホストサーバーでsudoになるためのパスワード�
 ~~~
 10分以上かかる。WARNING結構出て心配になる。Ansibleは冪等性を強調しており、何度実行しても同じところにたどり着くはずなので失敗してもあきらめずに試す。（en_USのlocaleを設定していないとエラーになるかも。`sudo locale-gen`してから`sudo dpkg --configure -a`。メモリ不足でlocale-genがこけることもあるらしい。https://freefielder.jp/blog/2022/05/ubuntu-fix-locale.html）
 
+フォーラムで悩みが解決するかも。（https://community.libre.space/c/satnogs/software/10）
 再びホストサーバーにて
 ~~~
 $ sudo satnogs-setup 
