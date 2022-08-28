@@ -20,44 +20,43 @@ window.addEventListener('DOMContentLoaded',()=>{
   controls.zoomSpeed = 0.1
   controls.panSpeed = 0.1
 
-  const light = new THREE.AmbientLight(0xFFFFFF,1.0)
+  const light = new THREE.AmbientLight(0xffffff,1.0)
   scene.add(light)
 
-  d3.json("./lib/countries-50m.json").then((topology)=>{
+  function lat2Vector(latitude,longitude,r=earthradius){
+    const phi   = (90-            latitude )*Math.PI/180 //colatitude
+    const theta = (90+parseFloat(longitude))*Math.PI/180 //+90 shift
+    return new THREE.Vector3().setFromSphericalCoords(r,phi,theta).multiply(new THREE.Vector3(1,flattening,1))
+  }
+
+  d3.json("./lib/countries-50m.json").then(topology=>{
     //https://unpkg.com/world-atlas@2.0.2/countries-50m.json
-    const material = new THREE.LineBasicMaterial({color:0x7f878f})
     topology.arcs.forEach((path,index)=>{
-      if( index >= 987 && index <= 1020){return}
-      const points = []
+      if( index >= 987 && index <= 1020){return} //exclude Japan
       let lon = 0, lat = 0
-      for (const p of path){
+      const points=path.map(p=>{
         const longitude = (lon += p[0]) * topology.transform.scale[0] + topology.transform.translate[0]
         const latitude  = (lat += p[1]) * topology.transform.scale[1] + topology.transform.translate[1] 
-        const phi   = (90-            latitude )*Math.PI/180 //colatitude
-        const theta = (90+parseFloat(longitude))*Math.PI/180 //+90 shift
-        points.push(new THREE.Vector3().setFromSphericalCoords(earthradius,phi,theta).multiply(new THREE.Vector3(1,flattening,1)))
-      }
+        return lat2Vector(latitude,longitude)
+      })
       const geometry = new THREE.BufferGeometry().setFromPoints(points)
-      const line = new THREE.Line(geometry,material)
+      const line = new THREE.Line(geometry,new THREE.LineBasicMaterial({color:0x7f878f}))
       scene.add(line)
     })
   }).catch(error => console.log(error))
 
-  d3.json("./lib/prefectures.json").then((topology)=>{
+  d3.json("./lib/prefectures.json").then(topology=>{
     //https://raw.githubusercontent.com/smartnews-smri/japan-topography/main/data/municipality/topojson/s0001/prefectures.json
-    const material = new THREE.LineBasicMaterial({color:0x7f878f})
     for(const path of topology.arcs){
-      const points=[]
+      //const points=[]
       let lon = 0, lat = 0
-      for (const p of path){
+      const points=path.map(p=>{
         const longitude = (lon += p[0]) * topology.transform.scale[0] + topology.transform.translate[0]
         const latitude  = (lat += p[1]) * topology.transform.scale[1] + topology.transform.translate[1]
-        const phi   = (90-            latitude )*Math.PI/180 //colatitude
-        const theta = (90+parseFloat(longitude))*Math.PI/180 //+90 shift
-        points.push(new THREE.Vector3().setFromSphericalCoords(earthradius,phi,theta).multiply(new THREE.Vector3(1,flattening,1)))
-      }
+        return lat2Vector(latitude,longitude)
+      })
       const geometry = new THREE.BufferGeometry().setFromPoints(points)
-      const line = new THREE.Line(geometry,material)
+      const line = new THREE.Line(geometry,new THREE.LineBasicMaterial({color:0x7f878f}))
       scene.add(line)
     }
   }).catch(error => console.log(error))
@@ -91,17 +90,16 @@ window.addEventListener('DOMContentLoaded',()=>{
       const values = row.split(',')
       if(values[0] > 2){
         const r = earthradius + values[1]/10000 * 2//parameter
-        const phi   = (90-           values[3] )*Math.PI/180 //colatitude
-        const theta = (90+parseFloat(values[2]))*Math.PI/180 //+90 shift
-
         if(values[0] > 6){
+          const phi   = (90-           values[3] )*Math.PI/180 //colatitude
+          const theta = (90+parseFloat(values[2]))*Math.PI/180 //+90 shift
           const x = - values[5]*Math.cos(phi)*Math.sin(theta) + values[4]*Math.cos(theta)
           const y =   values[5]*Math.sin(phi)
           const z = - values[5]*Math.cos(phi)*Math.cos(theta) - values[4]*Math.sin(theta) 
           const wind  = new THREE.Vector3().set(x,y,z)
           const arrow = new THREE.ArrowHelper(
             wind.clone().normalize(),
-            new THREE.Vector3().setFromSphericalCoords(r,phi,theta).multiply(new THREE.Vector3(1,flattening,1)),
+            lat2Vector(values[3],values[2],r),
             wind.length() * 0.02,//parameter
             color(values[12]),
             0.2,//headlength
@@ -109,7 +107,7 @@ window.addEventListener('DOMContentLoaded',()=>{
           )
           scene.add(arrow)
         }else{
-          p.push(new THREE.Vector3().setFromSphericalCoords(r,phi,theta).multiply(new THREE.Vector3(1,flattening,1)))
+          p.push(lat2Vector(values[3],values[2],r))
         }
       }
     }
