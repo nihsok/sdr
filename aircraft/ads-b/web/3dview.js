@@ -23,10 +23,10 @@ window.addEventListener('DOMContentLoaded',()=>{
   const light = new THREE.AmbientLight(0xffffff,1.0)
   scene.add(light)
 
-  function lat2Vector(latitude,longitude,r=earthradius){
+  function latlon2Vector(latitude,longitude,alt=0){
     const phi   = (90-            latitude )*Math.PI/180 //colatitude
     const theta = (90+parseFloat(longitude))*Math.PI/180 //+90 shift
-    return new THREE.Vector3().setFromSphericalCoords(r,phi,theta).multiply(new THREE.Vector3(1,flattening,1))
+    return new THREE.Vector3().setFromSphericalCoords(earthradius+alt,phi,theta).multiply(new THREE.Vector3(1,flattening,1))
   }
 
   d3.json("./lib/countries-50m.json").then(topology=>{
@@ -37,7 +37,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       const points=path.map(p=>{
         const longitude = (lon += p[0]) * topology.transform.scale[0] + topology.transform.translate[0]
         const latitude  = (lat += p[1]) * topology.transform.scale[1] + topology.transform.translate[1] 
-        return lat2Vector(latitude,longitude)
+        return latlon2Vector(latitude,longitude)
       })
       const geometry = new THREE.BufferGeometry().setFromPoints(points)
       const line = new THREE.Line(geometry,new THREE.LineBasicMaterial({color:0x7f878f}))
@@ -53,7 +53,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       const points=path.map(p=>{
         const longitude = (lon += p[0]) * topology.transform.scale[0] + topology.transform.translate[0]
         const latitude  = (lat += p[1]) * topology.transform.scale[1] + topology.transform.translate[1]
-        return lat2Vector(latitude,longitude)
+        return latlon2Vector(latitude,longitude)
       })
       const geometry = new THREE.BufferGeometry().setFromPoints(points)
       const line = new THREE.Line(geometry,new THREE.LineBasicMaterial({color:0x7f878f}))
@@ -89,7 +89,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     for (const row of data.split('\n')){
       const values = row.split(',')
       if(values[0] > 2){
-        const r = earthradius + values[1]/10000 * 2//parameter
+        const alt = values[1]/10000 * 2//parameter
         if(values[0] > 6){
           const phi   = (90-           values[3] )*Math.PI/180 //colatitude
           const theta = (90+parseFloat(values[2]))*Math.PI/180 //+90 shift
@@ -99,7 +99,7 @@ window.addEventListener('DOMContentLoaded',()=>{
           const wind  = new THREE.Vector3().set(x,y,z)
           const arrow = new THREE.ArrowHelper(
             wind.clone().normalize(),
-            lat2Vector(values[3],values[2],r),
+            latlon2Vector(values[3],values[2],alt),
             wind.length() * 0.02,//parameter
             color(values[12]),
             0.2,//headlength
@@ -107,7 +107,7 @@ window.addEventListener('DOMContentLoaded',()=>{
           )
           scene.add(arrow)
         }else{
-          p.push(lat2Vector(values[3],values[2],r))
+          p.push(latlon2Vector(values[3],values[2],alt))
         }
       }
     }
@@ -117,6 +117,29 @@ window.addEventListener('DOMContentLoaded',()=>{
     )
     scene.add(points)
   })
+
+  const canvas = document.createElement('canvas')
+  canvas.width=200
+  canvas.height=200
+  canvas.getContext('2d').font=`100px serif`
+
+  const sonde = new THREE.FileLoader().load('./lib/igra2-station-list.txt',(data)=>{
+    //https://www.ncei.noaa.gov/pub/data/igra/igra2-station-list.txt
+    const p=[]
+    for (const row of data.split('\n')){
+      const values = row.match(/[^\s]+/g)
+      if(values.slice(-2,-1)>2020) p.push(latlon2Vector(values[1],values[2],1))
+    }
+    canvas.getContext('2d').fillText('🎈',0,100)
+    const texture=new THREE.CanvasTexture(canvas)
+    const points = new THREE.Points(
+      new THREE.BufferGeometry().setFromPoints(p),
+      new THREE.PointsMaterial({size:20,transparent:true,map:texture})
+    )
+    scene.add(points)
+  })
+
+  //const airport=
 
   tick()
   function tick(){
