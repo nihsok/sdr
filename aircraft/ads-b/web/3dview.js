@@ -118,28 +118,43 @@ window.addEventListener('DOMContentLoaded',()=>{
     scene.add(points)
   })
 
-  const canvas = document.createElement('canvas')
-  canvas.width=200
-  canvas.height=200
-  canvas.getContext('2d').font=`100px serif`
-
-  const sonde = new THREE.FileLoader().load('./lib/igra2-station-list.txt',(data)=>{
-    //https://www.ncei.noaa.gov/pub/data/igra/igra2-station-list.txt
-    const p=[]
-    for (const row of data.split('\n')){
-      const values = row.match(/[^\s]+/g)
-      if(values.slice(-2,-1)>2020) p.push(latlon2Vector(values[1],values[2],1))
-    }
-    canvas.getContext('2d').fillText('🎈',0,100)
+  const airport = new THREE.FileLoader().load('./lib/gadb_declatlon.csv',(data)=>{
+    //https://www.partow.net/miscellaneous/airportdatabase/
+    const p=data.split('\n').flatMap(row=>{
+      const values = row.split(',')
+      return  latlon2Vector(values[0],values[1],1)
+    })
+    const canvas = document.createElement('canvas')
+    canvas.width=70
+    canvas.height=70
+    canvas.getContext('2d').font=`50px serif`
+    canvas.getContext('2d').fillText('🛫',0,45)
     const texture=new THREE.CanvasTexture(canvas)
     const points = new THREE.Points(
       new THREE.BufferGeometry().setFromPoints(p),
-      new THREE.PointsMaterial({size:20,transparent:true,map:texture})
+      new THREE.PointsMaterial({size:10,transparent:true,map:texture})
     )
     scene.add(points)
   })
 
-  //const airport=
+  const sonde = new THREE.FileLoader().load('./lib/igra2-station-list.txt',(data)=>{
+    //https://www.ncei.noaa.gov/pub/data/igra/igra2-station-list.txt
+    const p=data.split('\n').flatMap(row=>{
+      const values = row.match(/[^\s]+/g)
+      return values.slice(-2,-1)>2020 ? latlon2Vector(values[1],values[2],2) : []
+    })
+    const canvas = document.createElement('canvas')
+    canvas.width=70
+    canvas.height=70
+    canvas.getContext('2d').font=`50px serif`
+    canvas.getContext('2d').fillText('🎈',0,45)
+    const texture=new THREE.CanvasTexture(canvas)
+    const points = new THREE.Points(
+      new THREE.BufferGeometry().setFromPoints(p),
+      new THREE.PointsMaterial({size:10,transparent:true,map:texture})
+    )
+    scene.add(points)
+  })
 
   tick()
   function tick(){
