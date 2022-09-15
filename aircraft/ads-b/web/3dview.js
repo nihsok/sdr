@@ -118,6 +118,8 @@ window.addEventListener('DOMContentLoaded',()=>{
     scene.add(points)
   })
 
+  const flock = {}
+
   const airport = new THREE.FileLoader().load('./lib/gadb_declatlon.csv',(data)=>{
     //https://www.partow.net/miscellaneous/airportdatabase/
     const p=data.split('\n').flatMap(row=>{
@@ -130,11 +132,11 @@ window.addEventListener('DOMContentLoaded',()=>{
     canvas.getContext('2d').font=`50px serif`
     canvas.getContext('2d').fillText('🛫',0,45)
     const texture=new THREE.CanvasTexture(canvas)
-    const points = new THREE.Points(
+    flock.airport = new THREE.Points(
       new THREE.BufferGeometry().setFromPoints(p),
-      new THREE.PointsMaterial({size:10,transparent:true,map:texture})
+      new THREE.PointsMaterial({size:10,transparent:true,visible:false,map:texture})
     )
-    scene.add(points)
+    scene.add(flock.airport)
   })
 
   const sonde = new THREE.FileLoader().load('./lib/igra2-station-list.txt',(data)=>{
@@ -149,12 +151,22 @@ window.addEventListener('DOMContentLoaded',()=>{
     canvas.getContext('2d').font=`50px serif`
     canvas.getContext('2d').fillText('🎈',0,45)
     const texture=new THREE.CanvasTexture(canvas)
-    const points = new THREE.Points(
+    flock.sonde = new THREE.Points(
       new THREE.BufferGeometry().setFromPoints(p),
-      new THREE.PointsMaterial({size:10,transparent:true,map:texture})
+      new THREE.PointsMaterial({size:10,transparent:true,visible:false,map:texture})
     )
-    scene.add(points)
+    scene.add(flock.sonde)
   })
+
+  const options={
+    sonde:false,
+    airport:false
+  }
+  const gui = new dat.GUI({width:110})
+  gui.close()
+  gui.add(options,'sonde').onChange(value=>{ flock.sonde.material.visible = value })
+  gui.add(options,'airport').onChange(value=>{ flock.airport.material.visible = value })
+  document.getElementsByClassName('regend')[0].append(gui.domElement)
 
   tick()
   function tick(){
