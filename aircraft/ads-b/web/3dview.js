@@ -162,7 +162,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     sonde:false,
     airport:false
   }
-  var gui = new dat.GUI({width:110})
+  var gui = new dat.GUI({width:100})
   gui.close()
   gui.add(options,'sonde').onChange(value=>{ flock.sonde.material.visible = value })
   gui.add(options,'airport').onChange(value=>{ flock.airport.material.visible = value })

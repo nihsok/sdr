@@ -128,8 +128,8 @@ d3.csv("./data.csv").then(function(data){
   ias.append("g")
     .attr("transform", "translate(0," + height + ")")
       .call(d3
-        .axisBottom(x.domain([120,310]))
-        .tickValues(d3.range(120,311,10))
+        .axisBottom(x.domain([100,310]))
+        .tickValues(d3.range(100,311,10))
         .tickFormat((val) => val % 50 == 0 ? val.toString() : ''))
       .style("font-size",20)
       .append("text")
@@ -140,8 +140,8 @@ d3.csv("./data.csv").then(function(data){
       .html("Indicated AirSpeed (&cong;CAS) [m/s]")
   ias.append("g")
     .call(d3
-      .axisTop(x.domain([120,310]))
-      .tickValues(d3.range(120,310,10))
+      .axisTop(x.domain([1p0,310]))
+      .tickValues(d3.range(100,310,10))
       .tickFormat(''))
   //y axis
   ias.append("g")
