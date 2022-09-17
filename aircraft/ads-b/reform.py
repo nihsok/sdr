@@ -20,7 +20,10 @@ input=json.load(open(file,'r'))['aircraft']
 
 for aircraft in input:
   tmp = {'flag': 0, 'hex': aircraft['hex']}
+  if ('lon' in aircraft): tmp['lon'] = aircraft['lon']
+  if ('lat' in aircraft): tmp['lat'] = aircraft['lat']
   if ('tas' in aircraft): tmp['tas'] = aircraft['tas'] * 0.51444 #nm->m/s
+  if ('ias' in aircraft): tmp['ias'] = aircraft['ias'] * 0.51444 #nm->m/s
   if ('mach' in aircraft): tmp['mach'] = aircraft['mach']
   if ('flight' in aircraft): tmp['flight'] = aircraft['flight']
   if ('version' in aircraft): tmp['version'] = aircraft['version']
@@ -33,8 +36,6 @@ for aircraft in input:
       tmp['t'] = tmp['tas'] ** 2 / ( 401.8 * tmp['mach'] ** 2 ) - 273.15
     if ('lon' in aircraft) and ('lat' in aircraft):
       tmp['flag'] += 2
-      tmp['lon'] = aircraft['lon']
-      tmp['lat'] = aircraft['lat']
       tmp['dist'] = 0
       if ('gs' in aircraft) and ('tas' in aircraft) and ('track' in aircraft) and (tmp['lat'] <= 85):
         if ('mag_heading' in aircraft) or ('nav_heading' in aircraft) and (aircraft['nav_heading'] > 0):
@@ -42,6 +43,7 @@ for aircraft in input:
             heading = aircraft['mag_heading']
           else:
             heading = aircraft['nav_heading']
+            tmp['dist'] = 1 
           tmp['flag'] += 4
           aircraft['gs'] *= 0.51444 #nm->m/s
           heading += decline.ev(tmp['lon'],tmp['lat'])
@@ -54,16 +56,17 @@ for aircraft in input:
   output.append(tmp)
 
 with open(file.split('.')[0]+'.csv','w') as f:
-  writer = csv.DictWriter(f,['flag','alt','lon','lat','u','v','vt_x','vt_y','gs_x','gs_y','tas','mach','t','dist','hex','flight','version','category'],lineterminator='\n')
+  writer = csv.DictWriter(f,['flag','alt','lon','lat','u','v','vt_x','vt_y','gs_x','gs_y','tas','mach','t','ias','dist','hex','flight','version','category'],lineterminator='\n')
   writer.writerows(output)
 
 #flag,
 #lon,lat,alt, ...position
 #temperature,zonal wind,mediridional wind, ...physical value
-#mach number, tas, aircraft u, aircraft v, ...verification value
+#mach number, tas, ias, aircraft u, aircraft v, ...verification value
 #distance,hex,flight,version,category ...additional value
 #flag 8:temperature
 #flag 4:wind (needs lat, lon)
 #flag 2:lat,lon
 #falg 1:alt
 #flag 0:no data
+#dist!=0: bad quality
