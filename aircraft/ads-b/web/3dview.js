@@ -124,7 +124,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     //https://www.partow.net/miscellaneous/airportdatabase/
     const p=data.split('\n').flatMap(row=>{
       const values = row.split(',')
-      return  latlon2Vector(values[0],values[1],1)
+      return  latlon2Vector(values[0],values[1],2)
     })
     const canvas = document.createElement('canvas')
     canvas.width=70
@@ -143,7 +143,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     //https://www.ncei.noaa.gov/pub/data/igra/igra2-station-list.txt
     const p=data.split('\n').flatMap(row=>{
       const values = row.match(/[^\s]+/g)
-      return values.slice(-2,-1)>2020 ? latlon2Vector(values[1],values[2],2) : []
+      return values.slice(-2,-1)>2020 ? latlon2Vector(values[1],values[2],3) : []
     })
     const canvas = document.createElement('canvas')
     canvas.width=70

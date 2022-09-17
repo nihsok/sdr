@@ -1,11 +1,11 @@
 d3.csv("./stat.csv").then(function(data){
   if(data.length>240) data = data.slice(data.length-240) //24 times per day
-  const margin = {top:10, right:15, bottom:20, left:75},
+  const margin = {top:10, right:15, bottom:25, left:75},
         width  = 960 - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
 
   const x = d3.scaleTime().domain([new Date(data[0].time),new Date(data[data.length-1].time)]).range([0, width])
-  const y = d3.scaleLinear().domain([0,650]).range([height, 0])
+  const y = d3.scaleLinear().domain([0,600]).range([height, 0])
 
   const svg = d3.select("#count")
   .append("svg")
@@ -33,7 +33,7 @@ d3.csv("./stat.csv").then(function(data){
   svg.append("g")
     .call(d3
       .axisLeft(y)
-      .tickValues(d3.range(0,651,50))
+      .tickValues(d3.range(0,601,50))
       .tickFormat((val) => val % 100 == 0 ? val.toString() : ''))
     .style("font-size",20)
     .append("text")
@@ -42,12 +42,12 @@ d3.csv("./stat.csv").then(function(data){
     .attr("x", - height / 2 - margin.top)
     .attr("y", -55)
     .attr("transform","rotate(-90)")
-    .text("# of data / hour")
+    .text("# [/h] & Rate [%]")
   svg.append("g")
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
       .axisRight(y)
-      .tickValues(d3.range(0,651,50))
+      .tickValues(d3.range(0,601,50))
       .tickFormat(''))
   
   svg.append("clipPath")
@@ -59,7 +59,7 @@ d3.csv("./stat.csv").then(function(data){
       .attr("height",height)
   
   svg.selectAll(null)
-    .data(d3.range(50,650,50))
+    .data(d3.range(50,600,50))
     .enter()
     .append("line")
     .attr("x1",x(new Date(data[0].time)))
@@ -96,7 +96,7 @@ d3.csv("./stat.csv").then(function(data){
           +', Median='              +d3.median(   d,(d)=>d[1])
           +', Mean='     +Math.round(d3.mean(     d,(d)=>d[1])*10)/10
           +', Deviation='+Math.round(d3.deviation(d,(d)=>d[1])*10)/10
-)
+        )
     })
     .on("mousemove",function(event,d){
       tooltip
@@ -107,4 +107,15 @@ d3.csv("./stat.csv").then(function(data){
       d3.select(event.target).style("opacity",0.3)
       tooltip.style("visibility","hidden")
     })
+
+  svg.append("path")
+    .datum(data)
+    .attr("fill",'none')
+    .attr("stroke","black")
+    .attr("clip-path","url(#clip-count)")
+    .attr("d",d3.line()
+      .x(d=>x(new Date(d.time)))
+      .y(d=>y(d.t/(Number(d.little)+Number(d.alt)+Number(d.latlon)+Number(d.u)+Number(d.t))*100 || 0 ))
+    )
+
 })
