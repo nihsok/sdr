@@ -140,7 +140,7 @@ d3.csv("./data.csv").then(function(data){
       .html("Indicated AirSpeed (&cong;CAS) [m/s]")
   ias.append("g")
     .call(d3
-      .axisTop(x.domain([1p0,310]))
+      .axisTop(x.domain([100,310]))
       .tickValues(d3.range(100,310,10))
       .tickFormat(''))
   //y axis
