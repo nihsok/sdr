@@ -54,7 +54,7 @@ for aircraft in input:
   output.append(tmp)
 
 with open(file.split('.')[0]+'.csv','w') as f:
-  writer = csv.DictWriter(f,['flag','alt','lon','lat','u','v','vt_x','vt_y','gs_x','gs_y','t','tas','mach','p_fo','dist','hex','flight','version','category'],lineterminator='\n')
+  writer = csv.DictWriter(f,['flag','alt','lon','lat','gs_x','gs_y','u','v','vt_x','vt_y','tas','t','mach','p_fo','dist','hex','flight','version','category'],lineterminator='\n')
   writer.writerows(output)
 
 #flag,

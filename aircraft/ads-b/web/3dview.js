@@ -86,28 +86,29 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   const loader = new THREE.FileLoader().load('./data.csv',(data)=>{
     const p=[]
+    const index_flag = 0, index_alt = 1, index_lon = 2, index_lat = 3, index_u = 6, index_v = 7, index_t = 11
     for (const row of data.split('\n')){
       const values = row.split(',')
-      if(values[0] > 2){
-        const alt = values[1]/10000 * 2//parameter
-        if(values[0] > 6){
-          const phi   = (90-           values[3] )*Math.PI/180 //colatitude
-          const theta = (90+parseFloat(values[2]))*Math.PI/180 //+90 shift
-          const x = - values[5]*Math.cos(phi)*Math.sin(theta) + values[4]*Math.cos(theta)
-          const y =   values[5]*Math.sin(phi)
-          const z = - values[5]*Math.cos(phi)*Math.cos(theta) - values[4]*Math.sin(theta) 
+      if(values[index_flag] > 2){
+        const alt = values[index_alt]/10000 * 2//parameter
+        if(values[index_flag] > 6){
+          const phi   = (90-           values[index_lat] )*Math.PI/180 //colatitude
+          const theta = (90+parseFloat(values[index_lon]))*Math.PI/180 //+90 shift
+          const x = - values[index_v]*Math.cos(phi)*Math.sin(theta) + values[index_u]*Math.cos(theta)
+          const y =   values[index_v]*Math.sin(phi)
+          const z = - values[index_v]*Math.cos(phi)*Math.cos(theta) - values[index_u]*Math.sin(theta) 
           const wind  = new THREE.Vector3().set(x,y,z)
           const arrow = new THREE.ArrowHelper(
             wind.clone().normalize(),
-            latlon2Vector(values[3],values[2],alt),
+            latlon2Vector(values[index_lat],values[index_lon],alt),
             wind.length() * 0.02,//parameter
-            color(values[12]),
+            color(values[index_t]),
             0.2,//headlength
             0.1//headwidth
           )
           scene.add(arrow)
         }else{
-          p.push(latlon2Vector(values[3],values[2],alt))
+          p.push(latlon2Vector(values[index_lat],values[index_lon],alt))
         }
       }
     }

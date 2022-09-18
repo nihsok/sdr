@@ -128,8 +128,8 @@ d3.csv("./data.csv").then(function(data){
   pressure.append("g")
     .attr("transform", "translate(0," + height + ")")
       .call(d3
-        .axisBottom(x.domain([200,950]))
-        .tickValues(d3.range(200,951,50))
+        .axisBottom(x.domain([150,950]))
+        .tickValues(d3.range(150,951,50))
         .tickFormat(val => val % 100 == 0 ? val : ''))
       .style("font-size",20)
       .append("text")
@@ -140,8 +140,8 @@ d3.csv("./data.csv").then(function(data){
       .html("estimated Pressure [hPa]")
   pressure.append("g")
     .call(d3
-      .axisTop(x.domain([200,950]))
-      .tickValues(d3.range(200,950,50))
+      .axisTop(x.domain([150,950]))
+      .tickValues(d3.range(150,950,50))
       .tickFormat(''))
   //y axis
   pressure.append("g")
