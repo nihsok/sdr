@@ -128,9 +128,9 @@ d3.csv("./data.csv").then(function(data){
   pressure.append("g")
     .attr("transform", "translate(0," + height + ")")
       .call(d3
-        .axisBottom(x.domain([Math.log(100),Math.log(1000)]))
-        .tickValues(d3.range(100,1001,100).map(d=>Math.log(d)))
-        .tickFormat(val => val < 6.3 ? Math.round(Math.exp(val)) : ''))
+        .axisBottom(x.domain([200,950]))
+        .tickValues(d3.range(200,951,50))
+        .tickFormat(val => val % 100 == 0 ? val : ''))
       .style("font-size",20)
       .append("text")
       .attr("fill","black")
@@ -140,8 +140,8 @@ d3.csv("./data.csv").then(function(data){
       .html("estimated Pressure [hPa]")
   pressure.append("g")
     .call(d3
-      .axisTop(x.domain([Math.log(100),Math.log(1000)]))
-      .tickValues(d3.range(100,1000,100).map(d=>Math.log(d)))
+      .axisTop(x.domain([200,950]))
+      .tickValues(d3.range(200,950,50))
       .tickFormat(''))
   //y axis
   pressure.append("g")
@@ -175,7 +175,7 @@ d3.csv("./data.csv").then(function(data){
     .data(data.filter(d => d.alt && d.p > 0))
     .enter()
     .append("circle")
-      .attr("cx", d => x(Math.log(d.p/100)))
+      .attr("cx", d => x(d.p/100))
       .attr("cy", d => y(d.alt/1000))
       .attr("r", 3)
       .style("fill", d => '#'+d.hex)
@@ -184,7 +184,7 @@ d3.csv("./data.csv").then(function(data){
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
-        .html('P: '+d.p/100+'hPa'+'<br>z: '+d.alt+'m')
+        .html('P: '+Math.round(d.p)/100+'hPa'+'<br>z: '+Math.round(d.alt)/1000+'km')
     })
     .on("mousemove",function(event){
       tooltip

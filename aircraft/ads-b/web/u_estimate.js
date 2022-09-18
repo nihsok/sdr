@@ -221,4 +221,30 @@ d3.csv("./data.csv").then(function(data){
       .attr("cy", d => y(Math.atan2(d.vt_y,d.vt_x)*180/Math.PI))
       .attr("r", 1)
       .style("fill","blue")
+
+  vdeg.selectAll(null)
+    .data(data.filter(d=>d.u))
+    .enter()
+    .append("line")
+    .attr("x1", d=>x(Math.sqrt(d.gs_x**2+d.gs_y**2)))
+    .attr("y1", d=>y(Math.atan2(d.gs_y,d.gs_x)*180/Math.PI))
+    .attr("x2", d=>x(Math.sqrt(d.vt_x**2+d.vt_y**2)))
+    .attr("y2", d=>y(Math.atan2(d.vt_y,d.vt_x)*180/Math.PI))
+    .style("stroke", d=>'#'+d.hex)
+    .style("stroke-width",0.5)
+    .on("mouseover",function(event,d){
+      d3.select(event.target).style("opacity",1)
+      tooltip
+        .style("visibility","visible")
+        .html('u: '+Math.round(d.u*100)/100+'m/s'+'<br>v: '+Math.round(d.v*100)/100+'m/s')
+    })
+    .on("mousemove",function(event){
+      tooltip
+        .style("left", event.pageX + 15 + "px")
+        .style("top", event.pageY -20 + "px")
+    })
+    .on("mouseout",function(event){
+      d3.select(event.target).style("opacity",0.5)
+      tooltip.style("visibility","hidden")
+    })
 })
