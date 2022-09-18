@@ -200,8 +200,8 @@ d3.csv("./data.csv").then(function(data){
   vdeg.append("g")
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
-      .axisRight(y.domain([-350,350]))
-      .tickValues(d3.range(-350,351,50))
+      .axisRight(y.domain([-180,180]))
+      .tickValues(d3.range(-180,181,30))
       .tickFormat(''))
 
   vdeg.selectAll(null)
@@ -231,7 +231,7 @@ d3.csv("./data.csv").then(function(data){
     })
 
   vdeg.selectAll("dot")
-    .data(data.filter(d => d.gs_x))
+    .data(data.filter(d => d.u))
     .enter()
     .append("circle")
       .attr("cx", d => x(Math.sqrt(d.gs_x**2+d.gs_y**2)))
@@ -240,7 +240,7 @@ d3.csv("./data.csv").then(function(data){
       .style("fill","black")
 
   vdeg.selectAll("dot")
-    .data(data.filter(d => d.vt_x))
+    .data(data.filter(d => d.u))
     .enter()
     .append("circle")
       .attr("cx", d => x(Math.sqrt(d.vt_x**2+d.vt_y**2)))

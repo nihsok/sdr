@@ -171,6 +171,17 @@ d3.csv("./data.csv").then(function(data){
       .attr("width",width)
       .attr("height",height)
 
+  pressure.selectAll(null)
+    .data(data.filter(d => d.t && d.p>0))
+    .enter()
+    .append("line")
+    .attr("x1", d => x(d.p/100))
+    .attr("y1", d => y(d.alt/1000))
+    .attr("x2", d => x((d.p-d.p/(287*(Number(d.t)+273.15))*9.8*200)/100))
+    .attr("y2", d => y(d.alt/1000+0.2))
+    .style("stroke",'gray')
+    .style("stroke-width",1)
+
   pressure.selectAll("dot")
     .data(data.filter(d => d.alt && d.p > 0))
     .enter()
