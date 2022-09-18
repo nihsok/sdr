@@ -47,7 +47,7 @@ for aircraft in input:
         heading += decline.ev(tmp['lon'],tmp['lat'])
         tmp['vt_x'] = tmp['tas'] * math.sin(heading * math.pi / 180)
         tmp['vt_y'] = tmp['tas'] * math.cos(heading * math.pi / 180)
-      if ('vt_x' in tmp) and ('gs_x' in aircraft):
+      if ('vt_x' in tmp) and ('gs_x' in tmp):
         tmp['flag'] += 4
         tmp['u'] = tmp['gs_x'] - tmp['vt_x']
         tmp['v'] = tmp['gs_y'] - tmp['vt_y']

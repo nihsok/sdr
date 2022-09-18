@@ -13,7 +13,7 @@ d3.csv("./data.csv").then(function(data){
     .append("g")
       .attr("transform","translate(" + margin.left + "," + margin.top + ")")
 
-  const ias = d3.select("#check-t")
+  const pressure = d3.select("#check-t")
     .append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
@@ -125,12 +125,12 @@ d3.csv("./data.csv").then(function(data){
     })
 
   //x axis
-  ias.append("g")
+  pressure.append("g")
     .attr("transform", "translate(0," + height + ")")
       .call(d3
         .axisBottom(x.domain([Math.log(100),Math.log(1000)]))
-        .tickValues(d3.range(100,600,100).map(d=>Math.log(d)))
-        .tickFormat(val => Math.round(Math.exp(val))))
+        .tickValues(d3.range(100,1001,100).map(d=>Math.log(d)))
+        .tickFormat(val => val < 6.3 ? Math.round(Math.exp(val)) : ''))
       .style("font-size",20)
       .append("text")
       .attr("fill","black")
@@ -138,13 +138,13 @@ d3.csv("./data.csv").then(function(data){
       .attr("x", width / 2 )
       .attr("y", 40)
       .html("estimated Pressure [hPa]")
-  ias.append("g")
+  pressure.append("g")
     .call(d3
       .axisTop(x.domain([Math.log(100),Math.log(1000)]))
       .tickValues(d3.range(100,1000,100).map(d=>Math.log(d)))
       .tickFormat(''))
   //y axis
-  ias.append("g")
+  pressure.append("g")
     .call(d3
       .axisLeft(y.domain([0,15]))
       .tickValues(d3.range(0,15,1))
@@ -156,14 +156,14 @@ d3.csv("./data.csv").then(function(data){
       .attr("y", -50)
       .attr("transform","rotate(-90)")
       .text('Altitude [km]')
-  ias.append("g")
+  pressure.append("g")
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
       .axisRight(y.domain([0,15]))
       .tickValues(d3.range(0,15,1))
       .tickFormat(''))
 
-  ias.append("clipPath")
+  pressure.append("clipPath")
     .attr("id","clip-t")
     .append("rect")
       .attr("x",0)
@@ -171,7 +171,7 @@ d3.csv("./data.csv").then(function(data){
       .attr("width",width)
       .attr("height",height)
 
-  ias.selectAll("dot")
+  pressure.selectAll("dot")
     .data(data.filter(d => d.alt && d.p > 0))
     .enter()
     .append("circle")
