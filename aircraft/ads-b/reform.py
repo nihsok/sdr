@@ -23,7 +23,6 @@ for aircraft in input:
   if ('lon' in aircraft): tmp['lon'] = aircraft['lon']
   if ('lat' in aircraft): tmp['lat'] = aircraft['lat']
   if ('tas' in aircraft): tmp['tas'] = aircraft['tas'] * 0.51444 #nm->m/s
-  if ('ias' in aircraft): tmp['ias'] = aircraft['ias'] * 0.51444 #nm->m/s
   if ('mach' in aircraft): tmp['mach'] = aircraft['mach']
   if ('flight' in aircraft): tmp['flight'] = aircraft['flight']
   if ('version' in aircraft): tmp['version'] = aircraft['version']
@@ -34,35 +33,34 @@ for aircraft in input:
     if ('mach' in aircraft) and ('tas' in aircraft):
       tmp['flag'] += 8
       tmp['t'] = tmp['tas'] ** 2 / ( 401.8 * tmp['mach'] ** 2 ) - 273.15
+    if ('mach' in aircraft) and ('ias' in aircraft):
+      tmp['p_fo'] = ( aircraft['ias'] * 0.51444 / ( 340.5 * tmp['mach'] ) ) ** 2 * 101325
     if ('lon' in aircraft) and ('lat' in aircraft):
       tmp['flag'] += 2
       tmp['dist'] = 0
-      if ('gs' in aircraft) and ('tas' in aircraft) and ('track' in aircraft) and (tmp['lat'] <= 85):
-        if ('mag_heading' in aircraft) or ('nav_heading' in aircraft) and (aircraft['nav_heading'] > 0):
-          if ('mag_heading' in aircraft):
-            heading = aircraft['mag_heading']
-          else:
-            heading = aircraft['nav_heading']
-            tmp['dist'] = 1 
-          tmp['flag'] += 4
-          aircraft['gs'] *= 0.51444 #nm->m/s
-          heading += decline.ev(tmp['lon'],tmp['lat'])
-          tmp['vt_x'] = tmp['tas'] * math.sin(heading * math.pi / 180)
-          tmp['vt_y'] = tmp['tas'] * math.cos(heading * math.pi / 180)
-          tmp['gs_x'] = aircraft['gs'] * math.sin(aircraft['track'] * math.pi / 180)
-          tmp['gs_y'] = aircraft['gs'] * math.cos(aircraft['track'] * math.pi / 180)
-          tmp['u'] = tmp['gs_x'] - tmp['vt_x']
-          tmp['v'] = tmp['gs_y'] - tmp['vt_y']
+      if ('gs' in aircraft) and ('track' in aircraft):
+        aircraft['gs'] *= 0.51444 #nm->m/s
+        tmp['gs_x'] = aircraft['gs'] * math.sin(aircraft['track'] * math.pi / 180)
+        tmp['gs_y'] = aircraft['gs'] * math.cos(aircraft['track'] * math.pi / 180)
+      if ('tas' in aircraft) and (tmp['lat'] <= 85) and (('mag_heading' in aircraft) or ('nav_heading' in aircraft) and (aircraft['nav_heading'] > 0)):
+        heading = aircraft['mag_heading'] if ('mag_heading' in aircraft) else aircraft['nav_heading']
+        heading += decline.ev(tmp['lon'],tmp['lat'])
+        tmp['vt_x'] = tmp['tas'] * math.sin(heading * math.pi / 180)
+        tmp['vt_y'] = tmp['tas'] * math.cos(heading * math.pi / 180)
+      if ('vt_x' in tmp) and ('gs_x' in aircraft):
+        tmp['flag'] += 4
+        tmp['u'] = tmp['gs_x'] - tmp['vt_x']
+        tmp['v'] = tmp['gs_y'] - tmp['vt_y']
   output.append(tmp)
 
 with open(file.split('.')[0]+'.csv','w') as f:
-  writer = csv.DictWriter(f,['flag','alt','lon','lat','u','v','vt_x','vt_y','gs_x','gs_y','tas','mach','t','ias','dist','hex','flight','version','category'],lineterminator='\n')
+  writer = csv.DictWriter(f,['flag','alt','lon','lat','u','v','vt_x','vt_y','gs_x','gs_y','tas','mach','t','p_fo','dist','hex','flight','version','category'],lineterminator='\n')
   writer.writerows(output)
 
 #flag,
 #lon,lat,alt, ...position
 #temperature,zonal wind,mediridional wind, ...physical value
-#mach number, tas, ias, aircraft u, aircraft v, ...verification value
+#mach number, tas, p_firstorder, aircraft u, aircraft v, ...verification value
 #distance,hex,flight,version,category ...additional value
 #flag 8:temperature
 #flag 4:wind (needs lat, lon)
