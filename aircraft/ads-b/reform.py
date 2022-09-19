@@ -28,7 +28,7 @@ for aircraft in input:
   if ('version' in aircraft): tmp['version'] = aircraft['version']
   if ('category' in aircraft): tmp['category'] = aircraft['category']
   if ('alt_baro' in aircraft):
-    tmp['p_baro'] = 101325 * ( 1 - 0.0065 * aircraft['al_baro'] * 0.3048 / 288.15 ) ** ( 9.80665 / ( 287 * 0.0065 ) )
+    tmp['p_baro'] = 101325 * ( 1 - 0.0065 * aircraft['alt_baro'] * 0.3048 / 288.15 ) ** ( 9.80665 / ( 287 * 0.0065 ) )
   if ('alt_geom' in aircraft):
     tmp['flag'] += 1
     tmp['alt'] = aircraft['alt_geom'] * 0.3048 #ft->m
