@@ -196,7 +196,7 @@ d3.csv("./data.csv").then(function(data){
     .attr("x",  - height / 2 - margin.top)
     .attr("y", -55)
     .attr("transform","rotate(-90)")
-    .html("Angle [&deg;]")
+    .html("mod(Angle,180) [&deg;]")
   vdeg.append("g")
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
@@ -210,18 +210,14 @@ d3.csv("./data.csv").then(function(data){
     .append("line")
     .attr("x1", d=>x(Math.sqrt(d.gs_x**2+d.gs_y**2)))
     .attr("y1", d=>{
-      let deg=Math.atan2(d.gs_y,d.gs_x)*180/Math.PI
-      const odeg=Math.atan2(d.vt_y,d.vt_x)*180/Math.PI
-      deg = deg<0 ? deg+180 : deg
-      deg = deg>90 && deg-(odeg<0 ? odeg+180 : odeg )>90 ? deg-180 : deg
-      return y(deg)})
+      const deg=( Math.atan2(d.gs_y,d.gs_x)*180/Math.PI + 180 ) % 180
+      const odeg=( Math.atan2(d.vt_y,d.vt_x)*180/Math.PI + 180 ) % 180
+      return y( deg>90 && deg-odeg>90 ? deg-180 : deg )})
     .attr("x2", d=>x(Math.sqrt(d.vt_x**2+d.vt_y**2)))
     .attr("y2", d=>{
-      let deg=Math.atan2(d.vt_y,d.vt_x)*180/Math.PI
-      const odeg=Math.atan2(d.gs_y,d.gs_x)*180/Math.PI
-      deg = deg<0 ? deg+180 : deg
-      deg = deg>90 && deg-(odeg<0 ? odeg+180 : odeg )>90 ? deg-180 : deg
-      return y(deg)})
+      const deg=( Math.atan2(d.vt_y,d.vt_x)*180/Math.PI + 180 ) % 180
+      const odeg=( Math.atan2(d.gs_y,d.gs_x)*180/Math.PI + 180 )% 180
+      return y( deg>90 && deg-odeg>90 ? deg-180 : deg )})
     .style("stroke", d=>'#'+d.hex)
     .style("stroke-width",1)
     .on("mouseover",function(event,d){
@@ -246,11 +242,9 @@ d3.csv("./data.csv").then(function(data){
     .append("circle")
       .attr("cx", d => x(Math.sqrt(d.gs_x**2+d.gs_y**2)))
       .attr("cy", d =>{
-        let deg=Math.atan2(d.gs_y,d.gs_x)*180/Math.PI
-        const odeg=Math.atan2(d.vt_y,d.vt_x)*180/Math.PI
-        deg = deg<0 ? deg+180 : deg
-        deg = deg>90 && deg-(odeg<0 ? odeg+180 : odeg )>90 ? deg-180 : deg
-        return y(deg)})
+        const deg=( Math.atan2(d.gs_y,d.gs_x)*180/Math.PI + 180 ) % 180
+        const odeg=( Math.atan2(d.vt_y,d.vt_x)*180/Math.PI + 180 ) % 180
+        return y( deg>90 && deg-odeg>90 ? deg-180 : deg )})
       .attr("r", 1)
       .style("fill","black")
       .style("opacity",0.5)
@@ -261,11 +255,9 @@ d3.csv("./data.csv").then(function(data){
     .append("circle")
       .attr("cx", d => x(Math.sqrt(d.vt_x**2+d.vt_y**2)))
       .attr("cy", d => {
-        let deg=Math.atan2(d.vt_y,d.vt_x)*180/Math.PI
-        const odeg=Math.atan2(d.gs_y,d.gs_x)*180/Math.PI
-        deg = deg<0 ? deg+180 : deg
-        deg = deg>90 && deg-(odeg<0 ? odeg+180 : odeg )>90 ? deg-180 : deg
-        return y(deg)})
+        const deg=( Math.atan2(d.vt_y,d.vt_x)*180/Math.PI + 180 ) % 180
+        const odeg=( Math.atan2(d.gs_y,d.gs_x)*180/Math.PI + 180 ) % 180
+        return y( deg>90 && deg-odeg>90 ? deg-180 : deg )})
       .attr("r", 1)
       .style("fill","blue")
       .style("opacity",0.5)
