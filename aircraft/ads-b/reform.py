@@ -27,6 +27,8 @@ for aircraft in input:
   if ('flight' in aircraft): tmp['flight'] = aircraft['flight']
   if ('version' in aircraft): tmp['version'] = aircraft['version']
   if ('category' in aircraft): tmp['category'] = aircraft['category']
+  if ('alt_baro' in aircraft):
+    tmp['p_baro'] = 101325 * ( 1 - 0.0065 * aircraft['al_baro'] * 0.3048 / 288.15 ) ** ( 9.80665 / ( 287 * 0.0065 ) )
   if ('alt_geom' in aircraft):
     tmp['flag'] += 1
     tmp['alt'] = aircraft['alt_geom'] * 0.3048 #ft->m
@@ -35,6 +37,7 @@ for aircraft in input:
       tmp['t'] = tmp['tas'] ** 2 / ( 401.8 * tmp['mach'] ** 2 ) - 273.15
     if ('mach' in aircraft) and ('ias' in aircraft):
       tmp['p_fo'] = ( aircraft['ias'] * 0.51444 / ( 340.5 * tmp['mach'] ) ) ** 2 * 101325
+      # first order
     if ('lon' in aircraft) and ('lat' in aircraft):
       tmp['flag'] += 2
       tmp['dist'] = 0
@@ -54,7 +57,7 @@ for aircraft in input:
   output.append(tmp)
 
 with open(file.split('.')[0]+'.csv','w') as f:
-  writer = csv.DictWriter(f,['flag','alt','lon','lat','gs_x','gs_y','u','v','vt_x','vt_y','tas','t','mach','p_fo','dist','hex','flight','version','category'],lineterminator='\n')
+  writer = csv.DictWriter(f,['flag','alt','lon','lat','gs_x','gs_y','u','v','vt_x','vt_y','tas','t','mach','p_fo','p_baro','dist','hex','flight','version','category'],lineterminator='\n')
   writer.writerows(output)
 
 #flag,
