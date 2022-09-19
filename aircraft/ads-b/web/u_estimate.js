@@ -177,7 +177,7 @@ d3.csv("./data.csv").then(function(data){
       .attr("fill", "black")
       .attr("x", width / 2 )
       .attr("y", 40)
-      .text('Speed [m/s]')
+      .html('Speed [m/s]')
   vdeg.append("g")
     .call(d3
       .axisTop(x.domain([160,290]))
@@ -186,9 +186,9 @@ d3.csv("./data.csv").then(function(data){
   //y axis
   vdeg.append("g")
     .call(d3
-      .axisLeft(y.domain([-90,180]))
-      .tickValues(d3.range(-90,181,10))
-      .tickFormat((val) => val % 30 == 0 ? val.toString() : ''))
+      .axisLeft(y.domain([-45,90]))
+      .tickValues(d3.range(-45,91,5))
+      .tickFormat((val) => val % 15 == 0 ? val.toString() : ''))
     .style("font-size",20)
     .append("text")
     .attr("fill","black")
@@ -196,12 +196,12 @@ d3.csv("./data.csv").then(function(data){
     .attr("x",  - height / 2 - margin.top)
     .attr("y", -55)
     .attr("transform","rotate(-90)")
-    .html("mod(Angle,180) [&deg;]")
+    .html("mod(Angle,90) [&deg;]")
   vdeg.append("g")
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
-      .axisRight(y.domain([-90,180]))
-      .tickValues(d3.range(-90,181,10))
+      .axisRight(y.domain([-45,90]))
+      .tickValues(d3.range(-45,91,10))
       .tickFormat(''))
 
   vdeg.selectAll(null)
@@ -210,16 +210,17 @@ d3.csv("./data.csv").then(function(data){
     .append("line")
     .attr("x1", d=>x(Math.sqrt(d.gs_x**2+d.gs_y**2)))
     .attr("y1", d=>{
-      const deg=( Math.atan2(d.gs_y,d.gs_x)*180/Math.PI + 180 ) % 180
-      const odeg=( Math.atan2(d.vt_y,d.vt_x)*180/Math.PI + 180 ) % 180
-      return y( deg>90 && deg-odeg>90 ? deg-180 : deg )})
+      const deg=( Math.atan2(d.gs_y,d.gs_x)*180/Math.PI + 360 ) % 90
+      const odeg=( Math.atan2(d.vt_y,d.vt_x)*180/Math.PI + 360 ) % 90
+      return y( deg-odeg>45 ? deg-90 : deg )})
     .attr("x2", d=>x(Math.sqrt(d.vt_x**2+d.vt_y**2)))
     .attr("y2", d=>{
-      const deg=( Math.atan2(d.vt_y,d.vt_x)*180/Math.PI + 180 ) % 180
-      const odeg=( Math.atan2(d.gs_y,d.gs_x)*180/Math.PI + 180 )% 180
-      return y( deg>90 && deg-odeg>90 ? deg-180 : deg )})
+      const deg=( Math.atan2(d.vt_y,d.vt_x)*180/Math.PI + 360 ) % 90
+      const odeg=( Math.atan2(d.gs_y,d.gs_x)*180/Math.PI + 360 )% 90
+      return y( deg-odeg>45 ? deg-90 : deg )})
     .style("stroke", d=>'#'+d.hex)
     .style("stroke-width",1)
+    .style("opacity",0.5)
     .on("mouseover",function(event,d){
       d3.select(event.target).style("opacity",1)
       tooltip
@@ -242,9 +243,9 @@ d3.csv("./data.csv").then(function(data){
     .append("circle")
       .attr("cx", d => x(Math.sqrt(d.gs_x**2+d.gs_y**2)))
       .attr("cy", d =>{
-        const deg=( Math.atan2(d.gs_y,d.gs_x)*180/Math.PI + 180 ) % 180
-        const odeg=( Math.atan2(d.vt_y,d.vt_x)*180/Math.PI + 180 ) % 180
-        return y( deg>90 && deg-odeg>90 ? deg-180 : deg )})
+        const deg=( Math.atan2(d.gs_y,d.gs_x)*180/Math.PI + 360 ) % 90
+        const odeg=( Math.atan2(d.vt_y,d.vt_x)*180/Math.PI + 360 ) % 90
+        return y( deg-odeg>45 ? deg-90 : deg )})
       .attr("r", 1)
       .style("fill","black")
       .style("opacity",0.5)
@@ -255,9 +256,9 @@ d3.csv("./data.csv").then(function(data){
     .append("circle")
       .attr("cx", d => x(Math.sqrt(d.vt_x**2+d.vt_y**2)))
       .attr("cy", d => {
-        const deg=( Math.atan2(d.vt_y,d.vt_x)*180/Math.PI + 180 ) % 180
-        const odeg=( Math.atan2(d.gs_y,d.gs_x)*180/Math.PI + 180 ) % 180
-        return y( deg>90 && deg-odeg>90 ? deg-180 : deg )})
+        const deg=( Math.atan2(d.vt_y,d.vt_x)*180/Math.PI + 360 ) % 90
+        const odeg=( Math.atan2(d.gs_y,d.gs_x)*180/Math.PI + 360 ) % 90
+        return y( deg-odeg>45 ? deg-90 : deg )})
       .attr("r", 1)
       .style("fill","blue")
       .style("opacity",0.5)

@@ -2,7 +2,7 @@ d3.csv("./stat.csv").then(function(data){
   if(data.length>240) data = data.slice(data.length-240) //24 times per day
   const margin = {top:10, right:15, bottom:25, left:75},
         width  = 960 - margin.left - margin.right,
-        height = 200 - margin.top - margin.bottom;
+        height = 240 - margin.top - margin.bottom;
 
   const x = d3.scaleTime().domain([new Date(data[0].time),new Date(data[data.length-1].time)]).range([0, width])
   const y = d3.scaleLinear().domain([0,600]).range([height, 0])
@@ -39,10 +39,10 @@ d3.csv("./stat.csv").then(function(data){
     .append("text")
     .attr("fill","black")
     .attr("text-anchor","middle")
-    .attr("x", - height / 2 - margin.top)
+    .attr("x", - height / 2 - margin.top + 10)
     .attr("y", -55)
     .attr("transform","rotate(-90)")
-    .text("# [/h] & Rate [%]")
+    .text("# [/hour] & Rate [%]")
   svg.append("g")
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
