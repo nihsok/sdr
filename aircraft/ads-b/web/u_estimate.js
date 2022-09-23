@@ -71,7 +71,7 @@ d3.csv("./data.csv").then(function(data){
     .attr("stroke","black")
     .attr("cx",x(0))
     .attr("cy",y(0))
-    .attr("r",d => d*470/(2*width))
+    .attr("r",d => d*435/(2*width))
     .style("opacity", 0.1)
     .attr("clip-path","url(#clip-t)")
     .on("mouseover",function(event,d){
@@ -201,7 +201,7 @@ d3.csv("./data.csv").then(function(data){
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
       .axisRight(y.domain([-45,90]))
-      .tickValues(d3.range(-45,91,10))
+      .tickValues(d3.range(-45,91,5))
       .tickFormat(''))
 
   vdeg.selectAll(null)
