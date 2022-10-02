@@ -5,7 +5,7 @@ d3.csv("./stat.csv").then(function(data){
         height = 240 - margin.top - margin.bottom;
 
   const x = d3.scaleTime().domain([new Date(data[0].time),new Date(data[data.length-1].time)]).range([0, width])
-  const y = d3.scaleLinear().domain([0,600]).range([height, 0])
+  const y = d3.scaleLinear().domain([0,1000]).range([height, 0])
 
   const svg = d3.select("#count")
   .append("svg")
@@ -33,7 +33,7 @@ d3.csv("./stat.csv").then(function(data){
   svg.append("g")
     .call(d3
       .axisLeft(y)
-      .tickValues(d3.range(0,601,50))
+      .tickValues(d3.range(0,999,50))
       .tickFormat((val) => val % 100 == 0 ? val.toString() : ''))
     .style("font-size",20)
     .append("text")
@@ -42,12 +42,12 @@ d3.csv("./stat.csv").then(function(data){
     .attr("x", - height / 2 - margin.top + 10)
     .attr("y", -55)
     .attr("transform","rotate(-90)")
-    .text("# [/hour] & Rate [%]")
+    .text("# [/hour] & Rate [‰]")
   svg.append("g")
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
       .axisRight(y)
-      .tickValues(d3.range(0,601,50))
+      .tickValues(d3.range(0,999,50))
       .tickFormat(''))
   
   svg.append("clipPath")
@@ -59,7 +59,7 @@ d3.csv("./stat.csv").then(function(data){
       .attr("height",height)
   
   svg.selectAll(null)
-    .data(d3.range(50,600,50))
+    .data(d3.range(100,900,100))
     .enter()
     .append("line")
     .attr("x1",x(new Date(data[0].time)))
@@ -71,7 +71,6 @@ d3.csv("./stat.csv").then(function(data){
     .style("opacity",0.1)
 
   const color=['rgb(102,51,0)','rgb(53,161,107)','rgb(255,40,0)','rgb(0,65,255)','rgb(154,0,121)']
-  
   const legend={t:'T,U,Position',u:'U,Position',latlon:'Position (lon,lat,alt)',alt:'Altitude',little:'All'}
 
   svg.selectAll("mylayers")
@@ -115,7 +114,7 @@ d3.csv("./stat.csv").then(function(data){
     .attr("clip-path","url(#clip-count)")
     .attr("d",d3.line()
       .x(d=>x(new Date(d.time)))
-      .y(d=>y(d.t/(Number(d.little)+Number(d.alt)+Number(d.latlon)+Number(d.u)+Number(d.t))*100 || 0 ))
+      .y(d=>y(d.t/(Number(d.little)+Number(d.alt)+Number(d.latlon)+Number(d.u)+Number(d.t))*1000 || 0 ))
     )
 
 })
