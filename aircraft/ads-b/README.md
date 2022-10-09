@@ -8,15 +8,15 @@
 ## 気温 (T)
 マッハ数*M*は、相対風速 (True AirSpeed; TAS) と音速*V*sの比で与えらえる。
 
-<img src="https://latex.codecogs.com/svg.image?M=\frac{TAS}{V_s}">
+$M=\frac{TAS}{V_s}$
 
 音速の定義は比熱比κ、乾燥空気の気体定数R、気温*T*を用いて、
 
-<img src="https://latex.codecogs.com/svg.image?\inline&space;V_s=\sqrt{\kappa&space;RT}">
+$V_s=\sqrt{\kappa RT}$
 
 この2式から*T*について求めると、
 
-<img src="https://latex.codecogs.com/svg.image?T=\frac{TAS^2}{\kappa&space;RM^2}=\frac{TAS^2}{1.4\times&space;287\times&space;M^2}=\frac{TAS^2}{401.8M^2}">
+$T=\frac{TAS^2}{\kappa RM^2}=\frac{TAS^2}{1.4\times 287\times M^2}=\frac{TAS^2}{401.8M^2}$
 
 ### 予備知識
 航空機の速度はTAS以外に
@@ -24,39 +24,38 @@
 - 較正対気速度 (Calibrated AirSpeed; CAS) 
 - 等価対気速度 (Equivalent AirSpeed; EAS) 
 
-がある。これら3種はほぼ同じ値で（厳密には異なる）、TASがなくてもIASのデータが得られることがある。そこで、IASを用いて気温を求める方法を考える。
-**大気の圧縮性を無視できるとき**（M≦0.3: https://ja.wikipedia.org/wiki/マッハ数 ）、IASとTASの関係は以下のように与えられる。(https://en.wikipedia.org/wiki/Equivalent_airspeed)
+がある。それぞれの速度は気圧や密度による補正がかかっている。整理すると（主にsubsonic: 0.3 < M < 0.85の範囲で）
 
-<img src="https://latex.codecogs.com/svg.image?IAS\approx&space;EAS=TAS\sqrt{\frac{\rho}{\rho_0}}">
+$M=\sqrt{5[(\frac{q_c}{p}+1)^\frac{2}{7}-1]}\Leftrightarrow q_c=p[(1+0.2M^2)^\frac{7}{2}-1]$
 
-大気の密度*ρ*は等温を仮定すると、地上での密度*ρ*0からスケールハイト*H*を使って高度*z*とともに指数関数的に減少する。
+$EAS=a_0M\sqrt{\frac{p}{p_0}}=a_0\sqrt{\frac{5p}{p_0}[(\frac{q_c}{p}+1)^\frac{2}{7}-1]}$
 
-<img src="https://latex.codecogs.com/svg.image?\rho=\rho_0&space;e^{-\frac{z}{H}}">
+$TAS=EAS\sqrt{\frac{\rho_0}{\rho}}=a_0M\sqrt{\frac{T}{T_0}}=a_0\sqrt{\frac{5T}{T_0}[(\frac{q_c}{p}+1)^\frac{2}{7}-1]}$
 
-これを代入すると
+$CAS=IAS+\alpha\approx IAS$ （αは機体の特性による補正とのことだが、IASをブロードキャストしても意味がないのでCASと考えることにする）
 
-<img src="https://latex.codecogs.com/svg.image?TAS\approx&space;IAS\sqrt{\frac{\rho_0}{\rho}}=IAS\times&space;e^{\frac{z}{2H}}">
+$CAS=EAS[1+\frac{1}{8}(1-\frac{p}{p_0})M^2+\frac{3}{640}(1-10\frac{p}{p_0}+9(\frac{p}{p_0})^2)M^4]=a_0 M\sqrt{\frac{p}{p_0}}[1+\frac{1}{8}(1-\frac{p}{p_0})M^2+\frac{3}{640}(1-10\frac{p}{p_0}+9(\frac{p}{p_0})^2)M^4]$
+1. 非圧縮 (M < 0.3) のとき2次以上の項は無視できて、CAS=EAS
+2. 遷音速以上 (M > 0.8) のとき、5次方程式となり解析的に解けない
+3. 亜音速 (subsonic: 0.3 < M < 0.8) のとき、3次方程式となり解析解が求まる
 
-*T*を求める式は、
+$\delta=\sqrt{\frac{p}{p_0}}$ についての3次方程式は、
+$$\delta^3-(1+\frac{8}{M^2})\delta+\frac{8 CAS}{a_0 M^3}=0$$
+判別式は常に正となるので、3つの異なる実数解をもつ（$y=x^3$を少し曲げた典型的な3次関数の形）。
+$p=-(1+\frac{8}{M^2}), q=\frac{8 CAS}{a_0 M^3}$ とおくと、解は$\omega=\frac{-1+\sqrt{3}i}{2}$ を使い
+$$y=\omega^k\sqrt[3]{-\frac{q}{2}+\sqrt{(\frac{q}{2})^2+(\frac{p}{3})^3}}+\omega^{3-k}\sqrt[3]{-\frac{q}{2}-\sqrt{(\frac{q}{2})^2+(\frac{p}{3})^3}}  (k=0,1,2)$$
+ ここで $(\frac{q}{2})^2+(\frac{p}{3})^3=(\frac{4 CAS}{a_0 M^3})^2-\frac{(1+\frac{8}{M^2})^3}{27}<0$ なのでk=0の解は虚数が出てくる。虚数を含まない形にするのは難しそう（還元不能）なので、複素数を扱える言語で解くことにする。
 
-<img src="https://latex.codecogs.com/svg.image?T=\frac{e^{\frac{z}{H}}}{\kappa&space;R}\frac{IAS^2}{M^2}">
-
-ここで、平均的な気温約273K（仮定）のとき、*H*は8000m。
-
-**大気の圧縮性を無視できないとき** (M>0.3) はIASとTASの変換式は使えず、TASとMからTを求める式をTASについて変形した形
-
-<img src="https://latex.codecogs.com/svg.image?TAS=M\sqrt{\kappa&space;RT}">
-
-で求める。この式でTは求められないので、TASの情報がないときにIASから気温を求められるのはM≦0.3のときに限られる。実際に上空を航行しているときはほとんどM>0.3なので、今回は実装しない。
+これにより、MとCAS (≈IAS) があればpが求まることになる。2高度でのpとTの値があれば、静水圧平衡から密度（湿度）が求められると考える。（Tを乾燥大気として推定しているところを解決しないと不整合が出るかも）
 
 ## 風速 (U,V)
 飛行機は風の影響を受けながら進むため、対地速度**Vg**は飛行機自体の速度**Vt**と風速**V**の合計になる。
 
-<img src="https://latex.codecogs.com/svg.image?\mathbf{V}_g=\mathbf{V}_t&plus;\mathbf{V}" title="https://latex.codecogs.com/svg.image?\mathbf{V}_g=\mathbf{V}_t+\mathbf{V}" />
+$\mathbf{V}_g=\mathbf{V}_t+\mathbf{V}$
 
 よって、風速は
 
-<img src="https://latex.codecogs.com/svg.image?\binom{u}{v}=\binom{u}{v}_g-\binom{u}{v}_t=\binom{V_{gs}\sin\theta_{track}-V_{TAS}\sin(\theta_{heading}&plus;\alpha)}{V_{gs}\cos\theta_{track}-V_{TAS}\cos{(\theta_{heading}&plus;\alpha)}">
+$\binom{u}{v}=\binom{u}{v}_g-\binom{u}{v}_t=\binom{V_{gs}\sin\theta_{track}-V_{TAS}\sin(\theta_{heading}+\alpha)}{V_{gs}\cos\theta_{track}-V_{TAS}\cos{(\theta_{heading}+\alpha)}}$
 
 ここで*V*gs、*V*TASはそれぞれ対地速度と相対風速、*θ*trackと*θ*headingはそれぞれtrack angle（航路）とheading angle（針路）に対応する。
 
