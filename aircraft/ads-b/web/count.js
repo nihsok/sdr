@@ -49,7 +49,7 @@ d3.csv("./stat.csv").then(function(data){
       .axisRight(y)
       .tickValues(d3.range(0,999,50))
       .tickFormat(''))
-  
+
   svg.append("clipPath")
     .attr("id","clip-count")
     .append("rect")
@@ -57,9 +57,9 @@ d3.csv("./stat.csv").then(function(data){
       .attr("y",0)
       .attr("width",width)
       .attr("height",height)
-  
+
   svg.selectAll(null)
-    .data(d3.range(100,900,100))
+    .data(d3.range(100,901,100))
     .enter()
     .append("line")
     .attr("x1",x(new Date(data[0].time)))
