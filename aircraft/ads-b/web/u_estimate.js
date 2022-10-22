@@ -169,8 +169,8 @@ d3.csv("./data.csv").then(function(data){
   vdeg.append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(d3
-      .axisBottom(x.domain([160,290]))
-      .tickValues(d3.range(160,291,10))
+      .axisBottom(x.domain([140,330]))
+      .tickValues(d3.range(140,331,10))
       .tickFormat(val => val % 20 == 0 ? val : ''))
     .style("font-size",20)
     .append("text")
@@ -180,8 +180,8 @@ d3.csv("./data.csv").then(function(data){
       .html('Speed [m/s]')
   vdeg.append("g")
     .call(d3
-      .axisTop(x.domain([160,290]))
-      .tickValues(d3.range(160,291,10))
+      .axisTop(x.domain([140,330]))
+      .tickValues(d3.range(140,331,10))
       .tickFormat(''))
   //y axis
   vdeg.append("g")
@@ -196,7 +196,7 @@ d3.csv("./data.csv").then(function(data){
     .attr("x",  - height / 2 - margin.top)
     .attr("y", -55)
     .attr("transform","rotate(-90)")
-    .html("mod(Angle,90) [&deg;]")
+    .html("Angle [mod(&theta;,90)&deg;]")
   vdeg.append("g")
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
