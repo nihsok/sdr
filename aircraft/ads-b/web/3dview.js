@@ -89,7 +89,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     for (const row of data.split('\n')){
       const [flag,alt,lon,lat,,,u,v,,,,t] = row.split(',')
       if(flag > 2){
-        const alt = alt / 10000 * 2//parameter
+        alt = alt / 10000 * 2 //parameter
         if(flag > 6){
           const phi   = ( 90 -            lat ) * Math.PI/180 //colatitude
           const theta = ( 90 + parseFloat(lon)) * Math.PI/180 //+90 shift
@@ -100,10 +100,10 @@ window.addEventListener('DOMContentLoaded',()=>{
           const arrow = new THREE.ArrowHelper(
             wind.clone().normalize(),
             latlon2Vector(lat,lon,alt),
-            wind.length() * 0.02,//parameter
+            wind.length() * 0.02, //parameter
             color(t),
-            0.2,//headlength
-            0.1//headwidth
+            0.2, //headlength
+            0.1 //headwidth
           )
           scene.add(arrow)
         }else{
