@@ -14,12 +14,14 @@ decline=RectBivariateSpline(
   np.array(z1d).reshape([36,73])[::-1,:].T,
   kx=1,ky=1)
 
-file=sys.argv[1]
-output=[]
-input=json.load(open(file,'r'))['aircraft']
+file = sys.argv[1]
+output = []
+allinfo = json.load( open( file , 'r' ) )
+time      = allinfo['now']
+aircrafts = allinfo['aircraft']
 
-for aircraft in input:
-  tmp = {'flag': 0, 'hex': aircraft['hex']}
+for aircraft in aircrafts:
+  tmp = {'flag': 0, 'hex': aircraft['hex'], 'time': time}
   if ('lon' in aircraft): tmp['lon'] = aircraft['lon']
   if ('lat' in aircraft): tmp['lat'] = aircraft['lat']
   if ('tas' in aircraft): tmp['tas'] = aircraft['tas'] * 0.51444 #nm->m/s
@@ -61,14 +63,14 @@ for aircraft in input:
   output.append(tmp)
 
 with open(file.split('.')[0]+'.csv','w') as f:
-  writer = csv.DictWriter(f,['flag','alt','lon','lat','gs_x','gs_y','u','v','vt_x','vt_y','tas','t','mach','cas','p','ias','dist','hex','flight','version','category'],lineterminator='\n')
+  writer = csv.DictWriter(f,['flag','alt','lon','lat','gs_x','gs_y','u','v','vt_x','vt_y','tas','t','mach','cas','p','ias','dist','flight','version','category','hex','time'],lineterminator='\n')
   writer.writerows(output)
 
 #flag,
 #alt,lon,lat, ...position
 #temperature,zonal wind,mediridional wind,pressure ...physical value
 #mach,tas,cas,ias,aircraft u,aircraft v, ...verification value
-#distance,hex,flight,version,category ...additional value
+#distance,hex,flight,version,category,time ...additional value
 #flag 8:temperature
 #flag 4:wind (needs lat, lon)
 #flag 2:lat,lon

@@ -20,9 +20,9 @@ $T=\frac{TAS^2}{\kappa RM^2}=\frac{TAS^2}{1.4\times 287\times M^2}=\frac{TAS^2}{
 
 ### 予備知識
 航空機の速度はTAS以外に
-- 指示対気速度 (Indicated AirSpeed; IAS) 
-- 較正対気速度 (Calibrated AirSpeed; CAS) 
-- 等価対気速度 (Equivalent AirSpeed; EAS) 
+- 指示対気速度 (Indicated AirSpeed; IAS)
+- 較正対気速度 (Calibrated AirSpeed; CAS)
+- 等価対気速度 (Equivalent AirSpeed; EAS)
 
 がある。それぞれの速度は気圧や密度による補正がかかっている。整理すると（主にsubsonic: 0.3 < M < 0.85の範囲で）
 
@@ -30,23 +30,26 @@ $M=\sqrt{5[(\frac{q_c}{p}+1)^\frac{2}{7}-1]}\Leftrightarrow q_c=p[(1+0.2M^2)^\fr
 
 $EAS=a_0M\sqrt{\frac{p}{p_0}}=a_0\sqrt{\frac{5p}{p_0}[(\frac{q_c}{p}+1)^\frac{2}{7}-1]}$
 
-$TAS=EAS\sqrt{\frac{\rho_0}{\rho}}=a_0M\sqrt{\frac{T}{T_0}}=a_0\sqrt{\frac{5T}{T_0}[(\frac{q_c}{p}+1)^\frac{2}{7}-1]}$
+$TAS=a_0M\sqrt{\frac{T}{T_0}}=a_0\sqrt{\frac{5T}{T_0}[(\frac{q_c}{p}+1)^\frac{2}{7}-1]} (\approx EAS\sqrt{\frac{\rho_0}{\rho}}: 乾燥大気なら)$
 
-$CAS=IAS+\alpha\approx IAS$ （αは機体の特性による補正とのことだが、IASをブロードキャストしても意味がないのでCASと考えることにする）
+$CAS=IAS+\alpha$
 
 $CAS=EAS[1+\frac{1}{8}(1-\frac{p}{p_0})M^2+\frac{3}{640}(1-10\frac{p}{p_0}+9(\frac{p}{p_0})^2)M^4]=a_0 M\sqrt{\frac{p}{p_0}}[1+\frac{1}{8}(1-\frac{p}{p_0})M^2+\frac{3}{640}(1-10\frac{p}{p_0}+9(\frac{p}{p_0})^2)M^4]$
 1. 非圧縮 (M < 0.3) のとき2次以上の項は無視できて、CAS=EAS
-2. 遷音速以上 (M > 0.8) のとき、5次方程式となり解析的に解けない
-3. 亜音速 (subsonic: 0.3 < M < 0.8) のとき、3次方程式となり解析解が求まる
+2. 亜音速 (subsonic: 0.3 < M < 0.8) のとき、3次方程式となり解析解が求まる
+3. 遷音速以上 (M > 0.8) のとき、5次方程式となり解析的に解けない
+
+<details><summary>2の場合はCASとMがあればpが求まると思ったが、複素数が登場して複雑になるため素直に気圧高度から求めることにした。上の5次式はCASの計算に使い、IASと比較する。</summary><div>
 
 $\delta=\sqrt{\frac{p}{p_0}}$ についての3次方程式は、
 $$\delta^3-(1+\frac{8}{M^2})\delta+\frac{8 CAS}{a_0 M^3}=0$$
 判別式 $4(1+\frac{8}{M^2})^3-27(\frac{8 CAS}{a_0 M^3})^2>0$ が常に成り立つので、3つの異なる実数解をもつ（ $y=x^3$ を少し曲げた典型的な3次関数の形）。
 $p=-(1+\frac{8}{M^2}), q=\frac{8 CAS}{a_0 M^3}$ とおくと、解は $\omega=\frac{-1+\sqrt{3}i}{2}$ を使い
 $$y=\omega^k\sqrt[3]{-\frac{q}{2}+\sqrt{(\frac{q}{2})^2+(\frac{p}{3})^3}}+\omega^{3-k}\sqrt[3]{-\frac{q}{2}-\sqrt{(\frac{q}{2})^2+(\frac{p}{3})^3}}  (k=0,1,2)$$
- ここで $(\frac{q}{2})^2+(\frac{p}{3})^3=(\frac{4 CAS}{a_0 M^3})^2-\frac{(1+\frac{8}{M^2})^3}{27}<0$ なので解の途中式に虚数が出てくる。虚数を含まないよう変形するのは難しそう（還元不能）なので、複素数を扱える言語で解くことにする。
+ ここで $(\frac{q}{2})^2+(\frac{p}{3})^3=(\frac{4 CAS}{a_0 M^3})^2-\frac{(1+\frac{8}{M^2})^3}{27}<0$ なので解の途中式に虚数が出てくる。虚数を含まないよう変形するのは難しそう（還元不能）なので、複素数を扱える言語で解く必要がある。
 
-これにより、MとCAS (≈IAS) があればpが求まることになる。2高度でのpとTの値があれば、静水圧平衡から密度（湿度）が求められると考える。（Tを乾燥大気として推定しているところを解決しないと不整合が出るかも）
+これにより、MとCAS (≈IAS) があればpが求まる。2高度でのpとTの値があれば、静水圧平衡から密度（湿度）が求められると考える。（Tを乾燥大気として推定しているところを解決しないと不整合が出るかも）
+</div></details>
 
 ## 風速 (U,V)
 飛行機は風の影響を受けながら進むため、対地速度**Vg**は飛行機自体の速度**Vt**と風速**V**の合計になる。
