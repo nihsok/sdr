@@ -2,7 +2,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   const width = window.innerWidth
   const height = 700
   const earthradius = 637.8137 //10km
-  const flattening = 1 - 1/298.257222101 //GRS80
+  const flattening = 1 - 1/298.257223563 //WGS84
 
   const canvasElement = document.querySelector('#myCanvas')
   const renderer = new THREE.WebGLRenderer({canvas: canvasElement})
@@ -86,29 +86,28 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   const loader = new THREE.FileLoader().load('./data.csv',(data)=>{
     const p=[]
-    const index_flag = 0, index_alt = 1, index_lon = 2, index_lat = 3, index_u = 6, index_v = 7, index_t = 11
     for (const row of data.split('\n')){
-      const values = row.split(',')
-      if(values[index_flag] > 2){
-        const alt = values[index_alt]/10000 * 2//parameter
-        if(values[index_flag] > 6){
-          const phi   = (90-           values[index_lat] )*Math.PI/180 //colatitude
-          const theta = (90+parseFloat(values[index_lon]))*Math.PI/180 //+90 shift
-          const x = - values[index_v]*Math.cos(phi)*Math.sin(theta) + values[index_u]*Math.cos(theta)
-          const y =   values[index_v]*Math.sin(phi)
-          const z = - values[index_v]*Math.cos(phi)*Math.cos(theta) - values[index_u]*Math.sin(theta) 
+      const [flag,alt,lon,lat,,,u,v,,,,t] = row.split(',')
+      if(flag > 2){
+        const alt = alt / 10000 * 2//parameter
+        if(flag > 6){
+          const phi   = ( 90 -            lat ) * Math.PI/180 //colatitude
+          const theta = ( 90 + parseFloat(lon)) * Math.PI/180 //+90 shift
+          const x = - v*Math.cos(phi)*Math.sin(theta) + u*Math.cos(theta)
+          const y =   v*Math.sin(phi)
+          const z = - v*Math.cos(phi)*Math.cos(theta) - u*Math.sin(theta)
           const wind  = new THREE.Vector3().set(x,y,z)
           const arrow = new THREE.ArrowHelper(
             wind.clone().normalize(),
-            latlon2Vector(values[index_lat],values[index_lon],alt),
+            latlon2Vector(lat,lon,alt),
             wind.length() * 0.02,//parameter
-            color(values[index_t]),
+            color(t),
             0.2,//headlength
             0.1//headwidth
           )
           scene.add(arrow)
         }else{
-          p.push(latlon2Vector(values[index_lat],values[index_lon],alt))
+          p.push(latlon2Vector(lat,lon,alt))
         }
       }
     }

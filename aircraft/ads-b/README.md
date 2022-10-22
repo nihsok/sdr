@@ -59,10 +59,9 @@ $\binom{u}{v}=\binom{u}{v}_g-\binom{u}{v}_t=\binom{V_{gs}\sin\theta_{track}-V_{T
 
 ここで*V*gs、*V*TASはそれぞれ対地速度と相対風速、*θ*trackと*θ*headingはそれぞれtrack angle（航路）とheading angle（針路）に対応する。
 
-αは地磁気偏角で、緯度、経度、高度、時間によって決まる。NOAAのサイト (https://www.ngdc.noaa.gov/geomag/calculators/magcalc.shtml) で計算できる。今回は2020年1月1日における高度10kmの10度ごとの値を取得し、内挿により求める。
-- 数年のスケールでは問題ないと思われるが、地磁気は変化するので適宜更新が必要。
-- この方法では細かい水平構造（例えばhttps://www.gsi.go.jp/common/000237171.pdf） は再現できていないと思われる。
-- 風速の不確実性の原因にはなると思われる。
+αは地磁気偏角で、緯度、経度、高度、時間によって決まる。NOAAのサイト (https://www.ngdc.noaa.gov/geomag/calculators/magcalc.shtml) で計算できる。WMM2020から求められている (https://www.adsbexchange.com/ads-b-data-field-explanations/) とのことなので、2020年1月1日における高度10kmの10度ごとの値を取得し、内挿により求める。
+- 今後基準とするモデルが変わったら適宜更新が必要。
+- 10度ごとからの内挿なので、誤差が含まれる（特に低緯度で大きそう）
 - 鉛直方向の運動は（今のところ）無視している。
 
 参考文献：Haan et al (2011) https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2010JD015264
