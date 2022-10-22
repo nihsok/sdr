@@ -37,7 +37,7 @@ for aircraft in aircrafts:
       if (tmp['alt'] < 11019):
         tmp['p'] = 101325 * ( 1 - 0.0065 * aircraft['alt_baro'] * 0.3048 / 288.15 ) ** ( 9.80665 / ( 287 * 0.0065 ) )
       else:
-        tmp['p'] =  22632 * math.exp( ( 11019 - aircraft['alt_baro'] * 0.3048 ) * 9.80665 / ( 287 * 0.0065 ) )
+        tmp['p'] =  22632 * math.exp( ( 11019 - aircraft['alt_baro'] * 0.3048 ) * 9.80665 / ( 287 * 216.65 ) )
       if ('mach' in aircraft):
         delta = tmp['p'] / 101325
         tmp['cas'] = 340.5 * tmp['mach'] * math.sqrt(delta) * ( 1 + ( 1 - delta ) / 8 * tmp['mach'] ** 2 + ( 1 - 10 * delta + 9 * delta ** 2 ) * 3 / 640 * tmp['mach'] ** 4 )
