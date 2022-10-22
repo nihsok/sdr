@@ -63,6 +63,7 @@ $\binom{u}{v}=\binom{u}{v}_g-\binom{u}{v}_t=\binom{V_{gs}\sin\theta_{track}-V_{T
 - 今後基準とするモデルが変わったら適宜更新が必要。
 - 10度ごとからの内挿なので、誤差が含まれる（特に低緯度で大きそう）
 - 鉛直方向の運動は（今のところ）無視している。
+- 高度による違いも無視（ほぼ地表なので、水平位置による違いの方が大きい）
 
 参考文献：Haan et al (2011) https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2010JD015264
 
