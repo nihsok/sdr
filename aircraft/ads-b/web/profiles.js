@@ -97,7 +97,7 @@ d3.csv("./data.csv").then(function(data){
       d3.select(event.target).style("opacity",0.5)
       tooltip.style("visibility","hidden")
     })
-  //setting only for T profile  
+  //setting only for T profile
   t_profile.append("clipPath")
     .attr("id","clip-rect")
     .append("rect")
@@ -105,7 +105,7 @@ d3.csv("./data.csv").then(function(data){
       .attr("y",0)
       .attr("width",width)
       .attr("height",height)
-  
+
   for (i=-60; i<=160; i+=20){
     t_profile.append("path")
       .datum([0,15000])
@@ -127,9 +127,10 @@ d3.csv("./data.csv").then(function(data){
       )
   }
 
-  axes(u_profile,'Zonal wind [m/s]',[-50,50])
+  const u_max=70
+  axes(u_profile,'Zonal wind [m/s]',[-u_max,u_max])
   u_profile.selectAll("dot")
-    .data(data.filter(d => d.alt && d.u && Math.abs(d.u)<50))
+    .data(data.filter(d => d.alt && d.u && Math.abs(d.u)<u_max))
     .enter()
     .append("circle")
       .attr("cx", (d) => x(d.u))
@@ -153,7 +154,7 @@ d3.csv("./data.csv").then(function(data){
       tooltip.style("visibility","hidden")
     })
   u_profile.selectAll(null)
-    .data(d3.range(-40,41,10).concat([0]))
+    .data(d3.range(-u_max,u_max+1,10).concat([0]))
     .enter()
     .append("line")
     .attr("x1",d=>x(d))
@@ -164,9 +165,9 @@ d3.csv("./data.csv").then(function(data){
     .style("stroke","black")
     .style("opacity",0.1)
 
-  axes(v_profile,'Meridional Wind [m/s]',[-50,50])
+  axes(v_profile,'Meridional Wind [m/s]',[-u_max,u_max])
   v_profile.selectAll("dot")
-    .data(data.filter(d => d.alt && d.v && Math.abs(d.v)<50))
+    .data(data.filter(d => d.alt && d.v && Math.abs(d.v)<u_max))
    .enter()
    .append("circle")
      .attr("cx", (d) => x(d.v))
@@ -190,7 +191,7 @@ d3.csv("./data.csv").then(function(data){
      tooltip.style("visibility","hidden")
     })
   v_profile.selectAll(null)
-    .data(d3.range(-40,41,10).concat([0]))
+    .data(d3.range(-u_max,u_max-1,10).concat([0]))
     .enter()
     .append("line")
     .attr("x1",d=>x(d))
