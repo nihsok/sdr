@@ -6,13 +6,13 @@ input = sys.stdin.read().splitlines()
 tmp = input[0].split(',')
 hex = tmp[20]
 z1,u1,v1,t1,p1,time1 = [ float(tmp[i] or 0) for i in [1,6,7,11,15,21] ]
-if (t1 != 0): t1 = t1 + 273.15
+if (t1 != 0): t1 += 273.15
 theta1 = t1 * (100000/p1)**rdcp if t1 > 0 else 0
 
-for line in input:
+for line in input[1:]:
   tmp = line.split(',')
   z2,u2,v2,t2,p2,time2 = [ float(tmp[i] or 0) for i in [1,6,7,11,15,21] ]
-  if (t2 != 0): t2 = t2 + 273.15
+  if (t2 != 0): t2 += 273.15
   theta2 = t2 * (100000/p2)**rdcp if t2 > 0 else 0
 
   if t1 > 0 and time2 - time1 < 40 and z2 != z1:
