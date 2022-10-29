@@ -66,7 +66,7 @@ d3.csv("./data.csv").then(function(data){
         .tickValues(d3.range(0,15000,1000))
         .tickFormat(''))
   }
-  axes(t_profile,"Temperature [&#8451]",[-80,30])
+  axes(t_profile,"(Virtual) Temperature [&#8451]",[-80,30])
 
   const tooltip = d3.select("body")
     .append("div")
