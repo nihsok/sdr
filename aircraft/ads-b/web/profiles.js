@@ -1,5 +1,5 @@
 const margin = {top:10, right:15, bottom:50, left:60},
-  width = 320 - margin.left - margin.right,
+  width = 300 - margin.left - margin.right,
   height = 400 - margin.top - margin.bottom;
 
 const x = d3.scaleLinear().range([0, width])
@@ -34,7 +34,7 @@ d3.csv("./data.csv").then(function(data){
       .call(d3
         .axisBottom(x.domain(range))
         .tickValues(d3.range(...range,10))
-        .tickFormat((val) => val % 20 == 0 ? val.toString() : ''))
+        .tickFormat((val) => val % 30 == 0 ? val.toString() : ''))
       .style("font-size",20)
       .append("text")
         .attr("fill", "black")
@@ -127,7 +127,7 @@ d3.csv("./data.csv").then(function(data){
       )
   }
 
-  const u_max=70
+  const u_max=80
   axes(u_profile,'Zonal wind [m/s]',[-u_max,u_max])
   u_profile.selectAll("dot")
     .data(data.filter(d => d.alt && d.u && Math.abs(d.u)<u_max))

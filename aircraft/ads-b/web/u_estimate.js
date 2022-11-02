@@ -1,6 +1,6 @@
 d3.csv("./data.csv").then(function(data){
   const margin = {top:10, right:15, bottom:45, left:75},
-        width  = 480 - margin.left - margin.right,
+        width  = 450 - margin.left - margin.right,
         height = width//495 - margin.top - margin.bottom;
 
   const x = d3.scaleLinear().range([0, width])
@@ -89,7 +89,7 @@ d3.csv("./data.csv").then(function(data){
       d3.select(event.target).style("opacity",0.1)
       tooltip.style("visibility","hidden")
     })
-    
+
   svg.selectAll(null)
     .data(data.filter(d=>d.u))
     .enter()
