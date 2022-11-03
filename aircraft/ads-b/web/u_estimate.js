@@ -71,7 +71,7 @@ d3.csv("./data.csv").then(function(data){
     .attr("stroke","black")
     .attr("cx",x(0))
     .attr("cy",y(0))
-    .attr("r",d => d*435/(2*width))
+    .attr("r",d => d*293/(2*width))
     .style("opacity", 0.1)
     .attr("clip-path","url(#clip-t)")
     .on("mouseover",function(event,d){
@@ -194,7 +194,7 @@ d3.csv("./data.csv").then(function(data){
     .attr("fill","black")
     .attr("text-anchor","middle")
     .attr("x",  - height / 2 - margin.top)
-    .attr("y", -55)
+    .attr("y", -45)
     .attr("transform","rotate(-90)")
     .html("Angle [mod(&theta;,90)&deg;]")
   vdeg.append("g")

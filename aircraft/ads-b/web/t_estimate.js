@@ -49,7 +49,7 @@ d3.csv("./data.csv").then(function(data){
     .call(d3
       .axisLeft(y.domain([0.46,0.9]))
       .tickValues(d3.range(0.46,0.91,0.02))
-      .tickFormat(val => val*10 % 1 == 0 ? Math.round(val*100)/100 : ''))
+      .tickFormat(val => Math.round(val*100) % 10 == 0 ? Math.round(val*100)/100 : ''))
     .style("font-size",20)
     .append("text")
       .attr("fill", "black")

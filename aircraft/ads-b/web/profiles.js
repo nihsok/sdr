@@ -1,6 +1,6 @@
-const margin = {top:10, right:10, bottom:50, left:75},
+const margin = {top:10, right:10, bottom:45, left:75},
   width = 270 - margin.left - margin.right,
-  height = 400 - margin.top - margin.bottom;
+  height = 350 - margin.top - margin.bottom;
 
 const x = d3.scaleLinear().range([0, width])
 const y = d3.scaleLinear().range([height, 0])
@@ -39,7 +39,7 @@ d3.csv("./data.csv").then(function(data){
       .append("text")
         .attr("fill", "black")
         .attr("x", width / 2 )
-        .attr("y", 45)
+        .attr("y", 40)
         .html(title)
     svg.append("g")
       .call(d3
@@ -66,7 +66,7 @@ d3.csv("./data.csv").then(function(data){
         .tickValues(d3.range(0,15000,1000))
         .tickFormat(''))
   }
-  axes(t_profile,"(Virtual) Temp. [&#8451]",[-80,20],20,20)
+  axes(t_profile,"(Virtual) Temp. [&#8451]",[-80,20],20,10)
 
   const tooltip = d3.select("body")
     .append("div")
