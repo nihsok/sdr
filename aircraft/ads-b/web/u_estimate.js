@@ -20,6 +20,13 @@ d3.csv("./data.csv").then(function(data){
     .append("g")
       .attr("transform","translate(" + margin.left + "," + margin.top + ")")
 
+  const hodograph = d3.select("#check-u")
+    .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+
   const tooltip = d3.select("body")
     .append("div")
     .attr("class", "tooltip")
@@ -39,7 +46,7 @@ d3.csv("./data.csv").then(function(data){
       .text('Zonal component [m/s]')
   svg.append("g")
     .call(d3
-      .axisTop(x.domain([-350,350]))
+      .axisTop(x)
       .tickValues(d3.range(-350,351,50))
       .tickFormat(''))
   //y axis
@@ -59,7 +66,7 @@ d3.csv("./data.csv").then(function(data){
   svg.append("g")
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
-      .axisRight(y.domain([-350,350]))
+      .axisRight(y)
       .tickValues(d3.range(-350,351,50))
       .tickFormat(''))
 
@@ -71,7 +78,7 @@ d3.csv("./data.csv").then(function(data){
     .attr("stroke","black")
     .attr("cx",x(0))
     .attr("cy",y(0))
-    .attr("r",d => d*293/(2*width))
+    .attr("r",d => d*293/(2*width)) //parameter
     .style("opacity", 0.1)
     .attr("clip-path","url(#clip-t)")
     .on("mouseover",function(event,d){
@@ -164,6 +171,73 @@ d3.csv("./data.csv").then(function(data){
     .style("stroke-width",0.1)
     .attr("marker-end","url(#arrow-red)")
 
+  //x axis
+  hodograph.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3
+      .axisBottom(x.domain([-100,100]))
+      .tickValues(d3.range(-100,101,10))
+      .tickFormat(val => val% 30 == 0 ? val : ''))
+    .style("font-size",20)
+    .append("text")
+      .attr("fill", "black")
+      .attr("x", width / 2 )
+      .attr("y", 40)
+      .text('Zonal wind [m/s]')
+  hodograph.append("g")
+    .call(d3
+      .axisTop(x.domain([-100,100]))
+      .tickValues(d3.range(-100,101,10))
+      .tickFormat(''))
+  //y axis
+  hodograph.append("g")
+    .call(d3
+      .axisLeft(y.domain([-100,100]))
+      .tickValues(d3.range(-100,101,10))
+      .tickFormat((val) => val % 20 == 0 ? val.toString() : ''))
+    .style("font-size",20)
+    .append("text")
+    .attr("fill","black")
+    .attr("text-anchor","middle")
+    .attr("x",  - height / 2 - margin.top)
+    .attr("y", -55)
+    .attr("transform","rotate(-90)")
+    .text("Meridional wind [m/s]")
+  hodograph.append("g")
+    .attr('transform',"translate(" + width + ",0)")
+    .call(d3
+      .axisRight(y.domain([-100,100]))
+      .tickValues(d3.range(-100,101,10))
+      .tickFormat(''))
+
+  var color = d3.scaleLinear()
+      .domain([0,15000])
+      .range(['#857f1e','#0022fa'])
+
+  hodograph.selectAll("dot")
+    .data(data.filter(d => d.u))
+    .enter()
+    .append("circle")
+      .attr("cx", d => x(d.u))
+      .attr("cy", d => y(d.v))
+      .attr("r", 1)
+      .style("fill", d => color(d.alt))
+      .style("opacity", 0.5)
+    .on("mouseover",function(event,d){
+      d3.select(event.target).style("opacity",1)
+      tooltip
+        .style("visibility","visible")
+        .html('u: '+Math.round(d.u*100)/100+"m/s<br>v: "+Math.round(d.v*100)/100+'m/s<br>z: '+Math.round(d.alt)/1000+'km')
+    })
+    .on("mousemove",function(event){
+      tooltip
+        .style("left", event.pageX + 15 + "px")
+        .style("top", event.pageY -20 + "px")
+    })
+    .on("mouseout",function(event){
+      d3.select(event.target).style("opacity",0.5)
+      tooltip.style("visibility","hidden")
+    })
 
   //x axis
   vdeg.append("g")

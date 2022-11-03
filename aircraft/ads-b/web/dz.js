@@ -1,7 +1,7 @@
 d3.csv("./dz.csv").then(function(data){
   const margin = {top:10, right:10, bottom:45, left:75},
     width = 202.5 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    height = 350 - margin.top - margin.bottom;
   const x = d3.scaleLinear().range([0, width])
   const y = d3.scaleLinear().range([height, 0])
 
@@ -97,7 +97,7 @@ d3.csv("./dz.csv").then(function(data){
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
-        .html('z: '+Math.round(d.z1)/1000+'~'+Math.round(d.z2)/1000+'km'+'<br>N&sup2;: '+Math.round(g/d.theta1*d.dtdz*100000)/100000+'~'+Math.round(g/d.theta2*d.dtdz*100000)/100000+'s<sup>-2</sup>')
+        .html('z: '+Math.round(d.z1)/1000+'~'+Math.round(d.z2)/1000+'km'+'<br>N&sup2;: '+Math.round(g/d.theta1*d.dtdz*100000)/10+'~'+Math.round(g/d.theta2*d.dtdz*100000)/10+'&times;10<sup>-4</sup>s<sup>-2</sup>')
   })
   .on("mousemove",function(event){
     tooltip
@@ -125,7 +125,7 @@ d3.csv("./dz.csv").then(function(data){
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
-        .html('z: '+Math.round(d.z1)/1000+'~'+Math.round(d.z2)/1000+'km'+'<br>Richardson number: '+Math.round(g/d.theta1*d.dtdz/d.dvdz_square*100)/100+'~'+Math.round(g/d.theta2*d.dtdz/d.dvdz_square*100)/100)
+        .html('z: '+Math.round(d.z1)/1000+'~'+Math.round(d.z2)/1000+'km'+'<br>Ri: '+Math.round(g/d.theta1*d.dtdz/d.dvdz_square*100)/100+'~'+Math.round(g/d.theta2*d.dtdz/d.dvdz_square*100)/100)
   })
   .on("mousemove",function(event){
     tooltip
@@ -153,7 +153,7 @@ d3.csv("./dz.csv").then(function(data){
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
-        .html('z: '+Math.round(d.z1)/1000+'~'+Math.round(d.z2)/1000+'km'+'<br>Dw/Dt=-g-ρdp/dz: '+Math.round((-g-d.p1/(287*d.t1)*d.dpdz)*10)/10+'~'+Math.round((-g-d.p2/(287*d.t2)*d.dpdz)*10)/10+'[m/s&sup2;]')
+        .html('z: '+Math.round(d.z1)/1000+'~'+Math.round(d.z2)/1000+'km'+'<br>Dw/Dt: '+Math.round((-g-d.p1/(287*d.t1)*d.dpdz)*10)/10+'~'+Math.round((-g-d.p2/(287*d.t2)*d.dpdz)*10)/10+'[m/s&sup2;]')
   })
   .on("mousemove",function(event){
     tooltip
@@ -169,7 +169,7 @@ d3.csv("./dz.csv").then(function(data){
 d3.csv("./data.csv").then(function(data){
   const margin = {top:10, right:10, bottom:45, left:75},
     width = 202.5 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    height = 350 - margin.top - margin.bottom;
   const x = d3.scaleLinear().range([0, width])
   const y = d3.scaleLinear().range([height, 0])
 
@@ -246,7 +246,7 @@ d3.csv("./data.csv").then(function(data){
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
-        .html('z: '+Math.round(d.alt)/1000+"km<br>IAS: "+Math.round(d.ias*100)/100+'m/s<br>CAS: '+Math.round(d.cas*100)/100+'m/s<br>CAS-IAS: '+Math.round((d.cas-d.ias)*100)/100+'m/s')
+        .html('z: '+Math.round(d.alt)/1000+"km<br>CAS: "+Math.round(d.cas*100)/100+'m/s<br>IAS: '+Math.round(d.ias*100)/100+'m/s<br>Δ: '+Math.round((d.cas-d.ias)*100)/100+'m/s')
     })
     .on("mousemove",function(event,d){
       tooltip
