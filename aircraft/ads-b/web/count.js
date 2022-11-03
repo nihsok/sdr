@@ -1,7 +1,7 @@
 d3.csv("./stat.csv").then(function(data){
   if(data.length>240) data = data.slice(data.length-240) //24 times per day
-  const margin = {top:10, right:15, bottom:25, left:75},
-        width  = 900 - margin.left - margin.right,
+  const margin = {top:10, right:10, bottom:25, left:75},
+        width  = 810 - margin.left - margin.right,
         height = 240 - margin.top - margin.bottom;
 
   const x = d3.scaleTime().domain([new Date(data[0].time),new Date(data[data.length-1].time)]).range([0, width])

@@ -1,5 +1,5 @@
-const margin = {top:10, right:15, bottom:50, left:60},
-  width = 300 - margin.left - margin.right,
+const margin = {top:10, right:10, bottom:50, left:75},
+  width = 270 - margin.left - margin.right,
   height = 400 - margin.top - margin.bottom;
 
 const x = d3.scaleLinear().range([0, width])
@@ -27,14 +27,14 @@ const v_profile = d3.select("#profiles")
     .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
 d3.csv("./data.csv").then(function(data){
-  function axes(svg,title,range){
+  function axes(svg,title,range,rabel,tick){
     //x axis
     svg.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3
         .axisBottom(x.domain(range))
-        .tickValues(d3.range(...range,10))
-        .tickFormat((val) => val % 30 == 0 ? val.toString() : ''))
+        .tickValues(d3.range(...range,tick))
+        .tickFormat((val) => val % rabel == 0 ? val.toString() : ''))
       .style("font-size",20)
       .append("text")
         .attr("fill", "black")
@@ -66,7 +66,7 @@ d3.csv("./data.csv").then(function(data){
         .tickValues(d3.range(0,15000,1000))
         .tickFormat(''))
   }
-  axes(t_profile,"(Virtual) Temperature [&#8451]",[-80,30])
+  axes(t_profile,"(Virtual) Temp. [&#8451]",[-80,20],20,20)
 
   const tooltip = d3.select("body")
     .append("div")
@@ -128,7 +128,7 @@ d3.csv("./data.csv").then(function(data){
   }
 
   const u_max=80
-  axes(u_profile,'Zonal wind [m/s]',[-u_max,u_max])
+  axes(u_profile,'Zonal wind [m/s]',[-u_max,u_max],40,20)
   u_profile.selectAll("dot")
     .data(data.filter(d => d.alt && d.u && Math.abs(d.u)<u_max))
     .enter()
@@ -161,11 +161,10 @@ d3.csv("./data.csv").then(function(data){
     .attr("y1",y(0))
     .attr("x2",d=>x(d))
     .attr("y2",y(15000))
-    .attr("clip-path","url(#clip-t)")
     .style("stroke","black")
     .style("opacity",0.1)
 
-  axes(v_profile,'Meridional Wind [m/s]',[-u_max,u_max])
+  axes(v_profile,'Merid. Wind [m/s]',[-u_max,u_max],40,20)
   v_profile.selectAll("dot")
     .data(data.filter(d => d.alt && d.v && Math.abs(d.v)<u_max))
    .enter()
@@ -198,7 +197,6 @@ d3.csv("./data.csv").then(function(data){
     .attr("y1",y(0))
     .attr("x2",d=>x(d))
     .attr("y2",y(15000))
-    .attr("clip-path","url(#clip-t)")
     .style("stroke","black")
     .style("opacity",0.1)
 });

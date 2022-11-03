@@ -1,6 +1,6 @@
 d3.csv("./data.csv").then(function(data){
-  const margin = {top:10, right:15, bottom:45, left:75},
-        width  = 450 - margin.left - margin.right,
+  const margin = {top:10, right:10, bottom:45, left:75},
+        width  = 405 - margin.left - margin.right,
         height = width//495 - margin.top - margin.bottom;
 
   const x = d3.scaleLinear().range([0, width])
@@ -30,7 +30,7 @@ d3.csv("./data.csv").then(function(data){
   .attr("transform", "translate(0," + height + ")")
     .call(d3
       .axisBottom(x.domain([150,270]))
-      .tickValues(d3.range(150,271,5))
+      .tickValues(d3.range(150,271,10))
       .tickFormat((val) => val % 20 == 0 ? val.toString() : ''))
     .style("font-size",20)
     .append("text")
@@ -42,7 +42,7 @@ d3.csv("./data.csv").then(function(data){
   svg.append("g")
     .call(d3
       .axisTop(x.domain([150,270]))
-      .tickValues(d3.range(150,270,5))
+      .tickValues(d3.range(150,270,10))
       .tickFormat(''))
   //y axis
   svg.append("g")
