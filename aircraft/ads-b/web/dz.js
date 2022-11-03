@@ -1,3 +1,96 @@
+d3.csv("./data.csv").then(function(data){
+  const margin = {top:10, right:10, bottom:45, left:75},
+    width = 202.5 - margin.left - margin.right,
+    height = 350 - margin.top - margin.bottom;
+  const x = d3.scaleLinear().range([0, width])
+  const y = d3.scaleLinear().range([height, 0])
+
+  const cas = d3.select("#dz")
+    .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform","translate(" + margin.left + "," + margin.top + ")");
+
+  //x axis
+  cas.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3
+      .axisBottom(x.domain([-3,3]))
+      .tickValues(d3.range(-3,3,1))
+      .tickFormat((val) => val % 2 == 0 ? val.toString() : ''))
+    .style("font-size",20)
+    .append("text")
+      .attr("fill", "black")
+      .attr("x", width / 2 - 5)
+      .attr("y", 40)
+      .html('CAS-IAS [m/s]')
+  cas.append("g")
+    .call(d3
+      .axisTop(x.domain([-3,3]))
+      .tickValues(d3.range(-3,3,1))
+      .tickFormat(''))
+  //y axis
+  cas.append("g")
+    .call(d3
+      .axisLeft(y.domain([0, 15000]))
+      .tickValues(d3.range(0,15000,1000))
+      .tickFormat((val) => val % 2000 == 0 ? (val/1000).toString() : ''))
+    .style("font-size",20)
+    .append("text")
+    .attr("fill","black")
+    .attr("text-anchor","middle")
+    .attr("x",  - height / 2 - margin.top)
+    .attr("y", -40)
+    .attr("transform","rotate(-90)")
+    .text("Altitude [km]")
+  cas.append("g")
+    .attr('transform',"translate(" + width + ",0)")
+    .call(d3
+      .axisRight(y.domain([0, 15000]))
+      .tickValues(d3.range(0,15000,1000))
+      .tickFormat(''))
+  cas.selectAll(null)
+    .data([0])
+    .enter()
+    .append("line")
+    .attr("x1",d=>x(d))
+    .attr("y1",y(0))
+    .attr("x2",d=>x(d))
+    .attr("y2",y(15000))
+    .style("stroke","black")
+    .style("opacity",0.1)
+  const tooltip = d3.select("body")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+
+  cas.selectAll("dot")
+    .data(data.filter(d => d.alt && d.ias && d.cas))
+    .enter()
+    .append("circle")
+      .attr("cx", (d) => x(d.cas-d.ias))
+      .attr("cy", (d) => y(d.alt))
+      .attr("r", 3)
+      .style("fill", (d) => '#'+d.hex)
+      .style("opacity", 0.5)
+    .on("mouseover",function(event,d){
+      d3.select(event.target).style("opacity",1)
+      tooltip
+        .style("visibility","visible")
+        .html('z: '+Math.round(d.alt)/1000+"km<br>CAS: "+Math.round(d.cas*100)/100+'m/s<br>IAS: '+Math.round(d.ias*100)/100+'m/s<br>Δ: '+Math.round((d.cas-d.ias)*100)/100+'m/s')
+    })
+    .on("mousemove",function(event,d){
+      tooltip
+        .style("left", event.pageX + 15 + "px")
+        .style("top", event.pageY -20 + "px")
+    })
+    .on("mouseout",function(event){
+      d3.select(event.target).style("opacity",0.5)
+      tooltip.style("visibility","hidden")
+    })
+})
+
 d3.csv("./dz.csv").then(function(data){
   const margin = {top:10, right:10, bottom:45, left:75},
     width = 202.5 - margin.left - margin.right,
@@ -165,97 +258,4 @@ d3.csv("./dz.csv").then(function(data){
     d3.select(event.target).style("opacity",0.5)
     tooltip.style("visibility","hidden")
   })
-})
-
-d3.csv("./data.csv").then(function(data){
-  const margin = {top:10, right:10, bottom:45, left:75},
-    width = 202.5 - margin.left - margin.right,
-    height = 350 - margin.top - margin.bottom;
-  const x = d3.scaleLinear().range([0, width])
-  const y = d3.scaleLinear().range([height, 0])
-
-  const cas = d3.select("#dz")
-    .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform","translate(" + margin.left + "," + margin.top + ")");
-
-      //x axis
-  cas.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3
-      .axisBottom(x.domain([-3,3]))
-      .tickValues(d3.range(-3,3,1))
-      .tickFormat((val) => val % 2 == 0 ? val.toString() : ''))
-    .style("font-size",20)
-    .append("text")
-      .attr("fill", "black")
-      .attr("x", width / 2 - 5)
-      .attr("y", 40)
-      .html('CAS-IAS [m/s]')
-  cas.append("g")
-    .call(d3
-      .axisTop(x.domain([-3,3]))
-      .tickValues(d3.range(-3,3,1))
-      .tickFormat(''))
-  //y axis
-  cas.append("g")
-    .call(d3
-      .axisLeft(y.domain([0, 15000]))
-      .tickValues(d3.range(0,15000,1000))
-      .tickFormat((val) => val % 2000 == 0 ? (val/1000).toString() : ''))
-    .style("font-size",20)
-    .append("text")
-    .attr("fill","black")
-    .attr("text-anchor","middle")
-    .attr("x",  - height / 2 - margin.top)
-    .attr("y", -40)
-    .attr("transform","rotate(-90)")
-    .text("Altitude [km]")
-  cas.append("g")
-    .attr('transform',"translate(" + width + ",0)")
-    .call(d3
-      .axisRight(y.domain([0, 15000]))
-      .tickValues(d3.range(0,15000,1000))
-      .tickFormat(''))
-  cas.selectAll(null)
-    .data([0])
-    .enter()
-    .append("line")
-    .attr("x1",d=>x(d))
-    .attr("y1",y(0))
-    .attr("x2",d=>x(d))
-    .attr("y2",y(15000))
-    .style("stroke","black")
-    .style("opacity",0.1)
-  const tooltip = d3.select("body")
-    .append("div")
-    .attr("class", "tooltip")
-    .style("background-color", "white")
-
-  cas.selectAll("dot")
-    .data(data.filter(d => d.alt && d.ias && d.cas))
-    .enter()
-    .append("circle")
-      .attr("cx", (d) => x(d.cas-d.ias))
-      .attr("cy", (d) => y(d.alt))
-      .attr("r", 3)
-      .style("fill", (d) => '#'+d.hex)
-      .style("opacity", 0.5)
-    .on("mouseover",function(event,d){
-      d3.select(event.target).style("opacity",1)
-      tooltip
-        .style("visibility","visible")
-        .html('z: '+Math.round(d.alt)/1000+"km<br>CAS: "+Math.round(d.cas*100)/100+'m/s<br>IAS: '+Math.round(d.ias*100)/100+'m/s<br>Δ: '+Math.round((d.cas-d.ias)*100)/100+'m/s')
-    })
-    .on("mousemove",function(event,d){
-      tooltip
-        .style("left", event.pageX + 15 + "px")
-        .style("top", event.pageY -20 + "px")
-    })
-    .on("mouseout",function(event){
-      d3.select(event.target).style("opacity",0.5)
-      tooltip.style("visibility","hidden")
-    })
 })

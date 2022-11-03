@@ -66,7 +66,7 @@ d3.csv("./data.csv").then(function(data){
         .tickValues(d3.range(0,15000,1000))
         .tickFormat(''))
   }
-  axes(t_profile,"(Virtual) Temp. [&#8451]",[-80,20],20,10)
+  axes(t_profile,"(Virtual) Temp. [&#8451]",[-70,20],20,10)
 
   const tooltip = d3.select("body")
     .append("div")
@@ -127,7 +127,7 @@ d3.csv("./data.csv").then(function(data){
       )
   }
 
-  const u_max=80
+  const u_max=100
   axes(u_profile,'Zonal wind [m/s]',[-u_max,u_max],40,20)
   u_profile.selectAll("dot")
     .data(data.filter(d => d.alt && d.u && Math.abs(d.u)<u_max))
