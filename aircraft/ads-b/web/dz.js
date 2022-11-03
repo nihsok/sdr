@@ -32,7 +32,7 @@ d3.csv("./dz.csv").then(function(data){
       .attr("transform", "translate(0," + height + ")")
       .call(d3
         .axisBottom(x.domain(range))
-        .tickValues(d3.range(...range,tick))
+        .tickValues(d3.range(...range,tick).concat(range[1]))
         .tickFormat((val) => val % rabel == 0 ? val.toString() : ''))
       .style("font-size",20)
       .append("text")
@@ -43,6 +43,7 @@ d3.csv("./dz.csv").then(function(data){
     svg.append("g")
       .call(d3
         .axisTop(x.domain(range))
+        .tickValues(d3.range(...range,tick))
         .tickFormat(''))
     //y axis
     svg.append("g")
@@ -81,7 +82,7 @@ d3.csv("./dz.csv").then(function(data){
     .style("background-color", "white")
   const g = 9.8
 
-  axes(n2,"N&sup2; [/s&sup2;]",[-0.002,0.002],0.002,0.001)
+  axes(n2,'N&sup2; [/s&sup2;]',[-0.001,0.00099],0.001,0.0005)
   n2.selectAll(null)
     .data(data.filter(d=>d.dtdz && d.theta1>0 && d.theta2>0))
     .enter()
@@ -109,7 +110,7 @@ d3.csv("./dz.csv").then(function(data){
     tooltip.style("visibility","hidden")
   })
 
-  axes(ri,"Ri",[-10,10],4,2)
+  axes(ri,"Ri",[-8,8],4,2)
   ri.selectAll(null)
     .data(data.filter(d=>d.dtdz && d.theta1>0 && d.theta2>0))
     .enter()
