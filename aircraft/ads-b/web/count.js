@@ -5,7 +5,7 @@ d3.csv("./stat.csv").then(function(data){
         height = 240 - margin.top - margin.bottom;
 
   const x = d3.scaleTime().domain([new Date(data[0].time),new Date(data[data.length-1].time)]).range([0, width])
-  const y = d3.scaleLinear().domain([0,1000]).range([height, 0])
+  const y = d3.scaleLinear().range([height, 0])
 
   const svg = d3.select("#count")
   .append("svg")
@@ -32,9 +32,9 @@ d3.csv("./stat.csv").then(function(data){
   //y axis
   svg.append("g")
     .call(d3
-      .axisLeft(y)
-      .tickValues(d3.range(0,999,50))
-      .tickFormat((val) => val % 100 == 0 ? val.toString() : ''))
+      .axisLeft(y.domain([0,2300]))
+      .tickValues(d3.range(0,2300,100))
+      .tickFormat((val) => val % 200 == 0 ? val.toString() : ''))
     .style("font-size",20)
     .append("text")
     .attr("fill","black")
@@ -47,7 +47,7 @@ d3.csv("./stat.csv").then(function(data){
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
       .axisRight(y)
-      .tickValues(d3.range(0,999,50))
+      .tickValues(d3.range(0,2300,100))
       .tickFormat(''))
 
   svg.append("clipPath")
@@ -59,7 +59,7 @@ d3.csv("./stat.csv").then(function(data){
       .attr("height",height)
 
   svg.selectAll(null)
-    .data(d3.range(100,901,100))
+    .data(d3.range(100,2201,100))
     .enter()
     .append("line")
     .attr("x1",x(new Date(data[0].time)))

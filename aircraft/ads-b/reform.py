@@ -63,7 +63,7 @@ for aircraft in aircrafts:
   output.append(tmp)
 
 with open(file.split('.')[0]+'.csv','w') as f:
-  writer = csv.DictWriter(f,['flag','alt','lon','lat','gs_x','gs_y','u','v','vt_x','vt_y','tas','t','mach','cas','ias','p','dist','flight','version','category','hex','time'],lineterminator='\n')
+  writer = csv.DictWriter(f,['flag','alt','lon','lat','gs_x','gs_y','u','v','vt_x','vt_y','tas','t','mach','cas','ias','p','dist','flight','category','version','hex','time'],lineterminator='\n')
   writer.writerows(output)
 
 #flag,

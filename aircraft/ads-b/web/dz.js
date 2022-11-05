@@ -12,6 +12,13 @@ d3.csv("./data.csv").then(function(data){
     .append("g")
       .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
+  const theta = d3.select("#dz")
+    .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform","translate(" + margin.left + "," + margin.top + ")");
+
   //x axis
   cas.append("g")
     .attr("transform", "translate(0," + height + ")")
@@ -69,10 +76,10 @@ d3.csv("./data.csv").then(function(data){
     .data(data.filter(d => d.alt && d.ias && d.cas))
     .enter()
     .append("circle")
-      .attr("cx", (d) => x(d.cas-d.ias))
-      .attr("cy", (d) => y(d.alt))
-      .attr("r", 3)
-      .style("fill", (d) => '#'+d.hex)
+      .attr("cx", d => x(d.cas-d.ias))
+      .attr("cy", d => y(d.alt))
+      .attr("r", 2)
+      .style("fill", d => '#'+d.hex)
       .style("opacity", 0.5)
     .on("mouseover",function(event,d){
       d3.select(event.target).style("opacity",1)
@@ -89,6 +96,81 @@ d3.csv("./data.csv").then(function(data){
       d3.select(event.target).style("opacity",0.5)
       tooltip.style("visibility","hidden")
     })
+
+  //x axis
+  theta.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3
+      .axisBottom(x.domain([280,380]))
+      .tickValues(d3.range(280,381,20))
+      .tickFormat((val) => val % 40 == 0 ? val.toString() : ''))
+    .style("font-size",20)
+    .append("text")
+      .attr("fill", "black")
+      .attr("x", width / 2)
+      .attr("y", 40)
+      .html('θ [K]')
+  theta.append("g")
+    .call(d3
+      .axisTop(x)
+      .tickValues(d3.range(280,380,20))
+      .tickFormat(''))
+  //y axis
+  theta.append("g")
+    .call(d3
+      .axisLeft(y.domain([0, 15000]))
+      .tickValues(d3.range(0,15000,1000))
+      .tickFormat((val) => val % 2000 == 0 ? (val/1000).toString() : ''))
+    .style("font-size",20)
+    .append("text")
+    .attr("fill","black")
+    .attr("text-anchor","middle")
+    .attr("x",  - height / 2 - margin.top)
+    .attr("y", -40)
+    .attr("transform","rotate(-90)")
+    .text("Altitude [km]")
+  theta.append("g")
+    .attr('transform',"translate(" + width + ",0)")
+    .call(d3
+      .axisRight(y)
+      .tickValues(d3.range(0,15000,1000))
+      .tickFormat(''))
+
+  theta.selectAll("dot")
+    .data(data.filter(d => d.t))
+    .enter()
+    .append("circle")
+      .attr("cx", d => x((Number(d.t)+273.15)*(100000/d.p)**0.2858565737))
+      .attr("cy", d => y(d.alt))
+      .attr("r", 2)
+      .style("fill", d => '#'+d.hex)
+      .style("opacity", 0.5)
+    .on("mouseover",function(event,d){
+      d3.select(event.target).style("opacity",1)
+      tooltip
+        .style("visibility","visible")
+        .html('z: '+Math.round(d.alt)/1000+"km<br>θ: "+Math.round((Number(d.t)+273.15)*(100000/d.p)**0.2858565737*10)/10+'K')
+    })
+    .on("mousemove",function(event,d){
+      tooltip
+        .style("left", event.pageX + 15 + "px")
+        .style("top", event.pageY -20 + "px")
+    })
+    .on("mouseout",function(event){
+      d3.select(event.target).style("opacity",0.5)
+      tooltip.style("visibility","hidden")
+    })
+
+  theta.selectAll(null)
+    .data(d3.range(300,371,20))
+    .enter()
+    .append("line")
+    .attr("x1",d=>x(d))
+    .attr("y1",y(0))
+    .attr("x2",d=>x(d))
+    .attr("y2",y(15000))
+    .style("stroke","black")
+    .style("opacity",0.1)
 })
 
 d3.csv("./dz.csv").then(function(data){
@@ -99,13 +181,6 @@ d3.csv("./dz.csv").then(function(data){
   const y = d3.scaleLinear().range([height, 0])
 
   const n2 = d3.select("#dz")
-    .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform","translate(" + margin.left + "," + margin.top + ")");
-
-  const ri = d3.select("#dz")
     .append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
@@ -203,42 +278,14 @@ d3.csv("./dz.csv").then(function(data){
     tooltip.style("visibility","hidden")
   })
 
-  axes(ri,"Ri",[-8,8],4,2)
-  ri.selectAll(null)
-    .data(data.filter(d=>d.dtdz && d.theta1>0 && d.theta2>0))
-    .enter()
-    .append("line")
-    .attr("x1", d=>x(g/d.theta1*d.dtdz/d.dvdz_square))
-    .attr("y1", d=>y(d.z1))
-    .attr("x2", d=>x(g/d.theta2*d.dtdz/d.dvdz_square))
-    .attr("y2", d=>y(d.z2))
-    .style("stroke", d=>'#'+d.hex)
-    .style("stroke-width",4)
-    .style("opacity",0.5)
-    .on("mouseover",function(event,d){
-      d3.select(event.target).style("opacity",1)
-      tooltip
-        .style("visibility","visible")
-        .html('z: '+Math.round(d.z1)/1000+'~'+Math.round(d.z2)/1000+'km'+'<br>Ri: '+Math.round(g/d.theta1*d.dtdz/d.dvdz_square*100)/100+'~'+Math.round(g/d.theta2*d.dtdz/d.dvdz_square*100)/100)
-  })
-  .on("mousemove",function(event){
-    tooltip
-      .style("left", event.pageX + 15 + "px")
-      .style("top", event.pageY -20 + "px")
-  })
-  .on("mouseout",function(event){
-    d3.select(event.target).style("opacity",0.5)
-    tooltip.style("visibility","hidden")
-  })
-
-  axes(dwdt,"Dw/Dt [m/s&sup2;]",[-10,10],4,2)
+  axes(dwdt,"Dw/Dt [m/s&sup2;]",[-5,5],2,1)
   dwdt.selectAll(null)
     .data(data.filter(d=>d.dpdz && d.theta1>0 && d.theta2>0))
     .enter()
     .append("line")
-    .attr("x1", d=>x(-g-d.p1/(287*d.t1)*d.dpdz)) //R=287
+    .attr("x1", d=>x(-g-287*d.t1/d.p1*d.dpdz)) //R=287
     .attr("y1", d=>y(d.z1))
-    .attr("x2", d=>x(-g-d.p2/(287*d.t2)*d.dpdz))
+    .attr("x2", d=>x(-g-287*d.t2/d.p2*d.dpdz))
     .attr("y2", d=>y(d.z2))
     .style("stroke", d=>'#'+d.hex)
     .style("stroke-width",4)
@@ -247,7 +294,7 @@ d3.csv("./dz.csv").then(function(data){
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
-        .html('z: '+Math.round(d.z1)/1000+'~'+Math.round(d.z2)/1000+'km'+'<br>Dw/Dt: '+Math.round((-g-d.p1/(287*d.t1)*d.dpdz)*10)/10+'~'+Math.round((-g-d.p2/(287*d.t2)*d.dpdz)*10)/10+'[m/s&sup2;]')
+        .html('z: '+Math.round(d.z1)/1000+'~'+Math.round(d.z2)/1000+'km'+'<br>Dw/Dt: '+Math.round((-g-287*d.t1/d.p1*d.dpdz)*10)/10+'~'+Math.round((-g-287*d.t2/d.p2*d.dpdz)*10)/10+'[m/s&sup2;]')
   })
   .on("mousemove",function(event){
     tooltip

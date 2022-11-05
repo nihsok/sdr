@@ -21,5 +21,5 @@ for line in input[1:]:
     dvdz_square = ( (u2-u1)**2 + (v2-v1)**2 ) / (z2-z1)**2
 
     print (hex,z1,z2,t1,t2,p1,p2,theta1,theta2,dpdz,dtdz,dvdz_square,sep=',')
-    #z=z{1,2},N2=g/theta{1,2}*dtdz,Ri=N2{1,2}/dvdz_square,Dw/Dt=-g-p{1,2}/RT{1,2}*dpdz
+    #z=z{1,2},N2=g/theta{1,2}*dtdz,Ri=N2{1,2}/dvdz_square,Dw/Dt=-g-RT{1,2}/p{1,2}*dpdz
   z1,u1,v1,t1,p1,theta1,time1 = z2,u2,v2,t2,p2,theta2,time2

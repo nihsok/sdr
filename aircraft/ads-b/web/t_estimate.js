@@ -105,7 +105,7 @@ d3.csv("./data.csv").then(function(data){
     .append("circle")
       .attr("cx", d => x(d.tas))
       .attr("cy", d => y(d.mach))
-      .attr("r", 3)
+      .attr("r", 2)
       .style("fill", d => '#'+d.hex)
       .style("opacity", 0.5)
     .on("mouseover",function(event,d){
