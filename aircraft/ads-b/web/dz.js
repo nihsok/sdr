@@ -278,7 +278,7 @@ d3.csv("./dz.csv").then(function(data){
     tooltip.style("visibility","hidden")
   })
 
-  axes(dwdt,"Dw/Dt [m/s&sup2;]",[-5,5],2,1)
+  axes(dwdt,"Dw/Dt [m/s&sup2;]",[-3,3],1,0.5)
   dwdt.selectAll(null)
     .data(data.filter(d=>d.dpdz && d.theta1>0 && d.theta2>0))
     .enter()

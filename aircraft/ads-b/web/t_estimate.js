@@ -168,7 +168,7 @@ d3.csv("./data.csv").then(function(data){
                d3.max(data.filter(d=>d.alt), d => Number(d.alt))])
       .range(['#857f1e','#0022fa'])
 
-  hodograph.selectAll("dot")
+  const dot=hodograph.selectAll("dot")
     .data(data.filter(d => d.u))
     .enter()
     .append("circle")
@@ -192,4 +192,14 @@ d3.csv("./data.csv").then(function(data){
       d3.select(event.target).style("opacity",0.5)
       tooltip.style("visibility","hidden")
     })
+
+  const zoom=d3.zoom()
+    .scaleExtent([1,20])
+    .on("zoom",({transform})=>{
+      dot.attr("transform",transform)
+    })
+
+  hodograph
+    .call(zoom)
+//    .call(zoom.transform,d3.zoomIdentity)
 })
