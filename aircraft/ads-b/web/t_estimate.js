@@ -29,8 +29,8 @@ d3.csv("./data.csv").then(function(data){
   svg.append("g")
   .attr("transform", "translate(0," + height + ")")
     .call(d3
-      .axisBottom(x.domain([150,270]))
-      .tickValues(d3.range(150,271,10))
+      .axisBottom(x.domain([140,270]))
+      .tickValues(d3.range(140,271,10))
       .tickFormat((val) => val % 20 == 0 ? val.toString() : ''))
     .style("font-size",20)
     .append("text")
@@ -41,14 +41,14 @@ d3.csv("./data.csv").then(function(data){
     .text("True AirSpeed [m/s]")
   svg.append("g")
     .call(d3
-      .axisTop(x.domain([150,270]))
-      .tickValues(d3.range(150,270,10))
+      .axisTop(x)
+      .tickValues(d3.range(140,270,10))
       .tickFormat(''))
   //y axis
   svg.append("g")
     .call(d3
-      .axisLeft(y.domain([0.46,0.9]))
-      .tickValues(d3.range(0.46,0.91,0.02))
+      .axisLeft(y.domain([0.4,0.9]))
+      .tickValues(d3.range(0.4,0.91,0.02))
       .tickFormat(val => Math.round(val*100) % 10 == 0 ? Math.round(val*100)/100 : ''))
     .style("font-size",20)
     .append("text")
@@ -60,8 +60,8 @@ d3.csv("./data.csv").then(function(data){
   svg.append("g")
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
-      .axisRight(y.domain([0.46,0.9]))
-      .tickValues(d3.range(0.46,0.9,0.02))
+      .axisRight(y)
+      .tickValues(d3.range(0.4,0.9,0.02))
       .tickFormat(''))
 
   svg.append("clipPath")

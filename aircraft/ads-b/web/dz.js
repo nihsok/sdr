@@ -180,14 +180,14 @@ d3.csv("./dz.csv").then(function(data){
   const x = d3.scaleLinear().range([0, width])
   const y = d3.scaleLinear().range([height, 0])
 
-  const n2 = d3.select("#dz")
+  const n2 = d3.select("#dz2")
     .append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
     .append("g")
       .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
-  const dwdt = d3.select("#dz")
+  const dwdt = d3.select("#dz2")
     .append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
@@ -252,7 +252,7 @@ d3.csv("./dz.csv").then(function(data){
 
   axes(n2,'N&sup2; [/s&sup2;]',[-0.001,0.00099],0.001,0.0005)
   n2.selectAll(null)
-    .data(data.filter(d=>d.dtdz && d.theta1>0 && d.theta2>0))
+    .data(data.filter(d=>d.dtdz))
     .enter()
     .append("line")
     .attr("x1", d=>x(g/d.theta1*d.dtdz))
@@ -278,12 +278,12 @@ d3.csv("./dz.csv").then(function(data){
     tooltip.style("visibility","hidden")
   })
 
-  axes(dwdt,"Dw/Dt [m/s&sup2;]",[-3,3],1,0.5)
+  axes(dwdt,"Dw/Dt [m/s&sup2;]",[-2,2],1,0.5)
   dwdt.selectAll(null)
-    .data(data.filter(d=>d.dpdz && d.theta1>0 && d.theta2>0))
+    .data(data.filter(d=>d.dpdz))
     .enter()
     .append("line")
-    .attr("x1", d=>x(-g-287*d.t1/d.p1*d.dpdz)) //R=287
+    .attr("x1", d=>x(-g-287*d.t1/d.p1*d.dpdz)) //Rd=287
     .attr("y1", d=>y(d.z1))
     .attr("x2", d=>x(-g-287*d.t2/d.p2*d.dpdz))
     .attr("y2", d=>y(d.z2))
