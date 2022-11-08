@@ -115,6 +115,25 @@ d3.csv("./stat.csv").then(function(data){
     .attr("d",d3.line()
       .x(d=>x(new Date(d.time)))
       .y(d=>y(d.t/(Number(d.little)+Number(d.alt)+Number(d.latlon)+Number(d.u)+Number(d.t))*1000 || 0 ))
-    )
+    ).on("mouseover", () => {
+      const z = data[data.length-1]
+      tooltip
+        .style("visibility","visible")
+        .html('ratio of valid / all [%]'
+          +'<br>Latest=' +Math.round(                    (z.t/(Number(z.little)+Number(z.alt)+Number(z.latlon)+Number(z.u)+Number(z.t))*100 || 0)*10)/10
+          +', Max='      +Math.round(d3.max(      data,d=>d.t/(Number(d.little)+Number(d.alt)+Number(d.latlon)+Number(d.u)+Number(d.t))*100 || 0)*10)/10
+          +', Median='   +Math.round(d3.median(   data,d=>d.t/(Number(d.little)+Number(d.alt)+Number(d.latlon)+Number(d.u)+Number(d.t))*100 || 0)*10)/10
+          +', Mean='     +Math.round(d3.mean(     data,d=>d.t/(Number(d.little)+Number(d.alt)+Number(d.latlon)+Number(d.u)+Number(d.t))*100 || 0)*10)/10
+          +', Deviation='+Math.round(d3.deviation(data,d=>d.t/(Number(d.little)+Number(d.alt)+Number(d.latlon)+Number(d.u)+Number(d.t))*100 || 0)*10)/10
+        )
+    })
+    .on("mousemove",function(event,d){
+      tooltip
+        .style("left", event.pageX + 15 + "px")
+        .style("top", event.pageY -20 + "px")
+    })
+    .on("mouseout",function(event){
+      tooltip.style("visibility","hidden")
+    })
 
 })
