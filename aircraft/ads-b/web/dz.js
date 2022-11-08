@@ -252,7 +252,7 @@ d3.csv("./dz.csv").then(function(data){
 
   axes(n2,'N&sup2; [/s&sup2;]',[-0.001,0.00099],0.001,0.0005)
   n2.selectAll(null)
-    .data(data.filter(d=>d.dtdz))
+    .data(data.filter(d=>d.dtdz && Math.abs(d.z1-d.z2) < 1000))
     .enter()
     .append("line")
     .attr("x1", d=>x(g/d.theta1*d.dtdz))
@@ -262,25 +262,25 @@ d3.csv("./dz.csv").then(function(data){
     .style("stroke", d=>'#'+d.hex)
     .style("stroke-width",4)
     .style("opacity",0.5)
-    .on("mouseover",function(event,d){
+    .on("mouseover",(event,d)=>{
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
         .html('z: '+Math.round(d.z1)/1000+'~'+Math.round(d.z2)/1000+'km'+'<br>N&sup2;: '+Math.round(g/d.theta1*d.dtdz*100000)/10+'~'+Math.round(g/d.theta2*d.dtdz*100000)/10+'&times;10<sup>-4</sup>s<sup>-2</sup>')
-  })
-  .on("mousemove",function(event){
-    tooltip
-      .style("left", event.pageX + 15 + "px")
-      .style("top", event.pageY -20 + "px")
-  })
-  .on("mouseout",function(event){
-    d3.select(event.target).style("opacity",0.5)
-    tooltip.style("visibility","hidden")
-  })
+    })
+    .on("mousemove",(event)=>{
+      tooltip
+        .style("left", event.pageX + 15 + "px")
+        .style("top", event.pageY -20 + "px")
+    })
+    .on("mouseout",(event)=>{
+      d3.select(event.target).style("opacity",0.5)
+      tooltip.style("visibility","hidden")
+    })
 
   axes(dwdt,"Dw/Dt [m/s&sup2;]",[-2,2],1,0.5)
   dwdt.selectAll(null)
-    .data(data.filter(d=>d.dpdz))
+    .data(data.filter(d=>d.dpdz && Math.abs(d.z1-d.z2) < 1000))
     .enter()
     .append("line")
     .attr("x1", d=>x(-g-287*d.t1/d.p1*d.dpdz)) //Rd=287
@@ -290,19 +290,19 @@ d3.csv("./dz.csv").then(function(data){
     .style("stroke", d=>'#'+d.hex)
     .style("stroke-width",4)
     .style("opacity",0.5)
-    .on("mouseover",function(event,d){
+    .on("mouseover",(event,d)=>{
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
         .html('z: '+Math.round(d.z1)/1000+'~'+Math.round(d.z2)/1000+'km'+'<br>Dw/Dt: '+Math.round((-g-287*d.t1/d.p1*d.dpdz)*10)/10+'~'+Math.round((-g-287*d.t2/d.p2*d.dpdz)*10)/10+'[m/s&sup2;]')
-  })
-  .on("mousemove",function(event){
-    tooltip
-      .style("left", event.pageX + 15 + "px")
-      .style("top", event.pageY -20 + "px")
-  })
-  .on("mouseout",function(event){
-    d3.select(event.target).style("opacity",0.5)
-    tooltip.style("visibility","hidden")
-  })
+    })
+    .on("mousemove",(event)=>{
+      tooltip
+        .style("left", event.pageX + 15 + "px")
+        .style("top", event.pageY -20 + "px")
+    })
+    .on("mouseout",(event)=>{
+      d3.select(event.target).style("opacity",0.5)
+      tooltip.style("visibility","hidden")
+    })
 })
