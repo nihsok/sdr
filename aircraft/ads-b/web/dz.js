@@ -252,7 +252,7 @@ d3.csv("./dz.csv").then(function(data){
 
   axes(n2,'N&sup2; [/s&sup2;]',[-0.001,0.00099],0.001,0.0005)
   n2.selectAll(null)
-    .data(data.filter(d=>d.dtdz && Math.abs(d.z1-d.z2) < 1000))
+    .data(data.filter(d=>d.dtdz && d.theta1 > 0 && d.theta2 > 0 && Math.abs(d.z1-d.z2) < 1000))
     .enter()
     .append("line")
     .attr("x1", d=>x(g/d.theta1*d.dtdz))
@@ -280,7 +280,7 @@ d3.csv("./dz.csv").then(function(data){
 
   axes(dwdt,"Dw/Dt [m/s&sup2;]",[-2,2],1,0.5)
   dwdt.selectAll(null)
-    .data(data.filter(d=>d.dpdz && Math.abs(d.z1-d.z2) < 1000))
+    .data(data.filter(d=>d.dpdz && d.t1 > 0 && d.t2 > 0 && Math.abs(d.z1-d.z2) < 1000))
     .enter()
     .append("line")
     .attr("x1", d=>x(-g-287*d.t1/d.p1*d.dpdz)) //Rd=287

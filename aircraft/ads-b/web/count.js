@@ -2,7 +2,7 @@ d3.csv("./stat.csv").then(function(data){
   if(data.length>240) data = data.slice(data.length-240) //24 times per day
   const margin = {top:10, right:10, bottom:25, left:75},
         width  = 810 - margin.left - margin.right,
-        height = 240 - margin.top - margin.bottom;
+        height = 280 - margin.top - margin.bottom;
 
   const x = d3.scaleTime().domain([new Date(data[0].time),new Date(data[data.length-1].time)]).range([0, width])
   const y = d3.scaleLinear().range([height, 0])
@@ -32,8 +32,8 @@ d3.csv("./stat.csv").then(function(data){
   //y axis
   svg.append("g")
     .call(d3
-      .axisLeft(y.domain([0,2300]))
-      .tickValues(d3.range(0,2300,100))
+      .axisLeft(y.domain([0,3000]))
+      .tickValues(d3.range(0,3001,100))
       .tickFormat((val) => val % 200 == 0 ? val.toString() : ''))
     .style("font-size",20)
     .append("text")
@@ -47,7 +47,7 @@ d3.csv("./stat.csv").then(function(data){
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
       .axisRight(y)
-      .tickValues(d3.range(0,2300,100))
+      .tickValues(d3.range(0,3000,100))
       .tickFormat(''))
 
   svg.append("clipPath")
@@ -59,7 +59,7 @@ d3.csv("./stat.csv").then(function(data){
       .attr("height",height)
 
   svg.selectAll(null)
-    .data(d3.range(100,2201,100))
+    .data(d3.range(100,2901,100))
     .enter()
     .append("line")
     .attr("x1",x(new Date(data[0].time)))
