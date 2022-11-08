@@ -100,7 +100,7 @@ window.addEventListener('DOMContentLoaded',()=>{
           const arrow = new THREE.ArrowHelper(
             wind.clone().normalize(),
             latlon2Vector(lat,lon,alt2),
-            wind.length() * 0.02, //parameter
+            wind.length() * 0.015, //parameter
             color(t),
             0.2, //headlength
             0.1 //headwidth

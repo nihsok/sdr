@@ -125,50 +125,53 @@ d3.csv("./data.csv").then(function(data){
     })
 
   //x axis
-  hodograph.append("g")
+  const xAxis = d3.axisBottom(x.domain([-100,100]))
+    .tickValues(d3.range(-100,101,10))
+    .tickFormat(val => val % 30 == 0 ? val : '')
+  const gX = hodograph.append("g")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3
-      .axisBottom(x.domain([-100,100]))
-      .tickValues(d3.range(-100,101,10))
-      .tickFormat(val => val% 30 == 0 ? val : ''))
+    .call(xAxis)
     .style("font-size",20)
-    .append("text")
+  gX.append("text")
       .attr("fill", "black")
       .attr("x", width / 2 )
       .attr("y", 40)
       .text('Zonal wind [m/s]')
-  hodograph.append("g")
-    .call(d3
-      .axisTop(x.domain([-100,100]))
-      .tickValues(d3.range(-100,101,10))
-      .tickFormat(''))
+
+  const xAxis2 = d3.axisTop(x)
+    .tickValues(d3.range(-100,101,10))
+    .tickFormat('')
+  const gX2 = hodograph.append("g")
+    .call(xAxis2)
+
   //y axis
-  hodograph.append("g")
-    .call(d3
-      .axisLeft(y.domain([-100,100]))
-      .tickValues(d3.range(-100,101,10))
-      .tickFormat((val) => val % 20 == 0 ? val.toString() : ''))
+  const yAxis = d3.axisLeft(y.domain([-100,100]))
+    .tickValues(d3.range(-100,101,10))
+    .tickFormat(val => val % 20 == 0 ? val.toString() : '')
+  const gY = hodograph.append("g")
+    .call(yAxis)
     .style("font-size",20)
-    .append("text")
-    .attr("fill","black")
-    .attr("text-anchor","middle")
-    .attr("x",  - height / 2 - margin.top)
-    .attr("y", -55)
-    .attr("transform","rotate(-90)")
-    .text("Meridional wind [m/s]")
-  hodograph.append("g")
+  gY.append("text")
+      .attr("fill","black")
+      .attr("text-anchor","middle")
+      .attr("x",  - height / 2 - margin.top)
+      .attr("y", -55)
+      .attr("transform","rotate(-90)")
+      .text("Meridional wind [m/s]")
+
+  const yAxis2 = d3.axisRight(y)
+    .tickValues(d3.range(-100,101,10))
+    .tickFormat('')
+  const gY2 = hodograph.append("g")
     .attr('transform',"translate(" + width + ",0)")
-    .call(d3
-      .axisRight(y.domain([-100,100]))
-      .tickValues(d3.range(-100,101,10))
-      .tickFormat(''))
+    .call(yAxis2)
 
   const colorscale = d3.scaleLinear()
-      .domain([d3.min(data.filter(d=>d.alt), d => Number(d.alt)),
-               d3.max(data.filter(d=>d.alt), d => Number(d.alt))])
-      .range(['#857f1e','#0022fa'])
+    .domain([d3.min(data.filter( d => d.alt ), d => Number(d.alt)),
+             d3.max(data.filter( d => d.alt ), d => Number(d.alt))])
+    .range(['#857f1e','#0022fa'])
 
-  const dot=hodograph.selectAll("dot")
+  const dot = hodograph.selectAll("dot")
     .data(data.filter(d => d.u))
     .enter()
     .append("circle")
@@ -194,9 +197,13 @@ d3.csv("./data.csv").then(function(data){
     })
 
   const zoom=d3.zoom()
-    .scaleExtent([1,20])
+    .scaleExtent([1,8])
     .on("zoom",({transform})=>{
       dot.attr("transform",transform)
+      gX.call(xAxis.scale(transform.rescaleX(x)))
+      gY.call(yAxis.scale(transform.rescaleY(y)))
+      gX2.call(xAxis2.scale(transform.rescaleX(x)))
+      gY2.call(yAxis2.scale(transform.rescaleY(y)))
     })
 
   hodograph
