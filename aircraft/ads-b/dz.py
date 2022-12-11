@@ -14,7 +14,7 @@ for line in input[1:]:
   if (t2 != 0): t2 += 273.15
   theta2 = t2 * (100000/p2)**rdcp if t2 > 0 else 0
 
-  if (time2-time1) < 40 and z1 != z2 and p1 != p2:
+  if (time2-time1) < 40 and z1 > 0 and z2 > 0 and p1 > 0 and p2 > 0 and z1 != z2 and p1 != p2:
     dpdz = (p2-p1) / (z2-z1)
     dtdz = (theta2-theta1) / (z2-z1)
     dvdz_square = ( (u2-u1)**2 + (v2-v1)**2 ) / (z2-z1)**2

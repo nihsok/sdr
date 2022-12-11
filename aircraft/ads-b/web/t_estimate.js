@@ -126,8 +126,8 @@ d3.csv("./data.csv").then(function(data){
 
   //x axis
   const xAxis = d3.axisBottom(x.domain([-100,100]))
-    .tickValues(d3.range(-100,101,10))
-    .tickFormat(val => val % 30 == 0 ? val : '')
+    .ticks(20)
+    .tickFormat((val,i) => ( i + 2 ) % 3 == 0 ? val : '')
   const gX = hodograph.append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis)
@@ -139,15 +139,15 @@ d3.csv("./data.csv").then(function(data){
       .text('Zonal wind [m/s]')
 
   const xAxis2 = d3.axisTop(x)
-    .tickValues(d3.range(-100,101,10))
+    .ticks(20)
     .tickFormat('')
   const gX2 = hodograph.append("g")
     .call(xAxis2)
 
   //y axis
   const yAxis = d3.axisLeft(y.domain([-100,100]))
-    .tickValues(d3.range(-100,101,10))
-    .tickFormat(val => val % 20 == 0 ? val.toString() : '')
+    .ticks(20)
+    .tickFormat((val,i) => i % 2 == 0 ? val : '')
   const gY = hodograph.append("g")
     .call(yAxis)
     .style("font-size",20)
@@ -160,7 +160,7 @@ d3.csv("./data.csv").then(function(data){
       .text("Meridional wind [m/s]")
 
   const yAxis2 = d3.axisRight(y)
-    .tickValues(d3.range(-100,101,10))
+    .ticks(20)
     .tickFormat('')
   const gY2 = hodograph.append("g")
     .attr('transform',"translate(" + width + ",0)")
@@ -198,12 +198,14 @@ d3.csv("./data.csv").then(function(data){
 
   const zoom=d3.zoom()
     .scaleExtent([1,8])
+    .translateExtent([[0,0],[width+50,height+30]])
     .on("zoom",({transform})=>{
       dot.attr("transform",transform)
       gX.call(xAxis.scale(transform.rescaleX(x)))
       gY.call(yAxis.scale(transform.rescaleY(y)))
       gX2.call(xAxis2.scale(transform.rescaleX(x)))
       gY2.call(yAxis2.scale(transform.rescaleY(y)))
+      console.log(transform.invertX(0))
     })
 
   hodograph

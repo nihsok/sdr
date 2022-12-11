@@ -1,11 +1,18 @@
 const margin = {top:10, right:10, bottom:45, left:75},
-  width = 270 - margin.left - margin.right,
+  width = 202.5 - margin.left - margin.right,
   height = 350 - margin.top - margin.bottom;
 
 const x = d3.scaleLinear().range([0, width])
 const y = d3.scaleLinear().range([height, 0])
 
 const t_profile = d3.select("#profiles")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform","translate(" + margin.left + "," + margin.top + ")");
+
+const theta = d3.select("#profiles")
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -38,7 +45,7 @@ d3.csv("./data.csv").then(function(data){
       .style("font-size",20)
       .append("text")
         .attr("fill", "black")
-        .attr("x", width / 2 )
+        .attr("x", width / 2 - 20)
         .attr("y", 40)
         .html(title)
     svg.append("g")
@@ -66,7 +73,7 @@ d3.csv("./data.csv").then(function(data){
         .tickValues(d3.range(0,15000,1000))
         .tickFormat(''))
   }
-  axes(t_profile,"(Virtual) Temp. [&#8451]",[-70,20],20,10)
+  axes(t_profile,"Temperature [&#8451]",[-75,15],30,15)
 
   const tooltip = d3.select("body")
     .append("div")
@@ -106,7 +113,7 @@ d3.csv("./data.csv").then(function(data){
       .attr("width",width)
       .attr("height",height)
 
-  for (i=-60; i<=160; i+=20){
+  for (i=-60; i<=160; i+=15){
     t_profile.append("path")
       .datum([0,15000])
       .style("opacity",0.2)
@@ -127,8 +134,45 @@ d3.csv("./data.csv").then(function(data){
       )
   }
 
+  axes(theta,'Potential T [K]',[280,380],40,20)
+  theta.selectAll("dot")
+    .data(data.filter(d => d.t))
+    .enter()
+    .append("circle")
+      .attr("cx", d => x((Number(d.t)+273.15)*(100000/d.p)**0.2858565737))
+      .attr("cy", d => y(d.alt))
+      .attr("r", 2)
+      .style("fill", d => '#'+d.hex)
+      .style("opacity", 0.5)
+    .on("mouseover",function(event,d){
+      d3.select(event.target).style("opacity",1)
+      tooltip
+        .style("visibility","visible")
+        .html('z: '+Math.round(d.alt)/1000+"km<br>θ: "+Math.round((Number(d.t)+273.15)*(100000/d.p)**0.2858565737*10)/10+'K')
+    })
+    .on("mousemove",function(event,d){
+      tooltip
+        .style("left", event.pageX + 15 + "px")
+        .style("top", event.pageY -20 + "px")
+    })
+    .on("mouseout",function(event){
+      d3.select(event.target).style("opacity",0.5)
+      tooltip.style("visibility","hidden")
+    })
+
+    theta.selectAll(null)
+      .data(d3.range(300,371,20))
+      .enter()
+      .append("line")
+      .attr("x1",d=>x(d))
+      .attr("y1",y(0))
+      .attr("x2",d=>x(d))
+      .attr("y2",y(15000))
+      .style("stroke","black")
+      .style("opacity",0.1)
+
   const u_max=100
-  axes(u_profile,'Zonal wind [m/s]',[-u_max,u_max],40,20)
+  axes(u_profile,'Zonal wind [m/s]',[-u_max,u_max],60,20)
   u_profile.selectAll("dot")
     .data(data.filter(d => d.alt && d.u && Math.abs(d.u) < u_max))
     .enter()
@@ -154,7 +198,7 @@ d3.csv("./data.csv").then(function(data){
       tooltip.style("visibility","hidden")
     })
   u_profile.selectAll(null)
-    .data(d3.range(-u_max,u_max+1,10).concat([0]))
+    .data(d3.range(-u_max,u_max+1,20).concat([0]))
     .enter()
     .append("line")
     .attr("x1",d=>x(d))
@@ -164,7 +208,7 @@ d3.csv("./data.csv").then(function(data){
     .style("stroke","black")
     .style("opacity",0.1)
 
-  axes(v_profile,'Merid. Wind [m/s]',[-u_max,u_max],40,20)
+  axes(v_profile,'Merid. Wind [m/s]',[-u_max,u_max],60,20)
   v_profile.selectAll("dot")
     .data(data.filter(d => d.alt && d.v && Math.abs(d.v) < u_max))
    .enter()
@@ -190,7 +234,7 @@ d3.csv("./data.csv").then(function(data){
      tooltip.style("visibility","hidden")
     })
   v_profile.selectAll(null)
-    .data(d3.range(-u_max,u_max-1,10).concat([0]))
+    .data(d3.range(-u_max,u_max-1,20).concat([0]))
     .enter()
     .append("line")
     .attr("x1",d=>x(d))
