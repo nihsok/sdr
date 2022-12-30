@@ -28,6 +28,7 @@ for aircraft in aircrafts:
   if ('ias' in aircraft): tmp['ias'] = aircraft['ias'] * 0.51444 #nm->m/s
   if ('mach' in aircraft): tmp['mach'] = aircraft['mach']
   if ('flight' in aircraft): tmp['flight'] = aircraft['flight']
+  if ('squawk' in aircraft): tmp['squawk'] = aircraft['squawk']
   if ('version' in aircraft): tmp['version'] = aircraft['version']
   if ('category' in aircraft): tmp['category'] = aircraft['category']
   if ('alt_geom' in aircraft):
@@ -63,14 +64,14 @@ for aircraft in aircrafts:
   output.append(tmp)
 
 with open(file.split('.')[0]+'.csv','w') as f:
-  writer = csv.DictWriter(f,['flag','alt','lon','lat','gs_x','gs_y','u','v','vt_x','vt_y','tas','t','mach','cas','ias','p','dist','flight','category','version','hex','time'],lineterminator='\n')
+  writer = csv.DictWriter(f,['flag','alt','lon','lat','gs_x','gs_y','u','v','vt_x','vt_y','tas','t','mach','cas','ias','p','dist','flight','squawk','category','version','hex','time'],lineterminator='\n')
   writer.writerows(output)
 
 #flag,
 #alt,lon,lat, ...position
 #temperature,zonal wind,mediridional wind,pressure ...physical value
 #mach,tas,cas,ias,aircraft u,aircraft v, ...verification value
-#distance,hex,flight,version,category,time ...additional value
+#distance,hex,flight,squawk,version,category,time ...additional value
 #flag 8:temperature
 #flag 4:wind (needs lat, lon)
 #flag 2:lat,lon
