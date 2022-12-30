@@ -171,8 +171,8 @@ d3.csv("./data.csv").then(function(data){
       .style("stroke","black")
       .style("opacity",0.1)
 
-  const u_max=100
-  axes(u_profile,'Zonal wind [m/s]',[-u_max,u_max],60,20)
+  const u_max = 120
+  axes(u_profile,'Zonal wind [m/s]',[-60,u_max],60,20)
   u_profile.selectAll("dot")
     .data(data.filter(d => d.alt && d.u && Math.abs(d.u) < u_max))
     .enter()
@@ -198,7 +198,7 @@ d3.csv("./data.csv").then(function(data){
       tooltip.style("visibility","hidden")
     })
   u_profile.selectAll(null)
-    .data(d3.range(-u_max,u_max+1,20).concat([0]))
+    .data(d3.range(-60,u_max,20).concat([0]))
     .enter()
     .append("line")
     .attr("x1",d=>x(d))
@@ -208,9 +208,10 @@ d3.csv("./data.csv").then(function(data){
     .style("stroke","black")
     .style("opacity",0.1)
 
-  axes(v_profile,'Merid. Wind [m/s]',[-u_max,u_max],60,20)
+  const v_max = 40
+  axes(v_profile,'Merid. Wind [m/s]',[-v_max,v_max],30,10)
   v_profile.selectAll("dot")
-    .data(data.filter(d => d.alt && d.v && Math.abs(d.v) < u_max))
+    .data(data.filter(d => d.alt && d.v && Math.abs(d.v) < v_max))
    .enter()
    .append("circle")
      .attr("cx", d => x(d.v))
@@ -234,7 +235,7 @@ d3.csv("./data.csv").then(function(data){
      tooltip.style("visibility","hidden")
     })
   v_profile.selectAll(null)
-    .data(d3.range(-u_max,u_max-1,20).concat([0]))
+    .data(d3.range(-u_max,u_max-1,10).concat([0]))
     .enter()
     .append("line")
     .attr("x1",d=>x(d))

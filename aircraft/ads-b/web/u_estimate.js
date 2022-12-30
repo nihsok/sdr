@@ -168,8 +168,8 @@ d3.csv("./data.csv").then(function(data){
   vdeg.append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(d3
-      .axisBottom(x.domain([120,330]))
-      .tickValues(d3.range(120,325,15))
+      .axisBottom(x.domain([120,345]))
+      .tickValues(d3.range(120,345,15))
       .tickFormat(val => val % 30 == 0 ? val : ''))
     .style("font-size",20)
     .append("text")

@@ -6,6 +6,7 @@ d3.csv("./stat.csv").then(function(data){
 
   const x = d3.scaleTime().domain([new Date(data[0].time),new Date(data[data.length-1].time)]).range([0, width])
   const y = d3.scaleLinear().range([height, 0])
+  const maxval = 70
 
   const svg = d3.select("#count")
   .append("svg")
@@ -32,9 +33,9 @@ d3.csv("./stat.csv").then(function(data){
   //y axis
   svg.append("g")
     .call(d3
-      .axisLeft(y.domain([0,3000]))
-      .tickValues(d3.range(0,3001,100))
-      .tickFormat((val) => val % 200 == 0 ? val.toString() : ''))
+      .axisLeft(y.domain([0,maxval]))
+      .tickValues(d3.range(0,maxval+1,10))
+      .tickFormat((val) => val % 10 == 0 ? val.toString() : ''))
     .style("font-size",20)
     .append("text")
     .attr("fill","black")
@@ -42,12 +43,12 @@ d3.csv("./stat.csv").then(function(data){
     .attr("x", - height / 2 - margin.top + 10)
     .attr("y", -55)
     .attr("transform","rotate(-90)")
-    .text("# [/hour] & Rate [‰]")
+    .text("# [60/hour] & Rate [%]")
   svg.append("g")
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
       .axisRight(y)
-      .tickValues(d3.range(0,3000,100))
+      .tickValues(d3.range(0,maxval,10))
       .tickFormat(''))
 
   svg.append("clipPath")
@@ -59,7 +60,7 @@ d3.csv("./stat.csv").then(function(data){
       .attr("height",height)
 
   svg.selectAll(null)
-    .data(d3.range(100,2901,100))
+    .data(d3.range(0,maxval,10))
     .enter()
     .append("line")
     .attr("x1",x(new Date(data[0].time)))
@@ -83,18 +84,18 @@ d3.csv("./stat.csv").then(function(data){
     .attr("d",d3.area()
       .x(d=>x(new Date(d.data.time)))
       .y0(y(0))
-      .y1(d=>y(d[1]))
+      .y1(d=>y(d[1]/60))
     )
     .on("mouseover",function(event,d){
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
         .html(legend[d.key]
-          +'<br>Latest='+d[d.length-1][1]
-          +', Max='                 +d3.max(      d,(d)=>d[1])
-          +', Median='              +d3.median(   d,(d)=>d[1])
-          +', Mean='     +Math.round(d3.mean(     d,(d)=>d[1])*10)/10
-          +', Deviation='+Math.round(d3.deviation(d,(d)=>d[1])*10)/10
+          +'<br>Latest=' +Math.round(d[d.length-1][1]        /60 *10)/10
+          +', Max='      +Math.round(d3.max(      d,(d)=>d[1]/60)*10)/10
+          +', Median='   +Math.round(d3.median(   d,(d)=>d[1]/60)*10)/10
+          +', Mean='     +Math.round(d3.mean(     d,(d)=>d[1]/60)*10)/10
+          +', Deviation='+Math.round(d3.deviation(d,(d)=>d[1]/60)*10)/10
         )
     })
     .on("mousemove",function(event,d){
@@ -114,7 +115,7 @@ d3.csv("./stat.csv").then(function(data){
     .attr("clip-path","url(#clip-count)")
     .attr("d",d3.line()
       .x(d=>x(new Date(d.time)))
-      .y(d=>y(d.t/(Number(d.little)+Number(d.alt)+Number(d.latlon)+Number(d.u)+Number(d.t))*1000 || 0 ))
+      .y(d=>y(d.t/(Number(d.little)+Number(d.alt)+Number(d.latlon)+Number(d.u)+Number(d.t))*100 || 0 ))
     ).on("mouseover", () => {
       const z = data[data.length-1]
       tooltip
