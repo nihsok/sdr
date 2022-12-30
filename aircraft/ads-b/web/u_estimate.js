@@ -168,9 +168,9 @@ d3.csv("./data.csv").then(function(data){
   vdeg.append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(d3
-      .axisBottom(x.domain([120,340]))
-      .tickValues(d3.range(120,340,20))
-      .tickFormat(val => val % 40 == 0 ? val : ''))
+      .axisBottom(x.domain([100,360]))
+      .tickValues(d3.range(100,360,20))
+      .tickFormat(val => ( val + 20 ) % 40 == 0 ? val : ''))
     .style("font-size",20)
     .append("text")
       .attr("fill", "black")
@@ -179,8 +179,8 @@ d3.csv("./data.csv").then(function(data){
       .html('Speed [m/s]')
   vdeg.append("g")
     .call(d3
-      .axisTop(x.domain([120,340]))
-      .tickValues(d3.range(120,340,20))
+      .axisTop(x.domain([100,360]))
+      .tickValues(d3.range(100,360,20))
       .tickFormat(''))
   //y axis
   vdeg.append("g")
