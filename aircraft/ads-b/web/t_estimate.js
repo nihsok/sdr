@@ -153,7 +153,7 @@ d3.csv("./data.csv").then(function(data){
     .style("font-size",20)
     .append("text")
       .attr("fill", "black")
-      .attr("x",  - height / 2 + 70)
+      .attr("x",  - height / 2 + 110)
       .attr("y", -50)
       .attr("transform","rotate(-90)")
       .text('First 2 digits of squawk')
