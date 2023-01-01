@@ -34,7 +34,7 @@ d3.csv("./stat.csv").then(function(data){
   svg.append("g")
     .call(d3
       .axisLeft(y.domain([0,maxval]))
-      .tickValues(d3.range(0,maxval+1,10))
+      .tickValues(d3.range(0,maxval+1,5))
       .tickFormat((val) => val % 10 == 0 ? val.toString() : ''))
     .style("font-size",20)
     .append("text")
@@ -48,7 +48,7 @@ d3.csv("./stat.csv").then(function(data){
     .attr('transform',"translate(" + width + ",0)")
     .call(d3
       .axisRight(y)
-      .tickValues(d3.range(0,maxval,10))
+      .tickValues(d3.range(0,maxval,5))
       .tickFormat(''))
 
   svg.append("clipPath")
@@ -60,7 +60,7 @@ d3.csv("./stat.csv").then(function(data){
       .attr("height",height)
 
   svg.selectAll(null)
-    .data(d3.range(0,maxval,10))
+    .data(d3.range(0,maxval,5))
     .enter()
     .append("line")
     .attr("x1",x(new Date(data[0].time)))

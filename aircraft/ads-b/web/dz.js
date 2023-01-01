@@ -130,7 +130,7 @@ d3.csv("./dz.csv").then(function(data){
       .style("font-size",20)
       .append("text")
         .attr("fill", "black")
-        .attr("x", width / 2 )
+        .attr("x", width / 2 - 15)
         .attr("y", 40)
         .html(title)
     svg.append("g")
@@ -176,7 +176,7 @@ d3.csv("./dz.csv").then(function(data){
   const g = 9.8
   const Rd = 287
 
-  axes(t2,'T [K]',[180,300],40,20)
+  axes(t2,'Hydrostatic T [K]',[180,300],40,20)
   t2.selectAll(null)
     .data(data.filter(d=>d.dpdz && Math.abs(d.z1-d.z2) < 1000))
     .enter()

@@ -177,7 +177,7 @@ d3.csv("./data.csv").then(function(data){
       d3.select(event.target).style("opacity",1)
       tooltip
         .style("visibility","visible")
-        .html('Squawk: '+d.squawk)
+        .html('Squawk: '+d.squawk+(d.flight ? '<br>Flight: '+d.flight:''))
     })
     .on("mousemove",function(event){
       tooltip

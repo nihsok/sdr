@@ -45,7 +45,7 @@ d3.csv("./data.csv").then(function(data){
       .style("font-size",20)
       .append("text")
         .attr("fill", "black")
-        .attr("x", width / 2 - 20)
+        .attr("x", width / 2 - 18)
         .attr("y", 40)
         .html(title)
     svg.append("g")
