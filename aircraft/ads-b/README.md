@@ -34,7 +34,7 @@ $EAS=a_0M\sqrt{\frac{p}{p_0}}=a_0\sqrt{\frac{5p}{p_0}[(\frac{q_c}{p}+1)^\frac{2}
 
 $TAS=a_0M\sqrt{\frac{T}{T_0}}=a_0\sqrt{\frac{5T}{T_0}[(\frac{q_c}{p}+1)^\frac{2}{7}-1]} (\approx EAS\sqrt{\frac{\rho_0}{\rho}}: 乾燥大気なら)$
 
-$CAS=IAS+\alpha$
+$CAS=IAS+\alpha$（ただし、アナログ計器のときは読み値だったが、デジタル計器では補正済みかも）
 
 $CAS=EAS[1+\frac{1}{8}(1-\frac{p}{p_0})M^2+\frac{3}{640}(1-10\frac{p}{p_0}+9(\frac{p}{p_0})^2)M^4]=a_0 M\sqrt{\frac{p}{p_0}}[1+\frac{1}{8}(1-\frac{p}{p_0})M^2+\frac{3}{640}(1-10\frac{p}{p_0}+9(\frac{p}{p_0})^2)M^4]$
 1. 非圧縮 (M < 0.3) のとき2次以上の項は無視できて、CAS=EAS
@@ -92,7 +92,7 @@ flowchart TD
   G(高度z) --> F
   F -.-> A
   B -.-> F
-  
+
   H(航路角θtrack) --> I
   J(対地速度Vgs) --> I{{対地速度ベクトル}}
 
