@@ -12,18 +12,18 @@
   - 特定の対象（衛星など）を追いかけるためにローテーターを使うという選択肢もあるが、維持管理コストがかかるのでここでは考えない。
 ## ソフトウェア
 - rtl-sdr：受信機を制御するためのコマンド群
-  - rtl_fm：復調を行う（一番よく使う）
   - rtl_test：受信機をテストする
+  - rtl_fm：復調を行う（一番よく使う）
   - rtl_tcp：受信データをTCPプロトコルで送る（他のPCから見られるようにする）
 ~~~
-apt install rtl-sdr 
+apt install rtl-sdr
 ~~~
 でインストールできる。（273kB程度）
 
 SDR受信機の情報を設定ファイル（/etc/udev/rules.d/rtl-sdr.rules）に書き込む必要がある。ファイルがなければ新しく作成し、https://github.com/keenerd/rtl-sdr/blob/master/rtl-sdr.rules の内容を貼り付ける。
 - sox/play/rec：復調されたrawデータをwav等の音声に変換、再生する
 ~~~
-apt install sox 
+apt install sox
 ~~~
 でインストールできる。（1,309 kB程度）
 
@@ -35,7 +35,7 @@ WebSDR (http://websdr.org) という世界中のSDRを使わせてもらえる�
 - 自動運用との相性
 
 # できること
-## ラジオの受信
+## FMラジオの受信
 ~~~
 timeout 10 rtl_fm -f 84.0e6 -M wbfm|sox -t raw -r 24k -es -b16 - tmp.wav
 ~~~
@@ -72,20 +72,26 @@ apt install predict
 
 3. （受信したデータを音声に復調する）
 4. 受信したデータ（あるいは音声）から画像などのデータを作成する
- 
+
 衛星によっては復調プログラムがすでに開発されている。
 ### NOAA APT
 https://noaa-apt.mbernardi.com.ar/
 ### ISS SSTV
 
-### SATNOGS
-複雑なので、詳細はsatnogs_setup.mdに示す。
+### SatNOGS (https://satnogs.org/)
+世界各地でいろいろな衛星の電波を受信して、共有する試み。詳細はsatnogs_setup.mdに示す。
 ## 航空機データの受信
 航空機が発信しているデータとしては、
 - ACARS (Aircraft Communications Addressing and Reporting System)
 - ADS-B (Automatic Dependent Surveillance-Broadcast)
 - VDL2 (VHF Data Link - Mode 2)
-が受信できる。詳細はaircraftのディレクトリに記述。
+がある。詳細はaircraftのディレクトリに記述。
+## WSPR (Weak Signal Propagation Reporter)
+アマチュア無線により位置情報を送り、受信した側はオンラインで共有し、どこに伝播したかを知る
+
+情報集約先：https://www.wsprnet.org/drupal/
+
+rtl-sdrによる制御：https://github.com/Guenael/rtlsdr-wsprd
 ## 短波FAX
 ### Fldigi
 解説資料: http://www.hotozuka.com/fax/pdf/fldigi.pdf
