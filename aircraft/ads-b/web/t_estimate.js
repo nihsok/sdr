@@ -29,8 +29,8 @@ d3.csv("./data.csv").then(function(data){
   svg.append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(d3
-      .axisBottom(x.domain([140,270]))
-      .tickValues(d3.range(140,271,10))
+      .axisBottom(x.domain([130,270]))
+      .tickValues(d3.range(130,271,10))
       .tickFormat((val) => val % 20 == 0 ? val.toString() : ''))
     .style("font-size",20)
     .append("text")
@@ -42,7 +42,7 @@ d3.csv("./data.csv").then(function(data){
   svg.append("g")
     .call(d3
       .axisTop(x)
-      .tickValues(d3.range(140,270,10))
+      .tickValues(d3.range(130,270,10))
       .tickFormat(''))
   //y axis
   svg.append("g")
