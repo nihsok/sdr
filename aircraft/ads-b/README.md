@@ -34,10 +34,10 @@ $EAS=a_0M\sqrt{\frac{p}{p_0}}=a_0\sqrt{\frac{5p}{p_0}[(\frac{q_c}{p}+1)^\frac{2}
 
 $TAS=a_0M\sqrt{\frac{T}{T_0}}=a_0\sqrt{\frac{5T}{T_0}[(\frac{q_c}{p}+1)^\frac{2}{7}-1]} (\approx EAS\sqrt{\frac{\rho_0}{\rho}}: 乾燥大気なら)$
 
-$CAS=IAS+\alpha$（ただし、アナログ計器のときは読み値だったが、デジタル計器では補正済みかも）
+$CAS=IAS+\varepsilon$（ただし、アナログ計器のときは読み値だったが、デジタル計器では補正済みかも）
 
 $CAS=EAS[1+\frac{1}{8}(1-\frac{p}{p_0})M^2+\frac{3}{640}(1-10\frac{p}{p_0}+9(\frac{p}{p_0})^2)M^4]=a_0 M\sqrt{\frac{p}{p_0}}[1+\frac{1}{8}(1-\frac{p}{p_0})M^2+\frac{3}{640}(1-10\frac{p}{p_0}+9(\frac{p}{p_0})^2)M^4]$
-1. 非圧縮 (M < 0.3) のとき2次以上の項は無視できて、CAS=EAS
+1. 非圧縮 (M < 0.3) のとき2次以上の項は無視できて、CAS=EAS。このとき、$\varepsilon$を無視して$\rho$をどこかからもってくればTASの式からTが求められるという考えもあるらしいが、仮定が多いわりにM<0.3で上空を飛んでいることがあまりないため、今回は考えないことにする。
 2. 亜音速 (subsonic: 0.3 < M < 0.8) のとき、3次方程式となり解析解が求まる
 3. 遷音速以上 (M > 0.8) のとき、5次方程式となり解析的に解けない
 
@@ -70,7 +70,9 @@ $\mathbf{V}_g=\mathbf{V}_t+\mathbf{V}$
 
 よって、風速は
 
-$\binom{u}{v}=\binom{u}{v}_g-\binom{u}{v}_t=\binom{V_{gs}\sin\theta_{track}-V_{TAS}\sin(\theta_{heading}+\alpha)}{V_{gs}\cos\theta_{track}-V_{TAS}\cos{(\theta_{heading}+\alpha)}}$
+$u=u_g-u_t=V_{gs}\sin\theta_{track}-V_{TAS}\sin(\theta_{heading}+\alpha)$
+
+$v=v_g-v_t=V_{gs}\cos\theta_{track}-V_{TAS}\cos{(\theta_{heading}+\alpha)}$
 
 ここで$V_{gs}$、$V_{TAS}$はそれぞれ対地速度と相対風速、$\theta_{track}$と$\theta_{heading}$はそれぞれtrack angle（航路）とheading angle（針路）に対応する。
 
@@ -85,23 +87,28 @@ $\binom{u}{v}=\binom{u}{v}_g-\binom{u}{v}_t=\binom{V_{gs}\sin\theta_{track}-V_{T
 ## 計算の流れ
 ```mermaid
 flowchart TD
-  A(相対速度TAS) --> C{気温の計算}
+  A(相対風速TAS) --> C{気温の計算}
   B(マッハ数M) --> C
   C --> D[気温T]
-  E(指示対気速度IAS) --> F{M0.3以下}
-  G(高度z) --> F
-  F -.-> A
-  B -.-> F
 
   H(航路角θtrack) --> I
   J(対地速度Vgs) --> I{{対地速度ベクトル}}
 
-  M(緯度経度) --> N(偏角α)
-  N --> K{{移動風速ベクトル}}
+  M(緯度経度) --> N{{偏角α}}
+  N --> K
   L(針路角θheadihg) --> K
-  A --> K
+  A --> K{{移動風速ベクトル}}
+
 
   I --> O{和}
   K --> O
   O --> P[風速u,v]
+
+  Q(気圧高度) --> R{{気圧p}}
+  D --> S
+  R --> S[温位θ]
+
+  R --> T{{校正対気速度CAS}}
+  B --> T
+  T --+ε--> U(指示対気速度IAS)
 ```
