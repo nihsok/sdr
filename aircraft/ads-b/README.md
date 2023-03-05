@@ -32,7 +32,7 @@ $M=\sqrt{5[(\frac{q_c}{p}+1)^\frac{2}{7}-1]}\Leftrightarrow q_c=p[(1+0.2M^2)^\fr
 
 $EAS=a_0M\sqrt{\frac{p}{p_0}}=a_0\sqrt{\frac{5p}{p_0}[(\frac{q_c}{p}+1)^\frac{2}{7}-1]}$
 
-$TAS=a_0M\sqrt{\frac{T}{T_0}}=a_0\sqrt{\frac{5T}{T_0}[(\frac{q_c}{p}+1)^\frac{2}{7}-1]} (\approx EAS\sqrt{\frac{\rho_0}{\rho}}: 乾燥大気なら)$
+$TAS=a_0M\sqrt{\frac{T}{T_0}}=a_0\sqrt{\frac{5T}{T_0}[(\frac{q_c}{p}+1)^\frac{2}{7}-1]} (\approx EAS\sqrt{\frac{\rho_0}{\rho}})$
 
 $CAS=IAS+\varepsilon$（ただし、アナログ計器のときは読み値だったが、デジタル計器では補正済みかも）
 
@@ -61,10 +61,10 @@ $$y=\omega^k\sqrt[3]{-\frac{q}{2}+\sqrt{(\frac{q}{2})^2+(\frac{p}{3})^3}}+\omega
 1. 対流圏 (0< $z$ <11.019km) では $p=101325\times(1-\frac{0.0065z_p}{288.15})^\frac{9.80665}{287\times0.0065}$
 2. 対流圏界面 (11.019< $z$ <20.063km) では $p=22632\times e^\frac{(11019-0.3048z_p)*9.80665}{287\times216.65}$
 
-で計算する。求めたpの妥当性はIASとCASの比較等により検証する。
+で計算する。求めた $p$ の妥当性はIASとCASの比較等により検証する。
 
 ## 風速 (U,V)
-飛行機は風の影響を受けながら進むため、対地速度$V_g$は飛行機自体の速度$V_t$と風速$V$の合計になる。
+飛行機は風の影響を受けながら進むため、対地速度 $V_g$ は飛行機自体の速度 $V_t$ と風速 $V$ の合計になる。
 
 $\mathbf{V}_g=\mathbf{V}_t+\mathbf{V}$
 
