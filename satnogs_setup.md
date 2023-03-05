@@ -38,6 +38,10 @@ $ sudo satnogs-setup
 初回はかなり時間がかかる。
 - Basic Configurationの変数を設定する
   - このときまでにAPI token、設置場所の緯度経度などを取得しておく
-- RF Gainを設定するための設定はAdvancedになっている
+- RF Gainの設定はBasicではなくAdvancedにある。アンプ無しでの推奨ゲインは、
+  - 32.8 (https://wiki.satnogs.org/SatNOGS_Client_Setup)
+  - 44.5 (https://qiita.com/OzoraKobo/items/561f1ffc739d49fd9c57)
 - serviceで動いているので、ここまで完了したら基本的には自動で稼働し続ける
 - 設定を後から変更するときも同じ（このときも、少し時間がかかる）
+
+動くようにはなったが、信号が弱くなかなか復号できない。ゲインをいくつか試しても変わらず。ちょっといいアンテナを試してみるまで保留。
