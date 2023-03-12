@@ -21,6 +21,7 @@ sudo make install
 acarsdec -v -l acars.log -r 0 131.250 131.450 131.950
 ```
 # ADS-B (Automatic Dependent Surveillance-Broadcast)
+## Flightradar24へのフィード
 fr24feedをインストールすると、Flightradar24へのフィード送信までまとめてセットアップしてくれる。
 
 公式 (https://www.flightradar24.com/share-your-data) で推奨されているインストール方法
@@ -76,6 +77,21 @@ sudo systemctl restart lighttpd
 - http://192.168.0.100:8754 flightradar24のステータスを確認できる（IPアドレスは適宜変更の必要あり）
 - http://192.168.0.100/skyaware/ dump1090-faのステータスを確認できる（IPアドレスは適宜変更の必要あり）
 - http://www17.plala.or.jp/y9500/ads-b.html 熱対策とアンテナの工夫について参考になる。
+
+## FlightAwareへのフィード
+ここに書いてある通り。https://ja.flightaware.com/adsb/piaware/install
+```
+wget https://ja.flightaware.com/adsb/piaware/files/packages/pool/piaware/f/flightaware-apt-repository/flightaware-apt-repository_1.1_all.deb
+sudo dpkg -i flightaware-apt-repository_1.1_all.deb
+sudo apt update
+sudo apt install piaware
+sudo apt install dump1090-fa
+sudo reboot
+```
+PiAwareが動いているデバイスと同じグローバルIPをもつブラウザから https://ja.flightaware.com/adsb/piaware/claim にアクセスしてログインすると、アカウントとデバイスがひもづけられる。
+- 緯度経度や高度等の設定を入力することはない。
+- デバイスが認識されないときはとりあえず再起動してみる。
+- http://192.168.1.194:8080/ ローカルで受信状況を確認できる（IPアドレスは適当に）
 
 # VDL2 (VHF Data Link - Mode 2)
 ```
