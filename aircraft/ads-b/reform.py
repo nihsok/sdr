@@ -2,6 +2,7 @@ import json
 import math
 import sys
 import csv
+import os
 import numpy as np
 from scipy.interpolate import RectBivariateSpline
 
@@ -63,7 +64,7 @@ for aircraft in aircrafts:
         tmp['v'] = tmp['gs_y'] - tmp['vt_y']
   output.append(tmp)
 
-with open(file.split('.')[0]+'.csv','w') as f:
+with open('/tmp/dump1090-fa/'+os.path.splitext(os.path.basename(file))[0]+'.csv','w') as f:
   writer = csv.DictWriter(f,['flag','alt','lon','lat','gs_x','gs_y','u','v','vt_x','vt_y','tas','t','mach','cas','ias','p','dist','flight','squawk','category','version','hex','time'],lineterminator='\n')
   writer.writerows(output)
 

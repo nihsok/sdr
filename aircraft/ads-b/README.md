@@ -1,7 +1,7 @@
 # 機能
-1. reform.py: history_\*.jsonを読んでデータを成型→history_\*.csv
+1. reform.py: /run/dump1090-fa/history_\*.jsonを読んでデータを成型→/tmp/dump190-fa/history_\*.csv
 2. watch.sh: reform.pyの実行と、history_\*.csvを合体→data.csv（crontabの設定が必要）
-3. web以下のindex.html,\*.js: 可視化とそれ必要なライブラリ等
+3. web以下のindex.html,\*.js: 可視化とそれに必要なライブラリ等
 
 # 観測値の求め方
 以下の式ではSI単位系を使う。航空業界ではヤードポンド法が使われていることが多く、dump1090の出力もヤードポンド法になっているため、途中で間違えないよう最初に変換しておく。
