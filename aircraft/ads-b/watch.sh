@@ -17,3 +17,8 @@ for hex in $(cut -d , -f 22 /tmp/dump1090-fa/history_*.csv | sort | uniq -d);do
   grep -h $hex /tmp/dump1090-fa/history_*.csv | sort -k 22 | python3 dz.py >> web/dz.csv
 done
 # For offline analysis, replace ${path}/history_*.csv with web/data.csv. It uses file I/O.
+
+yyyymmdd=`date +"%Y%m%d"`
+hh=`date +"%H"`
+echo 'alt,lon,lat,u,v,t,pattern,code' > /tmp/${yyyymmd}$hh.csv
+python vdl2_decode.py /tmp/vdl2_${yyyymmdd}_$hh.json >>  /tmp/${yyyymmd}$hh.csv
