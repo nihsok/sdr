@@ -19,6 +19,6 @@ done
 # For offline analysis, replace ${path}/history_*.csv with web/data.csv. It uses file I/O.
 
 yyyymmdd=`date +"%Y%m%d"`
-hh=`date +"%H"`
+hh=`date +"%H" -d '-1 hour'`
 echo 'alt,lon,lat,u,v,t,pattern,code' > /tmp/${yyyymmd}$hh.csv
 python vdl2_decode.py /tmp/vdl2_${yyyymmdd}_$hh.json >>  /tmp/${yyyymmd}$hh.csv
