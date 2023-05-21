@@ -18,7 +18,8 @@ for hex in $(cut -d , -f 22 /tmp/dump1090-fa/history_*.csv | sort | uniq -d);do
 done
 # For offline analysis, replace ${path}/history_*.csv with web/data.csv. It uses file I/O.
 
-yyyymmdd=`date +"%Y%m%d"`
+yyyymmdd=`date +"%Y%m%d" -d '-1 hour'`
 hh=`date +"%H" -d '-1 hour'`
-echo 'alt,lon,lat,u,v,t,pattern,code' > /tmp/${yyyymmd}$hh.csv
-python vdl2_decode.py /tmp/vdl2_${yyyymmdd}_$hh.json >>  /tmp/${yyyymmd}$hh.csv
+mkdir -p /tmp/dumpvdl2/
+echo 'alt,lon,lat,u,v,t,pattern,code' > /tmp/dumpvdl2/${yyyymmdd}$hh.csv
+python vdl2_decode.py /tmp/vdl2_${yyyymmdd}_$hh.json >>  /tmp/dumpvdl2/${yyyymmdd}$hh.csv
