@@ -21,5 +21,5 @@ done
 yyyymmdd=`date +"%Y%m%d" -d '-1 hour'`
 hh=`date +"%H" -d '-1 hour'`
 mkdir -p /tmp/dumpvdl2/
-echo 'alt,lon,lat,u,v,t,pattern,code' > /tmp/dumpvdl2/${yyyymmdd}$hh.csv
+echo 'pattern,alt,lon,lat,u,v,t,code' > /tmp/dumpvdl2/${yyyymmdd}$hh.csv
 python vdl2_decode.py /tmp/vdl2_${yyyymmdd}_$hh.json | sort | uniq >>  /tmp/dumpvdl2/${yyyymmdd}$hh.csv
