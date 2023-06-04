@@ -74,4 +74,4 @@ with open(sys.argv[1]) as f:
 			elif ( result := re.findall(r"[\.\dNS]*[EW]\d{3}[- \.\dM]*$",data['acars']['msg_text']) ):
 				for code in result:
 
-					print('5','','','', '','','', code,sep=',')
+					print('5','','','','','','','', code,sep=',')
