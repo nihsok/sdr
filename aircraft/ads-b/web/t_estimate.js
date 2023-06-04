@@ -195,10 +195,9 @@ Promise.all([
   t_vt.selectAll("dot")
     .data(vdl2.filter(d => d.t))
     .enter()
-    .append("circle")
-      .attr("cx", d => logx(Number(d.t)))
-      .attr("cy", d => y(d.alt))
-      .attr("r", 2)
+    .append("path")
+      .attr("d",d3.symbol().type(d3.symbolDiamond).size(10))
+      .attr("transform",d => "translate(" + logx(Number(d.t)) + "," + y(d.alt) + ")")
       .style("opacity", 0.5)
     .on("mouseover",function(event,d){
       d3.select(event.target).style("opacity",1)

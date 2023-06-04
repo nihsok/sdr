@@ -33,7 +33,10 @@ const v_profile = d3.select("#profiles")
   .append("g")
     .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("./data.csv").then(function(data){
+Promise.all([
+  d3.csv("./data.csv"),
+  d3.csv("./vdl2.csv")
+]).then(([data,vdl2])=>{
   function axes(svg,title,range,rabel,tick){
     //x axis
     svg.append("g")
@@ -95,7 +98,7 @@ d3.csv("./data.csv").then(function(data){
         .style("visibility","visible")
         .html('z: '+Math.round(d.alt)/1000+"km<br>T: "+Math.round(d.t*100)/100+'&#8451')
     })
-    .on("mousemove",function(event,d){
+    .on("mousemove",function(event){
       tooltip
         .style("left", event.pageX + 15 + "px")
         .style("top", event.pageY -20 + "px")
@@ -150,7 +153,7 @@ d3.csv("./data.csv").then(function(data){
         .style("visibility","visible")
         .html('z: '+Math.round(d.alt)/1000+"km<br>θ: "+Math.round((Number(d.t)+273.15)*(100000/d.p)**0.2858565737*10)/10+'K')
     })
-    .on("mousemove",function(event,d){
+    .on("mousemove",function(event){
       tooltip
         .style("left", event.pageX + 15 + "px")
         .style("top", event.pageY -20 + "px")
@@ -188,7 +191,7 @@ d3.csv("./data.csv").then(function(data){
         .style("visibility","visible")
         .html('z: '+Math.round(d.alt)/1000+"km<br>u: "+Math.round(d.u*100)/100+'m/s')
     })
-    .on("mousemove",function(event,d){
+    .on("mousemove",function(event){
       tooltip
       .style("left", event.pageX + 15 + "px")
       .style("top", event.pageY -20 + "px")
@@ -208,6 +211,29 @@ d3.csv("./data.csv").then(function(data){
     .style("stroke","black")
     .style("opacity",0.1)
 
+  u_profile.selectAll("dot")
+    .data(vdl2.filter(d => d.alt && d.u && Math.abs(d.u) < u_max))
+    .enter()
+    .append("path")
+      .attr("d",d3.symbol().type(d3.symbolDiamond).size(10))
+      .attr("transform",d => "translate(" + x(d.u) + "," + y(d.alt) + ")")
+      .style("opacity", 0.2)
+    .on("mouseover",function(event,d){
+      d3.select(event.target).style("opacity",1)
+      tooltip
+        .style("visibility","visible")
+        .html('z: '+Math.round(d.alt)/1000+"km<br>u: "+Math.round(d.u*100)/100+'m/s')
+    })
+    .on("mousemove",function(event){
+      tooltip
+      .style("left", event.pageX + 15 + "px")
+      .style("top", event.pageY -20 + "px")
+    })
+    .on("mouseout",function(event){
+      d3.select(event.target).style("opacity",0.2)
+      tooltip.style("visibility","hidden")
+    })
+
   const v_max = 40
   axes(v_profile,'Merid. Wind [m/s]',[-v_max,v_max],30,10)
   v_profile.selectAll("dot")
@@ -225,7 +251,7 @@ d3.csv("./data.csv").then(function(data){
        .style("visibility","visible")
        .html('z: '+Math.round(d.alt)/1000+"km<br>v: "+Math.round(d.v*100)/100+'m/s')
     })
-    .on("mousemove",function(event,d){
+    .on("mousemove",function(event){
       tooltip
       .style("left", event.pageX + 15 + "px")
       .style("top", event.pageY -20 + "px")
@@ -244,6 +270,29 @@ d3.csv("./data.csv").then(function(data){
     .attr("y2",y(15000))
     .style("stroke","black")
     .style("opacity",0.1)
+
+  v_profile.selectAll("dot")
+    .data(vdl2.filter(d => d.alt && d.v && Math.abs(d.v) < v_max))
+    .enter()
+    .append("path")
+      .attr("d",d3.symbol().type(d3.symbolDiamond).size(10))
+      .attr("transform",d => "translate(" + x(d.v) + "," + y(d.alt) + ")")
+      .style("opacity", 0.2)
+    .on("mouseover",function(event,d){
+      d3.select(event.target).style("opacity",1)
+      tooltip
+        .style("visibility","visible")
+        .html('z: '+Math.round(d.alt)/1000+"km<br>v: "+Math.round(d.u*100)/100+'m/s')
+    })
+    .on("mousemove",function(event){
+      tooltip
+      .style("left", event.pageX + 15 + "px")
+      .style("top", event.pageY -20 + "px")
+    })
+    .on("mouseout",function(event){
+      d3.select(event.target).style("opacity",0.2)
+      tooltip.style("visibility","hidden")
+    })
 });
 
 
