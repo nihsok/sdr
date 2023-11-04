@@ -22,16 +22,12 @@ time      = allinfo['now']
 aircrafts = allinfo['aircraft']
 
 for aircraft in aircrafts:
-  tmp = {'flag': 0, 'hex': aircraft['hex'], 'time': time}
-  if ('lon' in aircraft): tmp['lon'] = aircraft['lon']
-  if ('lat' in aircraft): tmp['lat'] = aircraft['lat']
+  tmp = {key: aircraft[key] for key in ['hex','lon','lat','mach','roll','flight','squawk','version','category'] if key in aircraft}
+  tmp['flag'] = 0
+  tmp['time'] = time
   if ('tas' in aircraft): tmp['tas'] = aircraft['tas'] * 0.51444 #nm->m/s
   if ('ias' in aircraft): tmp['ias'] = aircraft['ias'] * 0.51444 #nm->m/s
-  if ('mach' in aircraft): tmp['mach'] = aircraft['mach']
-  if ('flight' in aircraft): tmp['flight'] = aircraft['flight']
-  if ('squawk' in aircraft): tmp['squawk'] = aircraft['squawk']
-  if ('version' in aircraft): tmp['version'] = aircraft['version']
-  if ('category' in aircraft): tmp['category'] = aircraft['category']
+
   if ('alt_geom' in aircraft):
     tmp['flag'] += 1
     tmp['alt'] = aircraft['alt_geom'] * 0.3048 #ft->m
@@ -65,17 +61,17 @@ for aircraft in aircrafts:
   output.append(tmp)
 
 with open('/tmp/dump1090-fa/'+os.path.splitext(os.path.basename(file))[0]+'.csv','w') as f:
-  writer = csv.DictWriter(f,['flag','alt','lon','lat','gs_x','gs_y','u','v','vt_x','vt_y','tas','t','mach','cas','ias','p','dist','flight','squawk','category','version','hex','time'],lineterminator='\n')
+  writer = csv.DictWriter(f,['flag','alt','lon','lat','gs_x','gs_y','u','v','vt_x','vt_y','tas','t','mach','cas','ias','roll','p','dist','flight','squawk','category','version','hex','time'],lineterminator='\n')
   writer.writerows(output)
 
 #flag,
 #alt,lon,lat, ...position
 #temperature,zonal wind,mediridional wind,pressure ...physical value
-#mach,tas,cas,ias,aircraft u,aircraft v, ...verification value
+#mach,tas,cas,ias,aircraft u,aircraft v,roll,p ...verification value
 #distance,hex,flight,squawk,version,category,time ...additional value
 #flag 8:temperature
 #flag 4:wind (needs lat, lon)
 #flag 2:lat,lon
 #falg 1:alt
 #flag 0:no data
-#dist!=0: bad quality
+#dist!=0: bad quality (now always 0)
