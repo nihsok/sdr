@@ -1,7 +1,4 @@
-Promise.all([
-  d3.csv("./data.csv"),
-  d3.csv("./vdl2.csv")
-]).then(([data,vdl2])=>{
+d3.csv("./data.csv").then(data=>{
   const margin = {top:10, right:10, bottom:45, left:75},
         width  = 405 - margin.left - margin.right,
         height = width//495 - margin.top - margin.bottom;
@@ -10,13 +7,6 @@ Promise.all([
   const y = d3.scaleLinear().range([height, 0])
 
   const svg = d3.select("#check-t")
-    .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform","translate(" + margin.left + "," + margin.top + ")")
-
-  const t_vt = d3.select("#check-t")
     .append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
@@ -127,146 +117,4 @@ Promise.all([
       tooltip.style("visibility","hidden")
     })
 
-  const logx = d3.scaleLog().range([0, width])
-  //x axis
-  t_vt.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3
-      .axisBottom(logx.domain([200,310]))
-      .ticks(10,'')
-      .tickFormat(val => val % 20 == 0 ? val.toString() : ''))
-    .style("font-size",20)
-    .append("text")
-    .attr("fill","black")
-    .attr("text-anchor","middle")
-    .attr("x", width / 2 )
-    .attr("y", 40)
-    .text("T (VDL2) & virtual T (ADS-B) [K]")
-  t_vt.append("g")
-    .call(d3
-      .axisTop(logx)
-      .ticks(10)
-      .tickFormat(''))
-  //y axis
-  t_vt.append("g")
-    .call(d3
-      .axisLeft(y.domain([0,15000]))
-      .tickValues(d3.range(0,15000,1000))
-      .tickFormat(val => val % 2000 == 0 ? (val/1000).toString() : ''))
-    .style("font-size",20)
-    .append("text")
-      .attr("fill", "black")
-      .attr("x",  - height / 2 + 60)
-      .attr("y", -50)
-      .attr("transform","rotate(-90)")
-      .text('Altitude [km]')
-  t_vt.append("g")
-    .attr('transform',"translate(" + width + ",0)")
-    .call(d3
-      .axisRight(y)
-      .tickValues(d3.range(0,15000,1000))
-      .tickFormat(''))
-
-  t_vt.selectAll("dot")
-    .data(data.filter(d => d.t))
-    .enter()
-    .append("circle")
-      .attr("cx", d => logx(Number(d.t)+273.15))
-      .attr("cy", d => y(d.alt))
-      .attr("r", 2)
-      .style("fill", d => '#'+d.hex)
-      .style("opacity", 0.5)
-    .on("mouseover",function(event,d){
-      d3.select(event.target).style("opacity",1)
-      tooltip
-        .style("visibility","visible")
-        .html('z: '+Math.round(d.alt)/1000+"km<br>T: "+Math.round((Number(d.t)+273.15)*100)/100+'K')
-    })
-    .on("mousemove",function(event){
-      tooltip
-        .style("left", event.pageX + 15 + "px")
-        .style("top", event.pageY -20 + "px")
-    })
-    .on("mouseout",function(event){
-      d3.select(event.target).style("opacity",0.5)
-      tooltip.style("visibility","hidden")
-    })
-
-  t_vt.selectAll("dot")
-    .data(vdl2.filter(d => d.t))
-    .enter()
-    .append("path")
-      .attr("d",d3.symbol().type(d3.symbolDiamond).size(10))
-      .attr("transform",d => "translate(" + logx(Number(d.t)) + "," + y(d.alt) + ")")
-      .style("opacity", 0.5)
-    .on("mouseover",function(event,d){
-      d3.select(event.target).style("opacity",1)
-      tooltip
-        .style("visibility","visible")
-        .html('z: '+Math.round(d.alt)/1000+"km<br>T: "+Math.round(Number(d.t)*100)/100+'K')
-    })
-    .on("mousemove",function(event){
-      tooltip
-        .style("left", event.pageX + 15 + "px")
-        .style("top", event.pageY -20 + "px")
-    })
-    .on("mouseout",function(event){
-      d3.select(event.target).style("opacity",0.5)
-      tooltip.style("visibility","hidden")
-    })
-
-  t_vt.selectAll(null)
-    .data(d3.range(280,320,5))
-    .enter()
-    .append("line")
-    .attr("x1",d=>x(d))
-    .attr("y1",y(0))
-    .attr("x2",d=>x(d*(1+0.61*0.015)))
-    .attr("y2",y(15000))
-    .attr("clip-path","url(#clip-t)")
-    .style("stroke","black")
-    .style("opacity",0.1)
-    .on("mouseover",function(event,d){
-        d3.select(event.target).style("opacity",1)
-        tooltip
-          .style("visibility","visible")
-          .html('')
-      })
-      .on("mousemove",function(event){
-        tooltip
-          .style("left", event.pageX + 15 + "px")
-          .style("top", event.pageY -20 + "px")
-      })
-      .on("mouseout",function(event){
-        d3.select(event.target).style("opacity",0.1)
-        tooltip.style("visibility","hidden")
-      })
-
-  t_vt.selectAll(null)
-      .data(d3.range(0.001,0.015,0.001))
-      .enter()
-      .append("line")
-      .attr("x1",logx(201))
-      .attr("y1",d => y(d*1000000))
-      .attr("x2",d => logx(201*(1+0.608*d)))
-      .attr("y2",d => y(d*1000000))
-      .attr("stroke-width",3)
-      .attr("clip-path","url(#clip-t)")
-      .style("stroke","black")
-      .style("opacity",0.5)
-      .on("mouseover",function(event,d){
-          d3.select(event.target).style("opacity",1)
-          tooltip
-            .style("visibility","visible")
-            .html('w='+Math.round(d*1000)/1000+'g/g')
-        })
-        .on("mousemove",function(event){
-          tooltip
-            .style("left", event.pageX + 15 + "px")
-            .style("top", event.pageY -20 + "px")
-        })
-        .on("mouseout",function(event){
-          d3.select(event.target).style("opacity",0.5)
-          tooltip.style("visibility","hidden")
-        })
 })

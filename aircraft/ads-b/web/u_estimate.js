@@ -20,10 +20,18 @@ d3.csv("./data.csv").then(function(data){
     .append("g")
       .attr("transform","translate(" + margin.left + "," + margin.top + ")")
 
+  const roll = d3.select("#check-u")
+    .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+
   const tooltip = d3.select("body")
     .append("div")
     .attr("class", "tooltip")
     .style("background-color", "white")
+
   //x axis
   svg.append("g")
     .attr("transform", "translate(0," + height + ")")
@@ -261,4 +269,80 @@ d3.csv("./data.csv").then(function(data){
       .attr("r", 1)
       .style("fill","blue")
       .style("opacity",0.5)
+
+  //x axis
+  roll.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3
+      .axisBottom(x.domain([-6,6]))
+      .tickValues(d3.range(-6,7,1))
+      .tickFormat(val => val% 2 == 0 ? val : ''))
+    .style("font-size",20)
+    .append("text")
+      .attr("fill", "black")
+      .attr("x", width / 2 )
+      .attr("y", 40)
+      .html('Radius: |rolling| [&deg;]')
+  roll.append("g")
+    .call(d3
+      .axisTop(x)
+      .tickValues(d3.range(-6,7,1))
+      .tickFormat(''))
+  //y axis
+  roll.append("g")
+    .call(d3
+      .axisLeft(y.domain([-6,6]))
+      .tickValues(d3.range(-6,7,1))
+      .tickFormat(val => val % 10 == 9 ? val.toString() : ''))
+    .style("font-size",20)
+    .append("text")
+    .attr("fill","black")
+    .attr("text-anchor","middle")
+    .attr("x",  - height / 2 - margin.top)
+    .attr("y", -55)
+    .attr("transform","rotate(-90)")
+    .html("Angle: wind direction [&deg;]")
+  roll.append("g")
+    .attr('transform',"translate(" + width + ",0)")
+    .call(d3
+      .axisRight(y)
+      .tickValues(d3.range(-6,7,1))
+      .tickFormat(''))
+
+  roll.selectAll("circle")
+    .data(d3.range(8,0.9,-1))
+    .enter()
+    .append("circle")
+    .attr("fill","none")
+    .attr("stroke","black")
+    .attr("cx",x(0))
+    .attr("cy",y(0))
+    .attr("r",d => d*17000/(2*width)) //parameter
+    .style("opacity", 0.1)
+    .attr("clip-path","url(#clip-t)")
+
+  roll.selectAll("dot")
+    .data(data.filter(d => d.u))
+    .enter()
+    .append("circle")
+      .attr("cx", d => x(d.u*Math.abs(d.roll)/Math.sqrt(d.u**2+d.v**2)))
+      .attr("cy", d => y(d.v*Math.abs(d.roll)/Math.sqrt(d.u**2+d.v**2)))
+      .attr("r", 2)
+      .style("fill", d => '#'+d.hex)
+      .style("opacity", 0.5)
+    .on("mouseover",function(event,d){
+      d3.select(event.target).style("opacity",1)
+      tooltip
+        .style("visibility","visible")
+        .html('Roll: '+Math.round(d.roll*10)/10+"deg<br>u: "+Math.round(d.u*100)/100+'m/s<br>v: '+Math.round(d.v*100)/100+'m/s')
+    })
+    .on("mousemove",function(event){
+      tooltip
+        .style("left", event.pageX + 15 + "px")
+        .style("top", event.pageY -20 + "px")
+    })
+    .on("mouseout",function(event){
+      d3.select(event.target).style("opacity",0.5)
+      tooltip.style("visibility","hidden")
+    })
 })
