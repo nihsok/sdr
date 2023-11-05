@@ -4,9 +4,9 @@ input = sys.stdin.read().splitlines()
 
 tmp = input[0].split(',')
 z1,u1,v1,t1,p1,time1 = [ float(tmp[i] or 0) for i in [1,6,7,11,16,23] ]
+hex = tmp[22]
 if (t1 != 0): t1 += 273.15
 theta1 = t1 * (100000/p1)**rdcp if t1 > 0 else 0
-hex = tmp[21]
 
 for line in input[1:]:
   tmp = line.split(',')
