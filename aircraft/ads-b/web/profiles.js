@@ -34,7 +34,7 @@ const v_profile = d3.select("#profiles")
     .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
 Promise.all([
-  d3.csv("./data.csv"),
+  d3.csv("/tmp/data.csv"),
   d3.csv("./vdl2.csv")
 ]).then(([data,vdl2])=>{
   function axes(svg,title,range,rabel,tick){

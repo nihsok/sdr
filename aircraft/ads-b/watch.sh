@@ -11,7 +11,7 @@ done
 
 echo 'flag,alt,lon,lat,gs_x,gs_y,u,v,vt_x,vt_y,tas,t,mach,cas,ias,roll,p,dist,flight,squawk,category,version,hex,time' > web/data.csv
 cat /tmp/dump1090-fa/history_*.csv | sort -g >> web/data.csv
-cat /tmp/dump1090-fa/history_*.csv | sort -g | curl 'http://localhost/~$USER/web/upload.php' -X POST -F 'file=data.csv' -F data=@-
+echo 'flag,alt,lon,lat,gs_x,gs_y,u,v,vt_x,vt_y,tas,t,mach,cas,ias,roll,p,dist,flight,squawk,category,version,hex,time' | cat - /tmp/dump1090-fa/history_*.csv | sort -g | curl http://localhost/~$USER/web/upload.php -X POST -F 'file=data.csv' -F data=@-
 
 echo 'hex,z1,z2,t1,t2,p1,p2,theta1,theta2,dpdz,dtdz,dvdz_square' > web/dz.csv
 for hex in $(cut -d , -f 23 /tmp/dump1090-fa/history_*.csv | sort | uniq -d);do
