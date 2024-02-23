@@ -84,7 +84,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     else               { return 0xd20000 }
   }//https://www.iaud.net/activity/2871/
 
-  const loader = new THREE.FileLoader().load('./data.csv',(data)=>{
+  const loader = new THREE.FileLoader().load('open_tmp.php?file=data.csv',(data)=>{
     const p=[]
     for (const row of data.split('\n')){
       const [flag,alt,lon,lat,,,u,v,,,,t] = row.split(',')

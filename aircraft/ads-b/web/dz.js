@@ -1,4 +1,4 @@
-d3.csv("./data.csv").then(function(data){
+d3.csv("open_tmp.php?file=data.csv").then(function(data){
   const margin = {top:10, right:10, bottom:45, left:75},
     width = 202.5 - margin.left - margin.right,
     height = 350 - margin.top - margin.bottom;
@@ -91,7 +91,7 @@ d3.csv("./data.csv").then(function(data){
     })
 })
 
-d3.csv("./dz.csv").then(function(data){
+d3.csv("open_tmp.php?file=dz.csv").then(function(data){
   const margin = {top:10, right:10, bottom:45, left:75},
     width = 202.5 - margin.left - margin.right,
     height = 350 - margin.top - margin.bottom;

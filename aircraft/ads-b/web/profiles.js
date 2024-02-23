@@ -35,7 +35,7 @@ const v_profile = d3.select("#profiles")
 
 Promise.all([
   d3.csv("open_tmp.php?file=data.csv"),
-  d3.csv("./vdl2.csv")
+  d3.csv("open_tmp.php?file=vdl2.csv")
 ]).then(([data,vdl2])=>{
   function axes(svg,title,range,rabel,tick){
     //x axis

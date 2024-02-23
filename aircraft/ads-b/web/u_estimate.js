@@ -1,4 +1,4 @@
-d3.csv("./data.csv").then(function(data){
+d3.csv("open_tmp.php?file=data.csv").then(function(data){
   const margin = {top:10, right:10, bottom:45, left:75},
         width  = 405 - margin.left - margin.right,
         height = width//495 - margin.top - margin.bottom;
