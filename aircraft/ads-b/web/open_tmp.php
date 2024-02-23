@@ -1,4 +1,6 @@
 <?php
-  $temp_dir=sys_get_temp_dir();
-  echo file_get_contents( $temp_dir.'/'.htmlspecialchars($_GET['file']) );
+  $filename = htmlspecialchars($_GET['file']);
+  header('Content-Type: text/csv');
+  header('Content-Disposition: attachment; filename='.$filename);
+  readfile( sys_get_temp_dir().'/'.$filename );
 ?>
