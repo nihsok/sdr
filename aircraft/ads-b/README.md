@@ -1,6 +1,6 @@
 # 機能
 1. reform.py: /run/dump1090-fa/history_\*.jsonを読んでデータを成型→/tmp/dump190-fa/history_\*.csv
-2. watch.sh: reform.pyの実行と、history_\*.csvを合体→data.csv（crontabの設定が必要）
+2. watch.sh: reform.pyの実行と、history_\*.csvを合体→data.csv（crontabの設定が必要）※data.csvを/tmp/に置くように変更した（Feb. 2024）ため、デモは確認しにくくなった。
 3. web以下のindex.html,\*.js: 可視化とそれに必要なライブラリ等
 
 # 観測値の求め方
