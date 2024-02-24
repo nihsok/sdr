@@ -1,6 +1,6 @@
 d3.csv("open_tmp.php?file=data.csv").then(data=>{
   const margin = {top:10, right:10, bottom:45, left:75},
-        width  = 405 - margin.left - margin.right,
+        width  = 404 - margin.left - margin.right,
         height = width//495 - margin.top - margin.bottom;
 
   const x = d3.scaleLinear().range([0, width])
@@ -47,7 +47,7 @@ d3.csv("open_tmp.php?file=data.csv").then(data=>{
     .append("text")
       .attr("fill", "black")
       .attr("x",  - height / 2 + 70)
-      .attr("y", -50)
+      .attr("y", -45)
       .attr("transform","rotate(-90)")
       .text('Mach number')
   svg.append("g")
