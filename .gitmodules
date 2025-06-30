@@ -1,0 +1,3 @@
+[submodule "aircraft"]
+	path = aircraft
+	url = https://github.com/nihsok/sdr-aircraft.git
